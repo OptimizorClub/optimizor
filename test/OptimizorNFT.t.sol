@@ -1,0 +1,91 @@
+// SPDX-License-Identifier: MIT 
+pragma solidity ^0.8.13;
+
+import "forge-std/Test.sol";
+
+import "../src/OptimizorNFT.sol";
+import "../src/SumChallenge.sol";
+
+uint constant SUM_ID = 0;
+uint constant NON_USED_ID = type(uint).max;
+
+contract OptimizorTest is Test {
+	Optimizor opt;
+	Challenge sum = new SumChallenge();
+
+    function setUp() public {
+		opt = new Optimizor();
+	}
+
+	function testAddSumChallenge() public {
+		addSumChallenge();
+	}
+
+	function addSumChallenge() internal {
+		opt.addChallenge(SUM_ID, sum);
+	}
+
+	function testDupAddSumChallenge() public {
+		addSumChallenge();
+
+		vm.expectRevert(abi.encodeWithSignature("ChallengeExists(uint256)", uint(0)));
+		addSumChallenge();
+	}
+
+	function testAddChallengeNonAdmin() public {
+		// TODO
+	}
+
+	function testAddExistingChallengeNonAdmin() public {
+		// TODO
+	}
+
+	function testNonExistentChallenge() public {
+		vm.expectRevert(abi.encodeWithSignature("NoChallenge(uint256)", type(uint).max));
+		opt.optimize(NON_USED_ID, address(0));
+    }
+
+	function testCheapSum() public {
+		addSumChallenge();
+		runCheapSum();
+	}
+
+	function runCheapSum() internal {
+		CheapSum ch = new CheapSum();
+		opt.optimize(SUM_ID, address(ch));
+		(,, address o) = opt.challenges(SUM_ID);
+		assertEq(o, address(ch));
+    }
+
+	function testExpensiveSum() public {
+		addSumChallenge();
+		runExpensiveSum();
+	}
+
+	function runExpensiveSum() internal {
+		ExpensiveSum exp = new ExpensiveSum();
+		opt.optimize(SUM_ID, address(exp));
+		(,, address o) = opt.challenges(SUM_ID);
+		assertEq(o, address(exp));
+    }
+
+    function testCheapExpensiveSum() public {
+		addSumChallenge();
+		runExpensiveSum();
+		runCheapSum();
+    }
+}
+
+contract CheapSum is ISum {
+	function sum(uint x, uint y) external pure returns (uint) {
+		return x + y;
+	}
+}
+
+contract ExpensiveSum is ISum {
+	function sum(uint x, uint y) external pure returns (uint) {
+		for (uint i = 0; i < y; ++i)
+			++x;
+		return x;
+	}
+}
