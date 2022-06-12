@@ -41,8 +41,8 @@ contract OptimizorTest is Test {
 	}
 
 	function testNonExistentChallenge() public {
-		vm.expectRevert(abi.encodeWithSignature("NoChallenge(uint256)", type(uint).max));
-		opt.optimize(NON_USED_ID, address(0));
+		vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint).max));
+		opt.challenge(NON_USED_ID, address(0));
     }
 
 	function testCheapSum() public {
@@ -52,7 +52,7 @@ contract OptimizorTest is Test {
 
 	function runCheapSum() internal {
 		CheapSum ch = new CheapSum();
-		opt.optimize(SUM_ID, address(ch));
+		opt.challenge(SUM_ID, address(ch));
 		(,, address o) = opt.challenges(SUM_ID);
 		assertEq(o, address(ch));
     }
@@ -64,7 +64,7 @@ contract OptimizorTest is Test {
 
 	function runExpensiveSum() internal {
 		ExpensiveSum exp = new ExpensiveSum();
-		opt.optimize(SUM_ID, address(exp));
+		opt.challenge(SUM_ID, address(exp));
 		(,, address o) = opt.challenges(SUM_ID);
 		assertEq(o, address(exp));
     }

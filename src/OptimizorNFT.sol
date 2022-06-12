@@ -1,20 +1,22 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.14;
 
 import "./Challenge.sol";
+import "./Time.sol";
 
-error NoChallenge(uint);
+error ChallengeNotFound(uint);
+error ChallengeFailed(uint);
 error ChallengeExists(uint);
-error NotCorrect();
 error NotOptimizor(uint, uint, uint);
+error AddressCodeMismatch();
 
-contract Optimizor {
+contract Optimizor is Time {
 	// TODO add events
 
 	struct State {
-		Challenge challenge;
+		IChallenge target;
 		uint gasUsed;
-		address optimizor;
+		address holder;
 	}
 
 	// TODO challenge address to State/id map?
@@ -44,32 +46,45 @@ contract Optimizor {
 		lock = 1;
 	}
 
-	function addChallenge(uint id, Challenge challenge) external onlyAdmin {
+	function addChallenge(uint id, IChallenge challenge) external onlyAdmin {
 		State storage chl = challenges[id];
-		if (address(chl.challenge) != address(0)) {
+		if (address(chl.target) != address(0)) {
 			revert ChallengeExists(id);
 		}
 
-		chl.challenge = challenge;
+		chl.target = challenge;
 	}
 
-	function optimize(uint id, address opzor) external noReentrancy {
+	/// The challenge period is the 256 blocks
+	function challenge(uint256 id, bytes32 codehash, address target, address recipient) inChallengePeriod external returns (bool) {
 		State storage chl = challenges[id];
+
 		if (address(chl.challenge) == address(0)) {
-			revert NoChallenge(id);
+			revert ChallengeNotFound(id);
 		}
 
-		bool success;
-		uint gas;
-		unchecked {
-			// It's fine if `salt` overflows because that's gonna take a while
-			// and salt-based random number generation manipulation will be unlikely.
-			// TODO should this call be `staticcall`?
-			(success, gas) = chl.challenge.run(opzor, ++salt);
+		if (codehashes[codehash] == address(0)) {
+			revert CodeNotSubmitted();
 		}
+
+		if (target.codehash != codehash) {
+			revert AddressCodeMismatch();
+		}
+
+		bytes32 seed = blockhash(revealBlock());
+
+		if (seed == 0) {
+			revert BlockHashNotFound();
+		}
+
+		if (chl.target == IChallenge(address(0))) {
+			revert ChallengeNotFound(id);
+		}
+
+		(bool success, uint gas) = challenges[id].run(target, seed);
 
 		if (!success) {
-			revert NotCorrect();
+			revert ChallengeFailed(id);
 		}
 
 		if (chl.gasUsed != 0 && (chl.gasUsed <= gas)) {
@@ -77,6 +92,10 @@ contract Optimizor {
 		}
 
 		chl.gasUsed = gas;
-		chl.optimizor = opzor;
+		chl.holder = recipient;
+		// TODO mint nft
+		// TODO record leaderboard
+
+		return true;
 	}
 }
