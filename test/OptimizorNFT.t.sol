@@ -106,19 +106,26 @@ contract OptimizorTest is BaseTest {
     }
 }
 
-contract CheapSqrt is ISqrt {
-	function sqrt(uint64[INPUT_SIZE] calldata inputs) external pure returns (uint64[INPUT_SIZE] memory outputs) {
+/// Returns the midpoint avoiding phantom overflow
+function mid(uint256 a, uint256 b) pure returns (uint) {
+    unchecked {
+        return (a / 2 + b / 2 + a & b & 1);
+    }
+}
+
+contract CheapSqrt {
+	function sqrt(uint256[INPUT_SIZE] calldata inputs) external pure returns (uint256[INPUT_SIZE] memory outputs) {
 		for (uint i = 0; i < inputs.length; ++i)
 			outputs[i] = sqrt_one(inputs[i]);
 	}
 
-	function sqrt_one(uint64 input) internal pure returns (uint64 output) {
+	function sqrt_one(uint256 input) internal pure returns (uint256 output) {
 		uint l = 0;
 		uint r = input - 1;
 		while (l < r) {
-			uint m = (l + r) / 2;
+			uint m = mid(l, r);
 			if ((m * m) <= input && ((m + 1) * (m + 1)) > input)
-				return uint64(m);
+				return uint256(m);
 			if (m * m < input)
 				l = m;
 			else
