@@ -105,3 +105,39 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders2[1], address(this));
     }
 }
+
+contract CheapSqrt is ISqrt {
+	function sqrt(uint64[INPUT_SIZE] calldata inputs) external pure returns (uint64[INPUT_SIZE] memory outputs) {
+		for (uint i = 0; i < inputs.length; ++i)
+			outputs[i] = sqrt_one(inputs[i]);
+	}
+
+	function sqrt_one(uint64 input) internal pure returns (uint64 output) {
+		uint l = 0;
+		uint r = input - 1;
+		while (l < r) {
+			uint m = (l + r) / 2;
+			if ((m * m) <= input && ((m + 1) * (m + 1)) > input)
+				return uint64(m);
+			if (m * m < input)
+				l = m;
+			else
+				r = m;
+		}
+		revert("wrong algorithm");
+	}
+}
+
+contract CheapSum is ISum {
+	function sum(uint x, uint y) external pure returns (uint) {
+		return x + y;
+	}
+}
+
+contract ExpensiveSum is ISum {
+	function sum(uint x, uint y) external pure returns (uint) {
+		for (uint i = 0; i < y; ++i)
+			++x;
+		return x;
+	}
+}
