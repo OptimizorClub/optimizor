@@ -9,7 +9,7 @@ interface ISum {
 	function sum(uint, uint) external returns (uint);
 }
 
-contract SumChallenge is Challenge {
+contract SumChallenge is IChallenge {
 	function run(address opzor, uint salt) external override returns (bool, uint) {
 		// Generate input.
 		(uint x, uint y) = (random(salt), random(++salt));

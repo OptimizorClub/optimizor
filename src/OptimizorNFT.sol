@@ -46,20 +46,20 @@ contract Optimizor is Time {
 		lock = 1;
 	}
 
-	function addChallenge(uint id, IChallenge challenge) external onlyAdmin {
+	function addChallenge(uint id, IChallenge chlAddr) external onlyAdmin {
 		State storage chl = challenges[id];
 		if (address(chl.target) != address(0)) {
 			revert ChallengeExists(id);
 		}
 
-		chl.target = challenge;
+		chl.target = chlAddr;
 	}
 
 	/// The challenge period is the 256 blocks
 	function challenge(uint256 id, bytes32 codehash, address target, address recipient) inChallengePeriod external returns (bool) {
 		State storage chl = challenges[id];
 
-		if (address(chl.challenge) == address(0)) {
+		if (address(chl.target) == address(0)) {
 			revert ChallengeNotFound(id);
 		}
 
@@ -71,7 +71,7 @@ contract Optimizor is Time {
 			revert AddressCodeMismatch();
 		}
 
-		bytes32 seed = blockhash(revealBlock());
+		bytes32 seed = blockhash(block.number);
 
 		if (seed == 0) {
 			revert BlockHashNotFound();
@@ -81,7 +81,7 @@ contract Optimizor is Time {
 			revert ChallengeNotFound(id);
 		}
 
-		(bool success, uint gas) = challenges[id].run(target, seed);
+		(bool success, uint gas) = chl.target.run(target, uint(seed));
 
 		if (!success) {
 			revert ChallengeFailed(id);
