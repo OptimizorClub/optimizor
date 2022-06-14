@@ -5,29 +5,29 @@ import "./Challenge.sol";
 
 import {Fixed18} from "./Fixed18.sol";
 
-uint constant INPUT_SIZE = 100;
-//uint constant INPUT_SIZE = 1;
+//uint constant INPUT_SIZE = 100;
+uint constant INPUT_SIZE = 1;
 
 // Expecting around 5 decimal place of precision
-Fixed18 constant EPSILON = Fixed18.wrap(0.00001 * 10**18);
+Fixed18 constant EPSILON = Fixed18.wrap(0.0001 * 10**18);
 
 interface ISqrt {
-	function sqrt(Fixed18[INPUT_SIZE] calldata) external view returns (Fixed18[INPUT_SIZE] memory);
+	function sqrt(Fixed18[INPUT_SIZE] calldata) external returns (Fixed18[INPUT_SIZE] memory);
 }
 
 function random_fixed18(uint256 seed) view returns (Fixed18) {
-    return Fixed18.wrap(random_uint256(seed));
+    return Fixed18.wrap(uint256(random_uint64(seed)));
 }
 
-function random_uint256(uint256 seed) view returns (uint256) {
-    return uint256(keccak256(abi.encodePacked(tx.origin, block.timestamp, seed)));
+function random_uint64(uint256 seed) view returns (uint64) {
+    return uint64(uint256(keccak256(abi.encodePacked(tx.origin, block.timestamp, seed))));
 }
 
 contract SqrtChallenge is Challenge {
 
-    error DoesNotSatisfyTolerance();
+    error DoesNotSatisfyTolerance(uint input, uint output);
 
-	function run(address target, uint seed) external view override returns (bool, uint) {
+	function run(address target, uint seed) external override returns (bool, uint) {
 		// Generate inputs.
 	    Fixed18[INPUT_SIZE] memory inputs;
 		unchecked {
@@ -73,7 +73,7 @@ contract SqrtChallenge is Challenge {
            .div(input)
            .lt(EPSILON)
         )
-            revert DoesNotSatisfyTolerance();
+            revert DoesNotSatisfyTolerance(Fixed18.unwrap(input), Fixed18.unwrap(output));
 
     }
 

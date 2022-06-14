@@ -3,7 +3,6 @@ pragma solidity ^0.8.15;
 
 import "./BaseTest.sol";
 import "../src/OptimizorNFT.sol";
-import "forge-std/Test.sol";
 
 contract OptimizorTest is BaseTest {
     function run() external returns (string memory) {
@@ -107,32 +106,35 @@ contract OptimizorTest is BaseTest {
 }
 
 /// Returns the midpoint avoiding phantom overflow
-function mid(uint256 a, uint256 b) pure returns (uint) {
+function mid(uint a, uint b) pure returns (uint) {
     unchecked {
-        return (a / 2 + b / 2 + a & b & 1);
+		return (a & b) + (a ^ b) / 2;
     }
 }
 
 contract CheapSqrt {
-	function sqrt(uint256[INPUT_SIZE] calldata inputs) external pure returns (uint256[INPUT_SIZE] memory outputs) {
+    function sqrt(uint[INPUT_SIZE] calldata inputs) external returns (uint[INPUT_SIZE] memory outputs) {
 		for (uint i = 0; i < inputs.length; ++i)
 			outputs[i] = sqrt_one(inputs[i]);
 	}
 
-	function sqrt_one(uint256 input) internal pure returns (uint256 output) {
+    function sqrt_one(uint input) internal returns (uint output) {
 		uint l = 0;
 		uint r = input - 1;
 		while (l < r) {
-			uint m = mid(l, r);
-			if ((m * m) <= input && ((m + 1) * (m + 1)) > input)
-				return uint256(m);
-			if (m * m < input)
+            uint m = mid(l, r);
+			emit BSEARCH(l, r, m);
+			uint mPlus1 = m + 1;
+            if ((m * m <= input) && (mPlus1 * mPlus1 > input))
+				return m * 10**9;
+            if (m * m < input)
 				l = m;
 			else
 				r = m;
 		}
 		revert("wrong algorithm");
 	}
+
 }
 
 contract CheapSum is ISum {
