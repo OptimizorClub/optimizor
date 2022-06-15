@@ -11,7 +11,7 @@ uint constant NON_USED_ID = type(uint).max;
 
 contract OptimizorTest is Test {
 	Optimizor opt;
-	Challenge sum = new SumChallenge();
+	IChallenge sum = new SumChallenge();
 
     function setUp() public {
 		opt = new Optimizor();
@@ -41,8 +41,9 @@ contract OptimizorTest is Test {
 	}
 
 	function testNonExistentChallenge() public {
-		vm.expectRevert(abi.encodeWithSignature("NoChallenge(uint256)", type(uint).max));
-		opt.optimize(NON_USED_ID, address(0));
+		vm.roll(block.number + 512);
+		vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint).max));
+		opt.challenge(NON_USED_ID, bytes32(0), address(0), address(0));
     }
 
 	function testCheapSum() public {
@@ -52,11 +53,16 @@ contract OptimizorTest is Test {
 
 	function runCheapSum() internal {
 		CheapSum ch = new CheapSum();
-		opt.optimize(SUM_ID, address(ch));
+		opt.commit(address(ch).codehash);
+
+		vm.roll(block.number + 512);
+
+		opt.challenge(SUM_ID, address(ch).codehash, address(ch), address(this));
 		(,, address o) = opt.challenges(SUM_ID);
-		assertEq(o, address(ch));
+		assertEq(o, address(this));
     }
 
+	/*
 	function testExpensiveSum() public {
 		addSumChallenge();
 		runExpensiveSum();
@@ -64,7 +70,7 @@ contract OptimizorTest is Test {
 
 	function runExpensiveSum() internal {
 		ExpensiveSum exp = new ExpensiveSum();
-		opt.optimize(SUM_ID, address(exp));
+		opt.challenge(SUM_ID, address(exp));
 		(,, address o) = opt.challenges(SUM_ID);
 		assertEq(o, address(exp));
     }
@@ -74,6 +80,7 @@ contract OptimizorTest is Test {
 		runExpensiveSum();
 		runCheapSum();
     }
+	*/
 }
 
 contract CheapSum is ISum {
