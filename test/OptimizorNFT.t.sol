@@ -58,7 +58,7 @@ contract OptimizorTest is Test {
 		vm.roll(block.number + 512);
 
 		opt.challenge(SUM_ID, address(ch).codehash, address(ch), address(this));
-		(,, address o) = opt.challenges(SUM_ID);
+		(,, address o,) = opt.challenges(SUM_ID);
 		assertEq(o, address(this));
     }
 
