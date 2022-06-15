@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol";
-
+import "./SumChallenge.sol";
 import "../src/OptimizorNFT.sol";
-import "../src/SumChallenge.sol";
+import "forge-std/Test.sol";
 
 uint constant SUM_ID = 0;
 uint constant NON_USED_ID = type(uint).max;

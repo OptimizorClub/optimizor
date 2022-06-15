@@ -4,9 +4,9 @@ pragma solidity ^0.8.14;
 import "./Challenge.sol";
 import "./Time.sol";
 
+import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
-import "solmate/auth/Owned.sol";
 
 contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	error ChallengeNotFound(uint challengeId);
