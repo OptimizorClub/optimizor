@@ -65,7 +65,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 			revert AddressCodeMismatch();
 		}
 
-		uint boundaryBlock = ((block.number - startBlock) / 768) * 768 + 511;
+		uint boundaryBlock;
+		unchecked {
+			boundaryBlock = ((block.number - startBlock) / 768) * 768 + 511;
+		}
 		bytes32 seed = blockhash(boundaryBlock);
 		if (seed == 0) {
 			revert BlockHashNotFound();
@@ -83,7 +86,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
 		chl.gasUsed = gas;
 		chl.holder = recipient;
-		++chl.level;
+		unchecked {
+			++chl.level;
+		}
 
 		uint tokenId = (id << 32) | chl.level;
 		ERC721._mint(recipient, tokenId);
