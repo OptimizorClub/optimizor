@@ -101,7 +101,10 @@ contract Optimizor is Time {
 		chl.gasUsed = gas;
 		chl.holder = recipient;
 		++chl.level;
-		// TODO mint nft
+
+		uint tokenId = (id << 32) | level;
+		ERC721._mint(recipient, tokenId);
+
 		// TODO record leaderboard
 
 		return true;
