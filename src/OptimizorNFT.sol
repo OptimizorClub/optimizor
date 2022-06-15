@@ -4,6 +4,8 @@ pragma solidity ^0.8.14;
 import "./Challenge.sol";
 import "./Time.sol";
 
+import "solmate/tokens/ERC721.sol";
+
 error ChallengeNotFound(uint);
 error ChallengeFailed(uint);
 error ChallengeExists(uint);
@@ -12,7 +14,7 @@ error AddressCodeMismatch();
 error BlockHashNotFound();
 error CodeNotSubmitted();
 
-contract Optimizor is Time {
+contract Optimizor is Time, ERC721 {
 	// TODO add events
 
 	struct Data {
@@ -44,7 +46,7 @@ contract Optimizor is Time {
 		lock = 1;
 	}
 
-	constructor() {
+	constructor() ERC721("Optimizor", "OPT") {
 		admin = msg.sender;
 		lock = 1;
 	}
@@ -102,11 +104,15 @@ contract Optimizor is Time {
 		chl.holder = recipient;
 		++chl.level;
 
-		uint tokenId = (id << 32) | level;
+		uint tokenId = (id << 32) | chl.level;
 		ERC721._mint(recipient, tokenId);
 
 		// TODO record leaderboard
 
 		return true;
+	}
+
+    function tokenURI(uint256 id) public view override returns (string memory) {
+		return "";
 	}
 }
