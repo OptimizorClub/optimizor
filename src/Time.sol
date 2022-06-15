@@ -3,19 +3,12 @@ pragma solidity ^0.8.14;
 
 contract Time {
 	/// Currently in the challenge period.
-	error InChallengePeriod();
-
+	error InChallengePeriod(uint period, uint startBlock, uint blockNumber);
 	/// Currently not in the challenge period.
-	error NotInChallengePeriod();
-
+	error NotInChallengePeriod(uint period, uint startBlock, uint blockNumber);
 	error CodeAlreadySubmitted();
-
 	error CodeNotSubmitted();
 
-	error BlockHashNotFound();
-
-	/// The genesis block we start counting from.
-	//uint256 constant public startBlock = 14946000;
 	uint256 immutable public startBlock;
 
 	mapping (bytes32 => address) public codehashes;
@@ -24,30 +17,26 @@ contract Time {
 		startBlock = block.number;
 	}
 
-	/// The challenge is split into two periods:
-	/// - commit, when new code can be submitted (this is the odd period)
-	/// - challenge, when committed code can be competed with (this is the even period)
-	///
-	/// Code can be committed at last 256 blocks preceding
-	/// the challenge period, and the challenge period is active
-	/// for 256 blocks. 
-	///
+	// 3 periods:
+	// [0, 256) commit
+	// [256, 512) wait
+	// [512, 768) challenge
 	function period() view public returns (uint256) {
 		unchecked {
-			return (block.number - startBlock) / 256;
+			return ((block.number - startBlock) % 768) / 256;
 		}
 	}
 
 	modifier inCommitPeriod {
-		if ((period() % 2) != 0) {
-			revert InChallengePeriod();
+		if (period() != 0) {
+			revert InChallengePeriod(period(), startBlock, block.number);
 		}
 		_;
 	}
 
 	modifier inChallengePeriod {
-		if ((period() % 2) != 1) {
-			revert NotInChallengePeriod();
+		if (period() != 2) {
+			revert NotInChallengePeriod(period(), startBlock, block.number);
 		}
 		_;
 	}

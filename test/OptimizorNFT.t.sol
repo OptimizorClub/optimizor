@@ -41,6 +41,7 @@ contract OptimizorTest is Test {
 	}
 
 	function testNonExistentChallenge() public {
+		vm.roll(block.number + 512);
 		vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint).max));
 		opt.challenge(NON_USED_ID, bytes32(0), address(0), address(0));
     }
@@ -54,7 +55,7 @@ contract OptimizorTest is Test {
 		CheapSum ch = new CheapSum();
 		opt.commit(address(ch).codehash);
 
-		vm.warp(block.number + 256);
+		vm.roll(block.number + 512);
 
 		opt.challenge(SUM_ID, address(ch).codehash, address(ch), address(this));
 		(,, address o) = opt.challenges(SUM_ID);

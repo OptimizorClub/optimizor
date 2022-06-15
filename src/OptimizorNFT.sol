@@ -9,6 +9,7 @@ error ChallengeFailed(uint);
 error ChallengeExists(uint);
 error NotOptimizor(uint, uint, uint);
 error AddressCodeMismatch();
+error BlockHashNotFound(uint number, uint old);
 
 contract Optimizor is Time {
 	// TODO add events
@@ -71,10 +72,10 @@ contract Optimizor is Time {
 			revert AddressCodeMismatch();
 		}
 
-		bytes32 seed = blockhash(block.number);
-
+		uint seedNumber = ((block.number - startBlock) / 768) * 768 + 512;
+		bytes32 seed = blockhash(seedNumber);
 		if (seed == 0) {
-			revert BlockHashNotFound();
+			revert BlockHashNotFound(block.number, seedNumber);
 		}
 
 		if (chl.target == IChallenge(address(0))) {
