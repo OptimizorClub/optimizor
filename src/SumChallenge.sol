@@ -6,13 +6,13 @@ import "./Challenge.sol";
 interface ISum {
 	error WrongSum(uint, uint, uint);
 
-	function sum(uint, uint) external returns (uint);
+	function sum(uint, uint) external view returns (uint);
 }
 
 contract SumChallenge is IChallenge {
-	function run(address opzor, uint salt) external override returns (bool, uint) {
+	function run(address opzor, uint seed) external view override returns (uint) {
 		// Generate input.
-		(uint x, uint y) = (random(salt), random(++salt));
+		(uint x, uint y) = (random(seed), random(++seed));
 
 		uint preGas = gasleft();
 		uint s = ISum(opzor).sum(x, y);
@@ -20,7 +20,7 @@ contract SumChallenge is IChallenge {
 
 		verify(x, y, s);
 
-		unchecked { return (true, preGas - postGas); }
+		unchecked { return preGas - postGas; }
 	}
 
 	function verify(uint x, uint y, uint s) internal pure {
@@ -30,7 +30,7 @@ contract SumChallenge is IChallenge {
 		}
 	}
 
-	function random(uint salt) internal view returns (uint) {
-		return uint(keccak256(abi.encodePacked(block.timestamp, salt))) % 100;
+	function random(uint seed) internal view returns (uint) {
+		return uint(keccak256(abi.encodePacked(block.timestamp, seed))) % 100;
 	}
 }
