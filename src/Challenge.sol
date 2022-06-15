@@ -2,5 +2,5 @@
 pragma solidity ^0.8.14;
 
 interface IChallenge {
-	function run(address target, uint seed) external returns (bool, uint);
+	function run(address target, uint seed) external view returns (uint);
 }

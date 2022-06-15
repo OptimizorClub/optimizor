@@ -7,7 +7,6 @@ import "./Time.sol";
 import "solmate/tokens/ERC721.sol";
 
 error ChallengeNotFound(uint);
-error ChallengeFailed(uint);
 error ChallengeExists(uint);
 error NotOptimizor(uint, uint, uint);
 error AddressCodeMismatch();
@@ -90,11 +89,7 @@ contract Optimizor is Time, ERC721 {
 			revert ChallengeNotFound(id);
 		}
 
-		(bool success, uint gas) = chl.target.run(target, uint(seed));
-
-		if (!success) {
-			revert ChallengeFailed(id);
-		}
+		uint gas = chl.target.run(target, uint(seed));
 
 		if (chl.gasUsed != 0 && (chl.gasUsed <= gas)) {
 			revert NotOptimizor(id, chl.gasUsed, gas);
@@ -106,8 +101,6 @@ contract Optimizor is Time, ERC721 {
 
 		uint tokenId = (id << 32) | chl.level;
 		ERC721._mint(recipient, tokenId);
-
-		// TODO record leaderboard
 
 		return true;
 	}
