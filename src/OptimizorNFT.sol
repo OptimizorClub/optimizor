@@ -6,6 +6,7 @@ import "./Time.sol";
 
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
+import "solmate/auth/Owned.sol";
 
 error ChallengeNotFound(uint);
 error ChallengeExists(uint);
@@ -14,7 +15,7 @@ error AddressCodeMismatch();
 error BlockHashNotFound();
 error CodeNotSubmitted();
 
-contract Optimizor is ReentrancyGuard, Time, ERC721 {
+contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	// TODO add events
 
 	struct Data {
@@ -30,19 +31,12 @@ contract Optimizor is ReentrancyGuard, Time, ERC721 {
 	// slot 0
 	mapping (uint => Data) public challenges;
 
-	// slot 1
-	address immutable admin;
-
-	modifier onlyAdmin {
-		require(msg.sender == admin);
-		_;
+	constructor()
+		ERC721("Optimizor", "OPT")
+		Owned(msg.sender) {
 	}
 
-	constructor() ERC721("Optimizor", "OPT") {
-		admin = msg.sender;
-	}
-
-	function addChallenge(uint id, IChallenge chlAddr) external onlyAdmin {
+	function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
 		Data storage chl = challenges[id];
 		if (address(chl.target) != address(0)) {
 			revert ChallengeExists(id);
