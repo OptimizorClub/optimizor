@@ -16,4 +16,8 @@ The main NFT contract is always in one of three states: `Commit`, `Wait`, or
 `Challenge`. Each state lasts 256 blocks. Challenger contracts can only be
 committed during the first stage. The second stage makes it harder for
 challengers to manipulate the pseudo-random input generation which relies on
-the `blockhash` of the last block of the `wait` stage as seed.
+the `blockhash` of the last block of the `wait` stage as seed. Finally,
+in the third stage challengers can try to claim the lead.
+
+If you are an optimizooor who wants to show your skills please see the
+[docs](docs).
