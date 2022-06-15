@@ -64,7 +64,7 @@ contract Optimizor is Time, ERC721 {
 		bytes32 codehash,
 		address target,
 		address recipient
-	) inChallengePeriod external returns (bool) {
+	) inChallengePeriod external {
 		Data storage chl = challenges[id];
 
 		if (address(chl.target) == address(0)) {
@@ -101,8 +101,6 @@ contract Optimizor is Time, ERC721 {
 
 		uint tokenId = (id << 32) | chl.level;
 		ERC721._mint(recipient, tokenId);
-
-		return true;
 	}
 
     function tokenURI(uint256 id) public view override returns (string memory) {
