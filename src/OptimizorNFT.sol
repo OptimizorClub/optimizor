@@ -8,14 +8,16 @@ import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
 import "solmate/auth/Owned.sol";
 
-error ChallengeNotFound(uint);
-error ChallengeExists(uint);
-error NotOptimizor(uint, uint, uint);
-error AddressCodeMismatch();
-error BlockHashNotFound();
-error CodeNotSubmitted();
-
 contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
+	error ChallengeNotFound(uint challengeId);
+	error ChallengeExists(uint challengeId);
+	error NotOptimizor(uint challengeId, uint bestGas, uint yourGas);
+	error AddressCodeMismatch();
+	error BlockHashNotFound();
+	error CodeNotSubmitted();
+
+	event ChallengeAdded(uint challengeId, IChallenge);
+
 	// TODO add events
 
 	struct Data {
@@ -43,6 +45,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		}
 
 		chl.target = chlAddr;
+
+		emit ChallengeAdded(id, chlAddr);
 	}
 
 	function challenge(
