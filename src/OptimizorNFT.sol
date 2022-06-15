@@ -9,26 +9,28 @@ error ChallengeFailed(uint);
 error ChallengeExists(uint);
 error NotOptimizor(uint, uint, uint);
 error AddressCodeMismatch();
-error BlockHashNotFound(uint number, uint old);
+error BlockHashNotFound();
+error CodeNotSubmitted();
 
 contract Optimizor is Time {
 	// TODO add events
 
-	struct State {
-		IChallenge target;
+	struct Data {
+		// slot 0
 		uint gasUsed;
+		// slot 1
+		IChallenge target;
+		// slot 2
 		address holder;
+		uint32 level;
 	}
 
-	// TODO challenge address to State/id map?
-
 	// slot 0
-	mapping (uint => State) public challenges;
+	mapping (uint => Data) public challenges;
 
 	// slot 1
 	address immutable admin;
 	uint8 lock;
-	uint128 salt;
 
 	modifier onlyAdmin {
 		require(msg.sender == admin);
@@ -48,7 +50,7 @@ contract Optimizor is Time {
 	}
 
 	function addChallenge(uint id, IChallenge chlAddr) external onlyAdmin {
-		State storage chl = challenges[id];
+		Data storage chl = challenges[id];
 		if (address(chl.target) != address(0)) {
 			revert ChallengeExists(id);
 		}
@@ -56,9 +58,13 @@ contract Optimizor is Time {
 		chl.target = chlAddr;
 	}
 
-	/// The challenge period is the 256 blocks
-	function challenge(uint256 id, bytes32 codehash, address target, address recipient) inChallengePeriod external returns (bool) {
-		State storage chl = challenges[id];
+	function challenge(
+		uint256 id,
+		bytes32 codehash,
+		address target,
+		address recipient
+	) inChallengePeriod external returns (bool) {
+		Data storage chl = challenges[id];
 
 		if (address(chl.target) == address(0)) {
 			revert ChallengeNotFound(id);
@@ -72,10 +78,10 @@ contract Optimizor is Time {
 			revert AddressCodeMismatch();
 		}
 
-		uint seedNumber = ((block.number - startBlock) / 768) * 768 + 512;
-		bytes32 seed = blockhash(seedNumber);
+		uint boundaryBlock = ((block.number - startBlock) / 768) * 768 + 511;
+		bytes32 seed = blockhash(boundaryBlock);
 		if (seed == 0) {
-			revert BlockHashNotFound(block.number, seedNumber);
+			revert BlockHashNotFound();
 		}
 
 		if (chl.target == IChallenge(address(0))) {
@@ -94,6 +100,7 @@ contract Optimizor is Time {
 
 		chl.gasUsed = gas;
 		chl.holder = recipient;
+		++chl.level;
 		// TODO mint nft
 		// TODO record leaderboard
 
