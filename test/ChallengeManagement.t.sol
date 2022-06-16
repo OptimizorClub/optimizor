@@ -6,7 +6,6 @@ import "../src/OptimizorNFT.sol";
 import "forge-std/Test.sol";
 
 contract ChallengeManagementTest is BaseTest {
-
 	function testAddSumChallenge() public {
 		addSumChallenge();
 	}
@@ -19,19 +18,28 @@ contract ChallengeManagementTest is BaseTest {
 	}
 
 	function testAddChallengeNonAdmin() public {
-		// TODO
+		address other = address(42);
+		vm.prank(other);
+
+		vm.expectRevert("UNAUTHORIZED");
+		addSumChallenge();
 	}
 
 	function testAddExistingChallengeNonAdmin() public {
-		// TODO
+		addSumChallenge();
+
+		address other = address(42);
+		vm.prank(other);
+
+		vm.expectRevert("UNAUTHORIZED");
+		addSumChallenge();
 	}
 
 	function testNonExistentChallenge() public {
 		advancePeriod();
 		advancePeriod();
-		//vm.roll(block.number + 512);
+
 		vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint).max));
 		opt.challenge(NON_USED_ID, bytes32(0), address(0), address(0));
     }
-
 }
