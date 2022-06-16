@@ -34,7 +34,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	mapping (uint => Data) public challenges;
 
 	constructor()
-		ERC721("Optimizor", "OPT")
+		ERC721("Test", "TTT")
 		Owned(msg.sender) {
 	}
 
@@ -69,11 +69,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 			revert AddressCodeMismatch();
 		}
 
-		uint boundaryBlock;
-		unchecked {
-			boundaryBlock = ((block.number - startBlock) / 768) * 768 + 511;
-		}
-		bytes32 seed = blockhash(boundaryBlock);
+		bytes32 seed = blockhash(boundaryBlock());
 		if (seed == 0) {
 			revert BlockHashNotFound();
 		}
@@ -108,9 +104,117 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		return uint32(id);
 	}
 
-    function tokenURI(uint256 id) public view override returns (string memory) {
-		uint32 level = uint32(id);
-		bool winner = winnerLevel(id) == level;
-		return "";
-	}
+    function tokenURI(uint256 /*id*/) public pure override returns (string memory) {
+		//uint32 level = uint32(id);
+		//bool winner = winnerLevel(id) == level;
+
+		//string memory image_data = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='100' width='100' style='background-color:green'%3E%3Ccircle cx='50' cy='50' r='40' stroke='black' stroke-width='3' fill='red' /%3E%3C/svg%3E";
+		string memory meta = string(
+			abi.encodePacked(
+				'{\n"name": "', "TestName",
+				'"\n,"description": "', "TestDescriptionnnnnnnnnnnnnnnnnnnnnnnnnn",
+				'"\n,"attributes":', "[]"
+			)
+		);
+
+		/*
+		meta = string(
+			abi.encodePacked(
+				meta,
+				'"\n,"image_data": "', image_data
+			)
+		);
+		*/
+
+		meta = string(
+			abi.encodePacked(
+				meta,
+				'\n,"image": "', "https://freesvg.org/img/Placeholder.png"
+			)
+		);
+
+		meta =  string(
+			abi.encodePacked(
+				meta,
+				'"\n}'
+			)
+		);
+
+		string memory json = Base64.encode(bytes(meta));
+		string memory output = string(
+			abi.encodePacked("data:application/json;base64,", json)
+		);
+		return output;
+    }
+}
+
+/// [MIT License]
+/// @title Base64
+/// @notice Provides a function for encoding some bytes in base64
+/// @author Brecht Devos <brecht@loopring.org>
+library Base64 {
+    bytes internal constant TABLE =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    /// @notice Encodes some bytes to the base64 representation
+    function encode(bytes memory data) internal pure returns (string memory) {
+        uint256 len = data.length;
+        if (len == 0) return "";
+
+        // multiply by 4/3 rounded up
+        uint256 encodedLen = 4 * ((len + 2) / 3);
+
+        // Add some extra buffer at the end
+        bytes memory result = new bytes(encodedLen + 32);
+
+        bytes memory table = TABLE;
+
+        assembly {
+            let tablePtr := add(table, 1)
+            let resultPtr := add(result, 32)
+
+            for {
+                let i := 0
+            } lt(i, len) {
+
+            } {
+                i := add(i, 3)
+                let input := and(mload(add(data, i)), 0xffffff)
+
+                let out := mload(add(tablePtr, and(shr(18, input), 0x3F)))
+                out := shl(8, out)
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(shr(12, input), 0x3F))), 0xFF)
+                )
+                out := shl(8, out)
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(shr(6, input), 0x3F))), 0xFF)
+                )
+                out := shl(8, out)
+                out := add(
+                    out,
+                    and(mload(add(tablePtr, and(input, 0x3F))), 0xFF)
+                )
+                out := shl(224, out)
+
+                mstore(resultPtr, out)
+
+                resultPtr := add(resultPtr, 4)
+            }
+
+            switch mod(len, 3)
+            case 1 {
+                mstore(sub(resultPtr, 2), shl(240, 0x3d3d))
+            }
+            case 2 {
+                mstore(sub(resultPtr, 1), shl(248, 0x3d))
+            }
+
+            mstore(result, encodedLen)
+        }
+
+        return string(result);
+    }
 }

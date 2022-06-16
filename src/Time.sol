@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.14;
 
+bool constant TESTNET = true;
+
 contract Time {
+
 	error NotInCommitPeriod();
 	error NotInChallengePeriod();
 	error CodeAlreadySubmitted();
@@ -32,16 +35,30 @@ contract Time {
 		}
 	}
 
+	function boundaryBlock() internal view returns (uint) {
+		if (!TESTNET) {
+			unchecked {
+				return ((block.number - startBlock) / 768) * 768 + 511;
+			}
+		} else {
+			return block.number - 1;
+		}
+	}
+
 	modifier inCommitPeriod {
-		if (period() != Period.COMMIT) {
-			revert NotInCommitPeriod();
+		if (!TESTNET) {
+			if (period() != Period.COMMIT) {
+				revert NotInCommitPeriod();
+			}
 		}
 		_;
 	}
 
 	modifier inChallengePeriod {
-		if (period() != Period.CHALLENGE) {
-			revert NotInChallengePeriod();
+		if (!TESTNET) {
+			if (period() != Period.CHALLENGE) {
+				revert NotInChallengePeriod();
+			}
 		}
 		_;
 	}
