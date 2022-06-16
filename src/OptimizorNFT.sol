@@ -11,7 +11,7 @@ import "solmate/utils/ReentrancyGuard.sol";
 contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	error ChallengeNotFound(uint challengeId);
 	error ChallengeExists(uint challengeId);
-	error NotOptimizor(uint challengeId, uint bestGas, uint yourGas);
+	error NotOptimizor();
 	error AddressCodeMismatch();
 	error BlockHashNotFound();
 	error CodeNotSubmitted();
@@ -85,7 +85,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		uint gas = chl.target.run(target, uint(seed));
 
 		if (chl.gasUsed != 0 && (chl.gasUsed <= gas)) {
-			revert NotOptimizor(id, chl.gasUsed, gas);
+			revert NotOptimizor();
 		}
 
 		chl.gasUsed = gas;

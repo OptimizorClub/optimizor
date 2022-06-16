@@ -12,10 +12,13 @@ contract OptimizorTest is BaseTest {
 		opt.commit(address(cheapSum).codehash);
 		advancePeriod();
 		advancePeriod();
-		opt.challenge(SUM_ID, address(cheapSum).codehash, address(cheapSum), address(this));
 
-		(,, address o,) = opt.challenges(SUM_ID);
-		assertEq(o, address(this));
+		(,,, uint32 preLevel) = opt.challenges(SUM_ID);
+		opt.challenge(SUM_ID, address(cheapSum).codehash, address(cheapSum), address(this));
+		(,, address postOpt, uint32 postLevel) = opt.challenges(SUM_ID);
+
+		assertEq(postOpt, address(this));
+		assertEq(postLevel, preLevel + 1);
 	}
 
 	function testExpensiveSum() public {
@@ -24,27 +27,47 @@ contract OptimizorTest is BaseTest {
 		opt.commit(address(expSum).codehash);
 		advancePeriod();
 		advancePeriod();
-		opt.challenge(SUM_ID, address(expSum).codehash, address(expSum), address(this));
 
-		(,, address o,) = opt.challenges(SUM_ID);
-		assertEq(o, address(this));
+		(,,, uint32 preLevel) = opt.challenges(SUM_ID);
+		opt.challenge(SUM_ID, address(expSum).codehash, address(expSum), address(this));
+		(,, address postOpt, uint32 postLevel) = opt.challenges(SUM_ID);
+
+		assertEq(postOpt, address(this));
+		assertEq(postLevel, preLevel + 1);
 	}
 
     function testCheapExpensiveSum() public {
 		addSumChallenge();
 
-		opt.commit(address(cheapSum).codehash);
+		address other = address(42);
+		vm.prank(other);
 		opt.commit(address(expSum).codehash);
+		vm.stopPrank();
+
+		opt.commit(address(cheapSum).codehash);
 
 		advancePeriod();
 		advancePeriod();
 
-		opt.challenge(SUM_ID, address(expSum).codehash, address(expSum), address(this));
-		(,, address o1,) = opt.challenges(SUM_ID);
-		assertEq(o1, address(this));
+		(,,, uint32 preLevel) = opt.challenges(SUM_ID);
+
+		vm.prank(other);
+		opt.challenge(SUM_ID, address(expSum).codehash, address(expSum), other);
+		vm.stopPrank();
+
+		(,, address postOpt, uint32 postLevel) = opt.challenges(SUM_ID);
+		assertEq(postOpt, other);
+		assertEq(postLevel, preLevel + 1);
 
 		opt.challenge(SUM_ID, address(cheapSum).codehash, address(cheapSum), address(this));
-		(,, address o2,) = opt.challenges(SUM_ID);
-		assertEq(o2, address(this));
+		(,, address postOpt2, uint32 postLevel2) = opt.challenges(SUM_ID);
+		assertEq(postOpt2, address(this));
+		assertEq(postLevel2, postLevel + 1);
+
+		vm.prank(other);
+		vm.expectRevert(abi.encodeWithSignature("NotOptimizor()"));
+		opt.challenge(SUM_ID, address(expSum).codehash, address(expSum), other);
+		vm.stopPrank();
+
     }
 }
