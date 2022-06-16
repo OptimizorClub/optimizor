@@ -31,17 +31,3 @@ contract BaseTest is Test {
 		vm.roll(block.number + 256);
 	}
 }
-
-contract CheapSum is ISum {
-	function sum(uint x, uint y) external pure returns (uint) {
-		return x + y;
-	}
-}
-
-contract ExpensiveSum is ISum {
-	function sum(uint x, uint y) external pure returns (uint) {
-		for (uint i = 0; i < y; ++i)
-			++x;
-		return x;
-	}
-}
