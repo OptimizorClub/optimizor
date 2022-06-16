@@ -98,7 +98,19 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		ERC721._mint(recipient, tokenId);
 	}
 
+	function winnerLevel(uint id) public view returns (uint32) {
+		require(_ownerOf[id] != address(0));
+
+		while (_ownerOf[id] != address(0)) {
+			++id;
+		}
+
+		return uint32(id);
+	}
+
     function tokenURI(uint256 id) public view override returns (string memory) {
+		uint32 level = uint32(id);
+		bool winner = winnerLevel(id) == level;
 		return "";
 	}
 }
