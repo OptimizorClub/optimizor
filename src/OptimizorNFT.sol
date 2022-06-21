@@ -134,10 +134,12 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             y3: "y33"
         });
 
-        return NFTSVG.generateSVG(svgParams);
+		uint challengeId = tokenId >> 32;
+        return NFTSVG.generateSVG(
+			svgParams,
+			challenges[challengeId].target.svg(tokenId)
+		);
 
-
-		/* uint challengeId = tokenId >> 32; */
 
 		/* return string(abi.encodePacked( */
 		/* 	"<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>", */

@@ -44,7 +44,10 @@ library NFTSVG {
         string y3;
     }
 
-    function generateSVG(SVGParams memory params) internal pure returns (string memory svg) {
+    function generateSVG(
+		SVGParams memory params,
+		bytes memory challengeSVG
+	) internal pure returns (string memory svg) {
         /*
         address: "0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
         msg: "Forged in SVG for Uniswap in 2021 by 0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
@@ -62,7 +65,8 @@ library NFTSVG {
                         params.baseTokenSymbol
                     ),
                     generateSVGCardMantle(params.quoteTokenSymbol, params.baseTokenSymbol, params.feeTier),
-                    generageSvgCurve(params.tickLower, params.tickUpper, params.tickSpacing, params.overRange),
+                    generageSvgCurve(params.tickLower, params.tickUpper, params.tickSpacing, params.overRange, challengeSVG),
+					//challengeSVG,
                     generateSVGPositionDataAndLocationCurve(
                         params.tokenId.toString(),
                         params.tickLower,
@@ -215,7 +219,8 @@ library NFTSVG {
         int24 tickLower,
         int24 tickUpper,
         int24 tickSpacing,
-        int8 overRange
+        int8 overRange,
+		bytes memory challengeSVG
     ) private pure returns (string memory svg) {
         string memory fade = overRange == 1 ? '#fade-up' : overRange == -1 ? '#fade-down' : '#none';
         string memory curve = getCurve(tickLower, tickUpper, tickSpacing);
@@ -224,8 +229,11 @@ library NFTSVG {
                 '<g mask="url(',
                 fade,
                 ')"',
-                ' style="transform:translate(72px,189px)">'
-                '<rect x="-16px" y="-16px" width="180px" height="180px" fill="none" />'
+                ' style="transform:translate(55px,160px)">',
+                //'<rect x="-16px" y="-16px" width="180px" height="180px" fill="none" />',
+				challengeSVG,
+				'</g>'
+				/*
                 '<path d="',
                 curve,
                 '" stroke="rgba(0,0,0,0.3)" stroke-width="32px" fill="none" stroke-linecap="round" />',
@@ -238,6 +246,7 @@ library NFTSVG {
                 curve,
                 '" stroke="rgba(255,255,255,1)" fill="none" stroke-linecap="round" /></g>',
                 generateSVGCurveCircle(overRange)
+				*/
             )
         );
     }
