@@ -347,6 +347,7 @@ library NFTSVG {
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Max Tick: </tspan>',
                 tickUpperStr,
                 '</text></g>'
+				/*
                 '<g style="transform:translate(226px, 433px)">',
                 '<rect width="36px" height="36px" rx="8px" ry="8px" fill="none" stroke="rgba(255,255,255,0.2)" />',
                 '<path stroke-linecap="round" d="M8 9C8.00004 22.9494 16.2099 28 27 28" fill="none" stroke="white" />',
@@ -355,6 +356,7 @@ library NFTSVG {
                 'px, ',
                 yCoord,
                 'px, 0px)" cx="0px" cy="0px" r="4px" fill="white"/></g>'
+				*/
             )
         );
     }
