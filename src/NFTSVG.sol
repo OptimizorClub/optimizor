@@ -68,7 +68,7 @@ library NFTSVG {
                         params.quoteTokenSymbol,
                         params.baseTokenSymbol
                     ),
-                    generateSVGCardMantle(params.quoteTokenSymbol, params.baseTokenSymbol, params.feeTier),
+                    generateSVGCardMantle(params.baseToken, params.baseTokenSymbol, params.feeTier),
                     generageSvgCurve(params.tickLower, params.tickUpper, params.tickSpacing, params.overRange, challengeSVG),
                     generateSVGPositionDataAndLocationCurve(
                         params.tokenId.toString(),
@@ -208,9 +208,7 @@ library NFTSVG {
             abi.encodePacked(
                 '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px" /> <text y="70px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
                 quoteTokenSymbol,
-                '/',
-                baseTokenSymbol,
-                '</text><text y="115px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
+                '</text><text y="115px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
                 feeTier,
                 '</text></g>',
                 '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)" />'
@@ -344,14 +342,14 @@ library NFTSVG {
                 '<rect width="',
                 uint256(7 * (str2length + 4)).toString(),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
-                '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Min Tick: </tspan>',
+                '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas used: </tspan>',
                 tickLowerStr,
                 '</text></g>',
                 ' <g style="transform:translate(29px, 444px)">',
                 '<rect width="',
                 uint256(7 * (str3length + 4)).toString(),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
-                '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Max Tick: </tspan>',
+                '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas opti: </tspan>',
                 tickUpperStr,
                 '</text></g>'
 				/*

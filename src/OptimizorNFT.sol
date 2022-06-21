@@ -121,14 +121,14 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         string memory name = chl.target.name();
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
-            quoteToken: "optimizoor",
+            quoteToken: "Optimizor",
             baseToken: name,
             poolAddress: address(this),
-            quoteTokenSymbol: name,
-            baseTokenSymbol: "",
+            quoteTokenSymbol: toHexString(uint(uint160(address(chl.holder))), 20),
+            baseTokenSymbol: toHexString(uint(uint160(address(chl.target))), 20),
             feeTier:
                 string.concat(
-                    "rank #",
+                    "Rank #",
                     Strings.toString(rank),
                     "/",
                     Strings.toString(participants)
@@ -230,6 +230,18 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
 	function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
         return uint256(uint8(token >> offset));
+    }
+
+    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length + 2);
+        buffer[0] = '0';
+        buffer[1] = 'x';
+        for (uint256 i = 2 * length + 1; i > 1; --i) {
+            buffer[i] = ALPHABET[value & 0xf];
+            value >>= 4;
+        }
+        require(value == 0, 'Strings: hex length insufficient');
+        return string(buffer);
     }
 
     bytes16 constant ALPHABET = '0123456789abcdef';

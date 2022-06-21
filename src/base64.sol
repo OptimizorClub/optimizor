@@ -19,7 +19,7 @@ library Base64 {
 
         bytes memory table = TABLE;
 
-        assembly {
+        assembly ("memory-safe") {
             let tablePtr := add(table, 1)
             let resultPtr := add(result, 32)
 
