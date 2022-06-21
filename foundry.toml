@@ -5,3 +5,9 @@ libs = ['lib']
 solc = "0.8.14"
 #gas_limit = 30000000
 # See more config options https://github.com/gakonst/foundry/tree/master/config
+
+remappings = [
+    '@openzeppelin=lib/openzeppelin-contracts/',
+    'forge-std=lib/forge-std/src/',
+    '@uniswap=lib/v3-core.git/',
+]
