@@ -100,7 +100,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	}
 
 	function winnerLevel(uint id) public view returns (uint32) {
-		require(_ownerOf[id] != address(0));
+		//require(_ownerOf[id] != address(0));
 
 		while (_ownerOf[id] != address(0)) {
 			++id;
@@ -110,6 +110,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	}
 
 	function svg(uint tokenId) internal view returns (string memory) {
+		uint32 level = uint32(tokenId);
+		bool winner = winnerLevel(tokenId) == level;
+
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             quoteToken: "optimizoor",
             baseToken: "sqrt",
@@ -139,46 +142,29 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 			svgParams,
 			challenges[challengeId].target.svg(tokenId)
 		);
-
-
-		/* return string(abi.encodePacked( */
-		/* 	"<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>", */
-		/* 	challenges[challengeId].target.svg(tokenId) */
-		/* )); */
 	}
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-		//uint32 level = uint32(id);
-		//bool winner = winnerLevel(id) == level;
-
-		string memory meta = string(
-			abi.encodePacked(
-				'{\n"name": "', "TestName",
-				'"\n,"description": "', "TestDescriptionnnnnnnnnnnnnnnnnnnnnnnnnn",
-				'"\n,"attributes":', "[]"
-			)
-		);
-
-		meta = string(
-			abi.encodePacked(
-				meta,
-				'\n,"image": "data:image/svg+xml;base64,',
-				Base64.encode(bytes(svg(id)))
-			)
-		);
-
-		meta =  string(
-			abi.encodePacked(
-				meta,
-				'"\n}'
-			)
-		);
-
-		string memory json = Base64.encode(bytes(meta));
-		string memory output = string(
-			abi.encodePacked("data:application/json;base64,", json)
-		);
-		return output;
-    }
+		return
+			string(
+				abi.encodePacked(
+					'data:application/json;base64,',
+					Base64.encode(
+						bytes(
+							abi.encodePacked(
+								'{"name":"',
+								"TestName",
+								'", "description":"',
+								"Descriptionnnnnnnnnnn",
+								'", "image": "',
+								'data:image/svg+xml;base64,',
+								Base64.encode(bytes(svg(id))),
+								'"}'
+							)
+						)
+					)
+				)
+			);
+	}
 }
 
