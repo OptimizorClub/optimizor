@@ -34,6 +34,10 @@ contract SumChallenge is IChallenge {
 		return uint(keccak256(abi.encodePacked(block.timestamp, seed))) % 100;
 	}
 
+    function name() external override view returns (string memory) {
+        return "SUM";
+    }
+
 	function svg(uint tokenId) external view returns (bytes memory art) {
 		art = '<rect width="230" height="240" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />';
 		//art = '<path d="M150 0 L75 200 L225 200 Z" />';

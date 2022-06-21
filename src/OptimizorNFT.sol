@@ -113,23 +113,32 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	function svg(uint tokenId) internal view returns (string memory) {
 		uint32 level = uint32(tokenId);
 		bool winner = winnerLevel(tokenId) == level;
+        uint rank = 1;
+        uint participants = 20;
 
 		uint challengeId = tokenId >> 32;
 		Data storage chl = challenges[challengeId];
+        string memory name = chl.target.name();
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             quoteToken: "optimizoor",
-            baseToken: "sqrt",
+            baseToken: name,
             poolAddress: address(this),
-            quoteTokenSymbol: "$OPTI",
-            baseTokenSymbol: "$BASE",
-            feeTier: "0.5",
-            tickLower: 1,
-            tickUpper: 2,
-            tickSpacing: 1,
-            overRange: 8,
+            quoteTokenSymbol: name,
+            baseTokenSymbol: "",
+            feeTier:
+                string.concat(
+                    "rank #",
+                    Strings.toString(rank),
+                    "/",
+                    Strings.toString(participants)
+                ),
+            tickLower: int24(int(chl.gasUsed)),
+            tickUpper: int24(int(chl.gasUsed + 100)),
+            tickSpacing: 1, // To remove
+            overRange: 8, // To remove
             tokenId: tokenId,
-			rank: 1,
+			rank: uint32(rank),
 			participants: 10,
 
 			color0: tokenToColorHex(uint256(uint160(address(chl.target))), 136),
