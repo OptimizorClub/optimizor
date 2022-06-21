@@ -10,6 +10,7 @@ contract OptimizorTest is BaseTest {
 
     function run() external returns (string memory) {
         setUp();
+        addSumChallenge();
         return opt.tokenURI(1);
     }
 
