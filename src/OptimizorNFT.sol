@@ -129,6 +129,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             tickSpacing: 1,
             overRange: 8,
             tokenId: tokenId,
+			rank: 1,
+			participants: 10,
 
 			color0: tokenToColorHex(uint256(uint160(address(chl.target))), 136),
             color1: tokenToColorHex(uint256(uint160(chl.holder)), 136),

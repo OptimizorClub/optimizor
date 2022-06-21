@@ -34,6 +34,8 @@ library NFTSVG {
         int24 tickSpacing;
         int8 overRange;
         uint256 tokenId;
+		uint32 rank;
+		uint32 participants;
         string color0;
         string color1;
         string color2;
@@ -73,7 +75,7 @@ library NFTSVG {
                         params.tickLower,
                         params.tickUpper
                     ),
-                    generateSVGRareSparkle(params.tokenId, params.poolAddress),
+                    generateSVGRareSparkle(params.rank),
                     '</svg>'
                 )
             );
@@ -402,8 +404,8 @@ library NFTSVG {
     }
 	*/
 
-    function generateSVGRareSparkle(uint256 tokenId, address poolAddress) private pure returns (string memory svg) {
-        if (isRare(tokenId, poolAddress)) {
+    function generateSVGRareSparkle(uint32 rank) private pure returns (string memory svg) {
+        if (rank == 1) {
             svg = string(
                 abi.encodePacked(
                     '<g style="transform:translate(226px, 392px)"><rect width="36px" height="36px" rx="8px" ry="8px" fill="none" stroke="rgba(255,255,255,0.2)" />',
@@ -416,10 +418,5 @@ library NFTSVG {
         } else {
             svg = '';
         }
-    }
-
-    function isRare(uint256 tokenId, address poolAddress) internal pure returns (bool) {
-        bytes32 h = keccak256(abi.encodePacked(tokenId, poolAddress));
-        return uint256(h) < type(uint256).max / (1 + BitMath.mostSignificantBit(tokenId) * 2);
     }
 }
