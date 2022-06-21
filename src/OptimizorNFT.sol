@@ -128,13 +128,15 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             color0: "red",
             color1: "blue",
             color2: "green",
-            color3: "orange",
+            color3: "orange"
+			/*
             x1: "sss",
             y1: "y11",
             x2: "x22",
             y2: "y22",
             x3: "x33",
             y3: "y33"
+			*/
         });
 
 		uint challengeId = tokenId >> 32;

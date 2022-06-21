@@ -36,12 +36,14 @@ library NFTSVG {
         string color1;
         string color2;
         string color3;
+		/*
         string x1;
         string y1;
         string x2;
         string y2;
         string x3;
         string y3;
+		*/
     }
 
     function generateSVG(
@@ -94,7 +96,9 @@ library NFTSVG {
                         )
                     )
                 ),
-                '"/><feImage result="p1" xlink:href="data:image/svg+xml;base64,',
+                '"/>',
+				/*
+				<feImage result="p1" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
@@ -108,7 +112,10 @@ library NFTSVG {
                         )
                     )
                 ),
-                '"/><feImage result="p2" xlink:href="data:image/svg+xml;base64,',
+				*/
+                '"/>',
+				/*
+				<feImage result="p2" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
@@ -123,6 +130,8 @@ library NFTSVG {
                     )
                 ),
                 '" />',
+				*/
+			   /*
                 '<feImage result="p3" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
@@ -137,6 +146,7 @@ library NFTSVG {
                         )
                     )
                 ),
+				*/
                 '" /><feBlend mode="overlay" in="p0" in2="p1" /><feBlend mode="exclusion" in2="p2" /><feBlend mode="overlay" in2="p3" result="blendOut" /><feGaussianBlur ',
                 'in="blendOut" stdDeviation="42" /></filter> <clipPath id="corners"><rect width="290" height="500" rx="42" ry="42" /></clipPath>',
                 '<path id="text-path-a" d="M40 12 H250 A28 28 0 0 1 278 40 V460 A28 28 0 0 1 250 488 H40 A28 28 0 0 1 12 460 V40 A28 28 0 0 1 40 12 z" />',
