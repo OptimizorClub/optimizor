@@ -107,13 +107,15 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		return uint32(id);
 	}
 
-	function svg() internal pure returns (string memory) {
-		return "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>\
-  <rect width='300' height='100' style='fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)' />\
-</svg>";
+	function svg(uint tokenId) internal view returns (string memory) {
+		uint challengeId = tokenId >> 32;
+		return string(abi.encodePacked(
+			"<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>",
+			challenges[challengeId].target.svg(tokenId)
+		));
 	}
 
-    function tokenURI(uint256 /*id*/) public pure override returns (string memory) {
+    function tokenURI(uint256 id) public view override returns (string memory) {
 		//uint32 level = uint32(id);
 		//bool winner = winnerLevel(id) == level;
 
@@ -128,7 +130,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		meta = string(
 			abi.encodePacked(
 				meta,
-				'\n,"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg()))
+				'\n,"image": "data:image/svg+xml;base64,',
+				Base64.encode(bytes(svg(id)))
 			)
 		);
 

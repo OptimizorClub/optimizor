@@ -6,6 +6,8 @@ import "../src/OptimizorNFT.sol";
 import "forge-std/Test.sol";
 
 contract OptimizorTest is BaseTest {
+	event SVG(string svg);
+
 	function testCheapSum() public {
 		addSumChallenge();
 
@@ -19,6 +21,12 @@ contract OptimizorTest is BaseTest {
 
 		assertEq(postOpt, address(this));
 		assertEq(postLevel, preLevel + 1);
+
+		uint tokenId = (SUM_ID << 32) | postLevel;
+		assertEq(opt.ownerOf(tokenId), address(this));
+
+		string memory svg = opt.tokenURI(tokenId);
+		emit SVG(svg);
 	}
 
 	function testExpensiveSum() public {

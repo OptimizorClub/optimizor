@@ -33,6 +33,10 @@ contract SumChallenge is IChallenge {
 	function random(uint seed) internal view returns (uint) {
 		return uint(keccak256(abi.encodePacked(block.timestamp, seed))) % 100;
 	}
+
+	function svg(uint tokenId) external view returns (bytes memory art) {
+		art = "<rect width='300' height='100' style='fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)' />";
+	}
 }
 
 contract CheapSum is ISum {
