@@ -11,6 +11,7 @@ import './base64.sol';
 library NFTSVG {
     using Strings for uint256;
 
+	/*
     string constant curve1 = 'M1 1C41 41 105 105 145 145';
     string constant curve2 = 'M1 1C33 49 97 113 145 145';
     string constant curve3 = 'M1 1C33 57 89 113 145 145';
@@ -19,6 +20,7 @@ library NFTSVG {
     string constant curve6 = 'M1 1C9 81 65 137 145 145';
     string constant curve7 = 'M1 1C1 89 57.5 145 145 145';
     string constant curve8 = 'M1 1C1 97 49 145 145 145';
+	*/
 
     struct SVGParams {
         string quoteToken;
@@ -68,7 +70,6 @@ library NFTSVG {
                     ),
                     generateSVGCardMantle(params.quoteTokenSymbol, params.baseTokenSymbol, params.feeTier),
                     generageSvgCurve(params.tickLower, params.tickUpper, params.tickSpacing, params.overRange, challengeSVG),
-					//challengeSVG,
                     generateSVGPositionDataAndLocationCurve(
                         params.tokenId.toString(),
                         params.tickLower,
@@ -233,7 +234,7 @@ library NFTSVG {
 		bytes memory challengeSVG
     ) private pure returns (string memory svg) {
         string memory fade = overRange == 1 ? '#fade-up' : overRange == -1 ? '#fade-down' : '#none';
-        string memory curve = getCurve(tickLower, tickUpper, tickSpacing);
+        //string memory curve = getCurve(tickLower, tickUpper, tickSpacing);
         svg = string(
             abi.encodePacked(
                 '<g mask="url(',
@@ -261,6 +262,7 @@ library NFTSVG {
         );
     }
 
+	/*
     function getCurve(
         int24 tickLower,
         int24 tickUpper,
@@ -285,7 +287,9 @@ library NFTSVG {
             curve = curve8;
         }
     }
+	*/
 
+   /*
     function generateSVGCurveCircle(int8 overRange) internal pure returns (string memory svg) {
         string memory curvex1 = '73';
         string memory curvey1 = '190';
@@ -322,6 +326,7 @@ library NFTSVG {
             );
         }
     }
+	*/
 
     function generateSVGPositionDataAndLocationCurve(
         string memory tokenId,
@@ -333,7 +338,7 @@ library NFTSVG {
         uint256 str1length = bytes(tokenId).length + 4;
         uint256 str2length = bytes(tickLowerStr).length + 10;
         uint256 str3length = bytes(tickUpperStr).length + 10;
-        (string memory xCoord, string memory yCoord) = rangeLocation(tickLower, tickUpper);
+        //(string memory xCoord, string memory yCoord) = rangeLocation(tickLower, tickUpper);
         svg = string(
             abi.encodePacked(
                 ' <g style="transform:translate(29px, 384px)">',
@@ -380,6 +385,7 @@ library NFTSVG {
         return string(abi.encodePacked(sign, uint256(int256(tick)).toString()));
     }
 
+	/*
     function rangeLocation(int24 tickLower, int24 tickUpper) internal pure returns (string memory, string memory) {
         int24 midPoint = (tickLower + tickUpper) / 2;
         if (midPoint < -125_000) {
@@ -404,6 +410,7 @@ library NFTSVG {
             return ('24', '27');
         }
     }
+	*/
 
     function generateSVGRareSparkle(uint256 tokenId, address poolAddress) private pure returns (string memory svg) {
         if (isRare(tokenId, poolAddress)) {
