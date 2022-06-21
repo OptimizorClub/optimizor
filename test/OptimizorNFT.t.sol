@@ -8,6 +8,11 @@ import "forge-std/Test.sol";
 contract OptimizorTest is BaseTest {
 	event SVG(string svg);
 
+    function run() external returns (string memory) {
+        setUp();
+        return opt.tokenURI(1);
+    }
+
 	function testCheapSum() public {
 		addSumChallenge();
 
