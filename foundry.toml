@@ -1,4 +1,5 @@
 [default]
+via_ir = true
 src = 'src'
 out = 'out'
 libs = ['lib']

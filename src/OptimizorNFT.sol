@@ -5,6 +5,8 @@ import "./Challenge.sol";
 import "./Time.sol";
 import "./base64.sol";
 
+import "./NFTSVG.sol";
+
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
@@ -108,11 +110,39 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 	}
 
 	function svg(uint tokenId) internal view returns (string memory) {
-		uint challengeId = tokenId >> 32;
-		return string(abi.encodePacked(
-			"<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>",
-			challenges[challengeId].target.svg(tokenId)
-		));
+        NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
+            quoteToken: "optimizoor",
+            baseToken: "sqrt",
+            poolAddress: address(this),
+            quoteTokenSymbol: "$OPTI",
+            baseTokenSymbol: "$BASE",
+            feeTier: "0.5",
+            tickLower: 1,
+            tickUpper: 2,
+            tickSpacing: 1,
+            overRange: 8,
+            tokenId: 200,
+            color0: "red",
+            color1: "blue",
+            color2: "green",
+            color3: "orange",
+            x1: "sss",
+            y1: "y11",
+            x2: "x22",
+            y2: "y22",
+            x3: "x33",
+            y3: "y33"
+        });
+
+        return NFTSVG.generateSVG(svgParams);
+
+
+		/* uint challengeId = tokenId >> 32; */
+
+		/* return string(abi.encodePacked( */
+		/* 	"<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'>", */
+		/* 	challenges[challengeId].target.svg(tokenId) */
+		/* )); */
 	}
 
     function tokenURI(uint256 id) public view override returns (string memory) {
