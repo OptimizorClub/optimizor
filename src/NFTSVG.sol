@@ -229,7 +229,7 @@ library NFTSVG {
                 '<g mask="url(',
                 fade,
                 ')"',
-                ' style="transform:translate(55px,160px)">',
+                ' style="transform:translate(30px,130px)">',
                 //'<rect x="-16px" y="-16px" width="180px" height="180px" fill="none" />',
 				challengeSVG,
 				'</g>'
