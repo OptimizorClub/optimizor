@@ -10,6 +10,7 @@ import "./NFTSVG.sol";
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
+import '@openzeppelin/contracts/utils/Strings.sol';
 
 
 
@@ -113,6 +114,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 		uint32 level = uint32(tokenId);
 		bool winner = winnerLevel(tokenId) == level;
 
+		uint challengeId = tokenId >> 32;
+		Data storage chl = challenges[challengeId];
+
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             quoteToken: "optimizoor",
             baseToken: "sqrt",
@@ -124,11 +128,25 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             tickUpper: 2,
             tickSpacing: 1,
             overRange: 8,
-            tokenId: 200,
+            tokenId: tokenId,
+
+			color0: tokenToColorHex(uint256(uint160(address(chl.target))), 136),
+            color1: tokenToColorHex(uint256(uint160(chl.holder)), 136),
+            color2: tokenToColorHex(uint256(uint160(address(chl.target))), 0),
+            color3: tokenToColorHex(uint256(uint160(chl.holder)), 0),
+
+			x1: scale(getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
+            y1: scale(getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
+            x2: scale(getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
+            y2: scale(getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
+            x3: scale(getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
+            y3: scale(getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
+			/*
             color0: "red",
             color1: "blue",
             color2: "green",
             color3: "orange"
+			*/
 			/*
             x1: "sss",
             y1: "y11",
@@ -139,10 +157,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 			*/
         });
 
-		uint challengeId = tokenId >> 32;
         return NFTSVG.generateSVG(
 			svgParams,
-			challenges[challengeId].target.svg(tokenId)
+			chl.target.svg(tokenId)
 		);
 	}
 
@@ -168,5 +185,42 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 				)
 			);
 	}
+
+	function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
+        return string(toHexStringNoPrefix((token >> offset), 3));
+    }
+
+	function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length);
+        for (uint256 i = buffer.length; i > 0; i--) {
+            buffer[i - 1] = ALPHABET[value & 0xf];
+            value >>= 4;
+        }
+        return string(buffer);
+    }
+
+	function scale(
+        uint256 n,
+        uint256 inMn,
+        uint256 inMx,
+        uint256 outMn,
+        uint256 outMx
+    ) private pure returns (string memory) {
+        return Strings.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
+    }
+
+	function getCircleCoord(
+        uint256 tokenAddress,
+        uint256 offset,
+        uint256 tokenId
+    ) internal pure returns (uint256) {
+        return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
+    }
+
+	function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
+        return uint256(uint8(token >> offset));
+    }
+
+    bytes16 constant ALPHABET = '0123456789abcdef';
 }
 
