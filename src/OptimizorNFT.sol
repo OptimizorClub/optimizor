@@ -133,25 +133,25 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
                     "/",
                     Strings.toString(participants)
                 ),
-                tickLower: int24(int(chl.gasUsed)),
-                tickUpper: int24(int(chl.gasUsed + 100)),
-                tickSpacing: 1, // To remove
-                overRange: 8, // To remove
-                tokenId: tokenId,
-                rank: uint32(rank),
-                participants: 10,
+            tickLower: int24(int(chl.gasUsed)),
+            tickUpper: int24(int(chl.gasUsed + 100)),
+            tickSpacing: 1, // To remove
+            overRange: 8, // To remove
+            tokenId: tokenId,
+            rank: uint32(rank),
+            participants: 10,
 
-                color0: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 136),
-                color1: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 136),
-                color2: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 0),
-                color3: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 0),
+            color0: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 136),
+            color1: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 136),
+            color2: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 0),
+            color3: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 0),
 
-                x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
-                y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
-                x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
-                y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
-                x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
-                y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
+            x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
+            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
+            x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
+            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
+            x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
+            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
         });
 
         return NFTSVG.generateSVG(
