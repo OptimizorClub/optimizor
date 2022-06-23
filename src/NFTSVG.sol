@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.15;
 
 import '@openzeppelin/contracts/utils/Strings.sol';
 // v3-core and 0.8 branch
@@ -23,8 +23,8 @@ library NFTSVG {
         int24 tickSpacing;
         int8 overRange;
         uint256 tokenId;
-		uint32 rank;
-		uint32 participants;
+        uint32 rank;
+        uint32 participants;
         string color0;
         string color1;
         string color2;
@@ -38,15 +38,15 @@ library NFTSVG {
     }
 
     function generateSVG(
-		SVGParams memory params,
-		bytes memory challengeSVG
-	) internal pure returns (string memory svg) {
+        SVGParams memory params,
+        bytes memory challengeSVG
+    ) internal pure returns (string memory svg) {
         /*
         address: "0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
         msg: "Forged in SVG for Uniswap in 2021 by 0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
         sig: "0x2df0e99d9cbfec33a705d83f75666d98b22dea7c1af412c584f7d626d83f02875993df740dc87563b9c73378f8462426da572d7989de88079a382ad96c57b68d1b",
         version: "2"
-        */
+         */
         return
             string(
                 abi.encodePacked(
@@ -66,8 +66,8 @@ library NFTSVG {
                     ),
                     generateSVGRareSparkle(params.rank),
                     '</svg>'
-                )
-            );
+            )
+        );
     }
 
     function generateSVGDefs(SVGParams memory params) private pure returns (string memory svg) {
@@ -115,7 +115,7 @@ library NFTSVG {
                     )
                 ),
                 '" />',
-    			'<feImage result="p3" xlink:href="data:image/svg+xml;base64,',
+                '<feImage result="p3" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
@@ -210,7 +210,7 @@ library NFTSVG {
         int24 tickUpper,
         int24 tickSpacing,
         int8 overRange,
-		bytes memory challengeSVG
+        bytes memory challengeSVG
     ) private pure returns (string memory svg) {
         string memory fade = overRange == 1 ? '#fade-up' : overRange == -1 ? '#fade-down' : '#none';
         svg = string(
@@ -219,8 +219,8 @@ library NFTSVG {
                 fade,
                 ')"',
                 ' style="transform:translate(30px,130px)">',
-				challengeSVG,
-				'</g>'
+                challengeSVG,
+                '</g>'
             )
         );
     }
@@ -288,11 +288,11 @@ library NFTSVG {
         }
     }
 
-	function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
+    function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
         return string(toHexStringNoPrefix((token >> offset), 3));
     }
 
-	function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
+    function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
         bytes memory buffer = new bytes(2 * length);
         for (uint256 i = buffer.length; i > 0; i--) {
             buffer[i - 1] = ALPHABET[value & 0xf];
@@ -301,7 +301,7 @@ library NFTSVG {
         return string(buffer);
     }
 
-	function scale(
+    function scale(
         uint256 n,
         uint256 inMn,
         uint256 inMx,
@@ -311,7 +311,7 @@ library NFTSVG {
         return Strings.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
     }
 
-	function getCircleCoord(
+    function getCircleCoord(
         uint256 tokenAddress,
         uint256 offset,
         uint256 tokenId
@@ -319,7 +319,7 @@ library NFTSVG {
         return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
     }
 
-	function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
+    function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
         return uint256(uint8(token >> offset));
     }
 

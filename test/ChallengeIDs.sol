@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT 
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.15;
 
 uint constant SUM_ID = 0;
 uint constant SQRT_ID = 4;

@@ -1,3 +1,5 @@
+pragma solidity ^0.8.15;
+
 /// [MIT License]
 /// @title Base64
 /// @notice Provides a function for encoding some bytes in base64
