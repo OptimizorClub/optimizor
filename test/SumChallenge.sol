@@ -39,7 +39,8 @@ contract SumChallenge is IChallenge {
     }
 
     function svg(uint tokenId) external view returns (bytes memory art) {
-        art = '<rect width="230" height="240" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />';
+        art = '<polygon points="115,115 148,115 148,148" fill="none" stroke="white"/><polygon points="115,115 148,148 125,171" fill="none" stroke="white"/><polygon points="115,115 125,171 92,177" fill="none" stroke="white"/><polygon points="115,115 92,177 61,165" fill="none" stroke="white"/><polygon points="115,115 61,165 39,141" fill="none" stroke="white"/><polygon points="115,115 39,141 28,110" fill="none" stroke="white"/><polygon points="115,115 28,110 30,77" fill="none" stroke="white"/><polygon points="115,115 30,77 43,47" fill="none" stroke="white"/><polygon points="115,115 43,47 66,23" fill="none" stroke="white"/><polygon points="115,115 66,23 95,8" fill="none" stroke="white"/><polygon points="115,115 95,8 127,2" fill="none" stroke="white"/><polygon points="115,115 127,2 160,5" fill="none" stroke="white"/><polygon points="115,115 160,5 190,18" fill="none" stroke="white"/>';
+        /* art = '<rect width="230" height="240" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />'; */
         //art = '<path d="M150 0 L75 200 L225 200 Z" />';
         //art = '<polygon points="100,10 40,198 190,78 10,78 160,198" style="fill:lime;stroke:purple;stroke-width:5;fill-rule:nonzero;" />';
     }
