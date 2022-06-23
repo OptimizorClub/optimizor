@@ -41,7 +41,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
     constructor()
         ERC721("Test", "TTT")
-     Owned(msg.sender) {
+        Owned(msg.sender) {
     }
 
     function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
@@ -101,13 +101,24 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     }
 
     function winnerLevel(uint id) public view returns (uint32) {
-        //require(_ownerOf[id] != address(0));
+        // TODO uncomment the line below
+        require(_ownerOf[id] != address(0));
 
         while (_ownerOf[id] != address(0)) {
             ++id;
         }
 
         return uint32(id);
+    }
+
+
+    function leaderboard(uint tokenId) public view returns (address[] memory board) {
+        uint challengeId = tokenId >> 32;
+        uint32 winners = winnerLevel(tokenId) - 1;
+        board = new address[](winners);
+        for (uint i = 1; i <= winners; ++i) {
+            board[i - 1] = _ownerOf[(challengeId << 32) | i];
+        }
     }
 
     function svg(uint tokenId) internal view returns (string memory) {
@@ -151,26 +162,43 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         );
     }
 
-    function tokenURI(uint256 id) public view override returns (string memory) {
+    function leaderboardString(uint tokenId) public view returns (bytes memory) {
+        address[] memory leaders = leaderboard(tokenId);
+        bytes memory leadersStr = "";
+        uint lIdx = leaders.length;
+        for (uint i = 0; i < leaders.length; ++i) {
+            leadersStr = abi.encodePacked(
+                "\\n",
+                Strings.toString(lIdx),
+                ". ",
+                Strings.toHexString(uint(uint160(leaders[i])), 20),
+                leadersStr
+            );
+            --lIdx;
+        }
+        return abi.encodePacked("Leaderboard:", leadersStr);
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         return
-        string(
-            abi.encodePacked(
-                'data:application/json;base64,',
-                Base64.encode(
-                    bytes(
-                        abi.encodePacked(
-                            '{"name":"',
-                            "TestName",
-                            '", "description":"',
-                            "Descriptionnnnnnnnnnn",
-                            '", "image": "',
-                            'data:image/svg+xml;base64,',
-                            Base64.encode(bytes(svg(id))),
-                            '"}'
+            string(
+                abi.encodePacked(
+                    'data:application/json;base64,',
+                    Base64.encode(
+                        bytes(
+                            abi.encodePacked(
+                                '{"name":"',
+                                "TestName",
+                                '", "description":"',
+                                leaderboardString(tokenId),
+                                '", "image": "',
+                                'data:image/svg+xml;base64,',
+                                Base64.encode(bytes(svg(tokenId))),
+                                '"}'
+                            )
                         )
                     )
                 )
-            )
-        );
+            );
     }
 }
