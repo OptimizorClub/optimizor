@@ -12,14 +12,12 @@ library NFTSVG {
     using Strings for uint256;
 
     struct SVGParams {
-        string quoteToken;
-        string baseToken;
-        address poolAddress;
-        string quoteTokenSymbol;
-        string baseTokenSymbol;
-        string feeTier;
-        int24 tickLower;
-        int24 tickUpper;
+        string projectName;
+        string challengeName;
+        string holderAddr;
+        string challengeAddr;
+        uint gasUsed;
+        uint gasOpti;
         int8 overRange;
         uint256 tokenId;
         uint32 rank;
@@ -51,17 +49,17 @@ library NFTSVG {
                 abi.encodePacked(
                     generateSVGDefs(params),
                     generateSVGBorderText(
-                        params.quoteToken,
-                        params.baseToken,
-                        params.quoteTokenSymbol,
-                        params.baseTokenSymbol
+                        params.projectName,
+                        params.challengeName,
+                        params.holderAddr,
+                        params.challengeAddr
                     ),
-                    generateSVGCardMantle(params.baseToken, params.baseTokenSymbol, params.feeTier),
-                    generageSvgCurve(params.tickLower, params.tickUpper, params.overRange, challengeSVG),
+                    generateSVGCardMantle(params.challengeName, params.challengeAddr, params.rank, params.participants),
+                    generateSvgCurve(params.overRange, challengeSVG),
                     generateSVGPositionDataAndLocationCurve(
                         params.tokenId.toString(),
-                        params.tickLower,
-                        params.tickUpper
+                        params.gasUsed,
+                        params.gasOpti
                     ),
                     generateSVGRareSparkle(params.rank),
                     '</svg>'
@@ -155,58 +153,62 @@ library NFTSVG {
     }
 
     function generateSVGBorderText(
-        string memory quoteToken,
-        string memory baseToken,
-        string memory quoteTokenSymbol,
-        string memory baseTokenSymbol
+        string memory projectName,
+        string memory challengeName,
+        string memory holderAddr,
+        string memory challengeAddr
     ) private pure returns (string memory svg) {
         svg = string(
             abi.encodePacked(
                 '<text text-rendering="optimizeSpeed">',
                 '<textPath startOffset="-100%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
-                baseToken,
+                challengeName,
                 unicode' • ',
-                baseTokenSymbol,
+                challengeAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite" />',
                 '</textPath> <textPath startOffset="0%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
-                baseToken,
+                challengeName,
                 unicode' • ',
-                baseTokenSymbol,
+                challengeAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite" /> </textPath>',
                 '<textPath startOffset="50%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
-                quoteToken,
+                projectName,
                 unicode' • ',
-                quoteTokenSymbol,
+                holderAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s"',
                 ' repeatCount="indefinite" /></textPath><textPath startOffset="-50%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
-                quoteToken,
+                projectName,
                 unicode' • ',
-                quoteTokenSymbol,
+                holderAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite" /></textPath></text>'
             )
         );
     }
 
     function generateSVGCardMantle(
-        string memory quoteTokenSymbol,
-        string memory baseTokenSymbol,
-        string memory feeTier
+        string memory holderAddr,
+        string memory challengeAddr,
+        uint32 rank,
+        uint32 participants
     ) private pure returns (string memory svg) {
         svg = string(
             abi.encodePacked(
                 '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px" /> <text y="70px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
-                quoteTokenSymbol,
+                holderAddr,
                 '</text><text y="115px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
-                feeTier,
+                string.concat(
+                    "Rank #",
+                    Strings.toString(rank),
+                    "/",
+                    Strings.toString(participants)
+                ),
                 '</text></g>',
                 '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)" />'
             )
         );
     }
 
-    function generageSvgCurve(
-        int24 tickLower,
-        int24 tickUpper,
+    function generateSvgCurve(
         int8 overR,
         bytes memory challengeSVG
     ) private pure returns (string memory svg) {
@@ -225,15 +227,14 @@ library NFTSVG {
 
     function generateSVGPositionDataAndLocationCurve(
         string memory tokenId,
-        int24 tickLower,
-        int24 tickUpper
+        uint gasUsed,
+        uint gasOpti
     ) private pure returns (string memory svg) {
-        string memory tickLowerStr = tickToString(tickLower);
-        string memory tickUpperStr = tickToString(tickUpper);
+        string memory gasUsedStr = Strings.toString(gasUsed);
+        string memory gasOptiStr = Strings.toString(gasOpti);
         uint256 str1length = bytes(tokenId).length + 4;
-        uint256 str2length = bytes(tickLowerStr).length + 10;
-        uint256 str3length = bytes(tickUpperStr).length + 10;
-        //(string memory xCoord, string memory yCoord) = rangeLocation(tickLower, tickUpper);
+        uint256 str2length = bytes(gasUsedStr).length + 10;
+        uint256 str3length = bytes(gasOptiStr).length + 10;
         svg = string(
             abi.encodePacked(
                 ' <g style="transform:translate(29px, 384px)">',
@@ -248,26 +249,17 @@ library NFTSVG {
                 uint256(7 * (str2length + 4)).toString(),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas used: </tspan>',
-                tickLowerStr,
+                gasUsedStr,
                 '</text></g>',
                 ' <g style="transform:translate(29px, 444px)">',
                 '<rect width="',
                 uint256(7 * (str3length + 4)).toString(),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas opti: </tspan>',
-                tickUpperStr,
+                gasOptiStr,
                 '</text></g>'
             )
         );
-    }
-
-    function tickToString(int24 tick) private pure returns (string memory) {
-        string memory sign = '';
-        if (tick < 0) {
-            tick = tick * -1;
-            sign = '-';
-        }
-        return string(abi.encodePacked(sign, uint256(int256(tick)).toString()));
     }
 
     function generateSVGRareSparkle(uint32 rank) private pure returns (string memory svg) {

@@ -121,20 +121,12 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         string memory name = chl.target.name();
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
-            quoteToken: "Optimizor",
-            baseToken: name,
-            poolAddress: address(this),
-            quoteTokenSymbol: NFTSVG.toHexString(uint(uint160(address(chl.holder))), 20),
-            baseTokenSymbol: NFTSVG.toHexString(uint(uint160(address(chl.target))), 20),
-            feeTier:
-                string.concat(
-                    "Rank #",
-                    Strings.toString(rank),
-                    "/",
-                    Strings.toString(participants)
-                ),
-            tickLower: int24(int(chl.gasUsed)),
-            tickUpper: int24(int(chl.gasUsed + 100)),
+            projectName: "Optimizor",
+            challengeName: name,
+            holderAddr: NFTSVG.toHexString(uint(uint160(address(chl.holder))), 20),
+            challengeAddr: NFTSVG.toHexString(uint(uint160(address(chl.target))), 20),
+            gasUsed: chl.gasUsed,
+            gasOpti: 10,
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: uint32(rank),
