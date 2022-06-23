@@ -124,8 +124,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             quoteToken: "Optimizor",
             baseToken: name,
             poolAddress: address(this),
-            quoteTokenSymbol: toHexString(uint(uint160(address(chl.holder))), 20),
-            baseTokenSymbol: toHexString(uint(uint160(address(chl.target))), 20),
+            quoteTokenSymbol: NFTSVG.toHexString(uint(uint160(address(chl.holder))), 20),
+            baseTokenSymbol: NFTSVG.toHexString(uint(uint160(address(chl.target))), 20),
             feeTier:
                 string.concat(
                     "Rank #",
@@ -141,17 +141,17 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 			rank: uint32(rank),
 			participants: 10,
 
-			color0: tokenToColorHex(uint256(uint160(address(chl.target))), 136),
-            color1: tokenToColorHex(uint256(uint160(chl.holder)), 136),
-            color2: tokenToColorHex(uint256(uint160(address(chl.target))), 0),
-            color3: tokenToColorHex(uint256(uint160(chl.holder)), 0),
+			color0: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 136),
+            color1: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 136),
+            color2: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 0),
+            color3: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 0),
 
-			x1: scale(getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
-            y1: scale(getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
-            x2: scale(getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
-            y2: scale(getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
-            x3: scale(getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
-            y3: scale(getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
+			x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
+            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
+            x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
+            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
+            x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
+            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
 			/*
             color0: "red",
             color1: "blue",
@@ -196,54 +196,5 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 				)
 			);
 	}
-
-	function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
-        return string(toHexStringNoPrefix((token >> offset), 3));
-    }
-
-	function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
-        bytes memory buffer = new bytes(2 * length);
-        for (uint256 i = buffer.length; i > 0; i--) {
-            buffer[i - 1] = ALPHABET[value & 0xf];
-            value >>= 4;
-        }
-        return string(buffer);
-    }
-
-	function scale(
-        uint256 n,
-        uint256 inMn,
-        uint256 inMx,
-        uint256 outMn,
-        uint256 outMx
-    ) private pure returns (string memory) {
-        return Strings.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
-    }
-
-	function getCircleCoord(
-        uint256 tokenAddress,
-        uint256 offset,
-        uint256 tokenId
-    ) internal pure returns (uint256) {
-        return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
-    }
-
-	function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
-        return uint256(uint8(token >> offset));
-    }
-
-    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
-        bytes memory buffer = new bytes(2 * length + 2);
-        buffer[0] = '0';
-        buffer[1] = 'x';
-        for (uint256 i = 2 * length + 1; i > 1; --i) {
-            buffer[i] = ALPHABET[value & 0xf];
-            value >>= 4;
-        }
-        require(value == 0, 'Strings: hex length insufficient');
-        return string(buffer);
-    }
-
-    bytes16 constant ALPHABET = '0123456789abcdef';
 }
 

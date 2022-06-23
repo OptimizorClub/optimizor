@@ -11,17 +11,6 @@ import './base64.sol';
 library NFTSVG {
     using Strings for uint256;
 
-	/*
-    string constant curve1 = 'M1 1C41 41 105 105 145 145';
-    string constant curve2 = 'M1 1C33 49 97 113 145 145';
-    string constant curve3 = 'M1 1C33 57 89 113 145 145';
-    string constant curve4 = 'M1 1C25 65 81 121 145 145';
-    string constant curve5 = 'M1 1C17 73 73 129 145 145';
-    string constant curve6 = 'M1 1C9 81 65 137 145 145';
-    string constant curve7 = 'M1 1C1 89 57.5 145 145 145';
-    string constant curve8 = 'M1 1C1 97 49 145 145 145';
-	*/
-
     struct SVGParams {
         string quoteToken;
         string baseToken;
@@ -224,99 +213,17 @@ library NFTSVG {
 		bytes memory challengeSVG
     ) private pure returns (string memory svg) {
         string memory fade = overRange == 1 ? '#fade-up' : overRange == -1 ? '#fade-down' : '#none';
-        //string memory curve = getCurve(tickLower, tickUpper, tickSpacing);
         svg = string(
             abi.encodePacked(
                 '<g mask="url(',
                 fade,
                 ')"',
                 ' style="transform:translate(30px,130px)">',
-                //'<rect x="-16px" y="-16px" width="180px" height="180px" fill="none" />',
 				challengeSVG,
 				'</g>'
-				/*
-                '<path d="',
-                curve,
-                '" stroke="rgba(0,0,0,0.3)" stroke-width="32px" fill="none" stroke-linecap="round" />',
-                '</g><g mask="url(',
-                fade,
-                ')"',
-                ' style="transform:translate(72px,189px)">',
-                '<rect x="-16px" y="-16px" width="180px" height="180px" fill="none" />',
-                '<path d="',
-                curve,
-                '" stroke="rgba(255,255,255,1)" fill="none" stroke-linecap="round" /></g>',
-                generateSVGCurveCircle(overRange)
-				*/
             )
         );
     }
-
-	/*
-    function getCurve(
-        int24 tickLower,
-        int24 tickUpper,
-        int24 tickSpacing
-    ) internal pure returns (string memory curve) {
-        int24 tickRange = (tickUpper - tickLower) / tickSpacing;
-        if (tickRange <= 4) {
-            curve = curve1;
-        } else if (tickRange <= 8) {
-            curve = curve2;
-        } else if (tickRange <= 16) {
-            curve = curve3;
-        } else if (tickRange <= 32) {
-            curve = curve4;
-        } else if (tickRange <= 64) {
-            curve = curve5;
-        } else if (tickRange <= 128) {
-            curve = curve6;
-        } else if (tickRange <= 256) {
-            curve = curve7;
-        } else {
-            curve = curve8;
-        }
-    }
-	*/
-
-   /*
-    function generateSVGCurveCircle(int8 overRange) internal pure returns (string memory svg) {
-        string memory curvex1 = '73';
-        string memory curvey1 = '190';
-        string memory curvex2 = '217';
-        string memory curvey2 = '334';
-        if (overRange == 1 || overRange == -1) {
-            svg = string(
-                abi.encodePacked(
-                    '<circle cx="',
-                    overRange == -1 ? curvex1 : curvex2,
-                    'px" cy="',
-                    overRange == -1 ? curvey1 : curvey2,
-                    'px" r="4px" fill="white" /><circle cx="',
-                    overRange == -1 ? curvex1 : curvex2,
-                    'px" cy="',
-                    overRange == -1 ? curvey1 : curvey2,
-                    'px" r="24px" fill="none" stroke="white" />'
-                )
-            );
-        } else {
-            svg = string(
-                abi.encodePacked(
-                    '<circle cx="',
-                    curvex1,
-                    'px" cy="',
-                    curvey1,
-                    'px" r="4px" fill="white" />',
-                    '<circle cx="',
-                    curvex2,
-                    'px" cy="',
-                    curvey2,
-                    'px" r="4px" fill="white" />'
-                )
-            );
-        }
-    }
-	*/
 
     function generateSVGPositionDataAndLocationCurve(
         string memory tokenId,
@@ -352,16 +259,6 @@ library NFTSVG {
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas opti: </tspan>',
                 tickUpperStr,
                 '</text></g>'
-				/*
-                '<g style="transform:translate(226px, 433px)">',
-                '<rect width="36px" height="36px" rx="8px" ry="8px" fill="none" stroke="rgba(255,255,255,0.2)" />',
-                '<path stroke-linecap="round" d="M8 9C8.00004 22.9494 16.2099 28 27 28" fill="none" stroke="white" />',
-                '<circle style="transform:translate3d(',
-                xCoord,
-                'px, ',
-                yCoord,
-                'px, 0px)" cx="0px" cy="0px" r="4px" fill="white"/></g>'
-				*/
             )
         );
     }
@@ -374,33 +271,6 @@ library NFTSVG {
         }
         return string(abi.encodePacked(sign, uint256(int256(tick)).toString()));
     }
-
-	/*
-    function rangeLocation(int24 tickLower, int24 tickUpper) internal pure returns (string memory, string memory) {
-        int24 midPoint = (tickLower + tickUpper) / 2;
-        if (midPoint < -125_000) {
-            return ('8', '7');
-        } else if (midPoint < -75_000) {
-            return ('8', '10.5');
-        } else if (midPoint < -25_000) {
-            return ('8', '14.25');
-        } else if (midPoint < -5_000) {
-            return ('10', '18');
-        } else if (midPoint < 0) {
-            return ('11', '21');
-        } else if (midPoint < 5_000) {
-            return ('13', '23');
-        } else if (midPoint < 25_000) {
-            return ('15', '25');
-        } else if (midPoint < 75_000) {
-            return ('18', '26');
-        } else if (midPoint < 125_000) {
-            return ('21', '27');
-        } else {
-            return ('24', '27');
-        }
-    }
-	*/
 
     function generateSVGRareSparkle(uint32 rank) private pure returns (string memory svg) {
         if (rank == 1) {
@@ -417,4 +287,53 @@ library NFTSVG {
             svg = '';
         }
     }
+
+	function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
+        return string(toHexStringNoPrefix((token >> offset), 3));
+    }
+
+	function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length);
+        for (uint256 i = buffer.length; i > 0; i--) {
+            buffer[i - 1] = ALPHABET[value & 0xf];
+            value >>= 4;
+        }
+        return string(buffer);
+    }
+
+	function scale(
+        uint256 n,
+        uint256 inMn,
+        uint256 inMx,
+        uint256 outMn,
+        uint256 outMx
+    ) internal pure returns (string memory) {
+        return Strings.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
+    }
+
+	function getCircleCoord(
+        uint256 tokenAddress,
+        uint256 offset,
+        uint256 tokenId
+    ) internal pure returns (uint256) {
+        return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
+    }
+
+	function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
+        return uint256(uint8(token >> offset));
+    }
+
+    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
+        bytes memory buffer = new bytes(2 * length + 2);
+        buffer[0] = '0';
+        buffer[1] = 'x';
+        for (uint256 i = 2 * length + 1; i > 1; --i) {
+            buffer[i] = ALPHABET[value & 0xf];
+            value >>= 4;
+        }
+        require(value == 0, 'Strings: hex length insufficient');
+        return string(buffer);
+    }
+
+    bytes16 constant ALPHABET = '0123456789abcdef';
 }
