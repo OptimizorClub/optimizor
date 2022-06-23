@@ -135,8 +135,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
                 ),
             tickLower: int24(int(chl.gasUsed)),
             tickUpper: int24(int(chl.gasUsed + 100)),
-            tickSpacing: 1, // To remove
-            overRange: 8, // To remove
+            overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: uint32(rank),
             participants: 10,

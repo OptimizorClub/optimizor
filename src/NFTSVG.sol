@@ -20,7 +20,6 @@ library NFTSVG {
         string feeTier;
         int24 tickLower;
         int24 tickUpper;
-        int24 tickSpacing;
         int8 overRange;
         uint256 tokenId;
         uint32 rank;
@@ -58,7 +57,7 @@ library NFTSVG {
                         params.baseTokenSymbol
                     ),
                     generateSVGCardMantle(params.baseToken, params.baseTokenSymbol, params.feeTier),
-                    generageSvgCurve(params.tickLower, params.tickUpper, params.tickSpacing, params.overRange, challengeSVG),
+                    generageSvgCurve(params.tickLower, params.tickUpper, params.overRange, challengeSVG),
                     generateSVGPositionDataAndLocationCurve(
                         params.tokenId.toString(),
                         params.tickLower,
@@ -208,11 +207,10 @@ library NFTSVG {
     function generageSvgCurve(
         int24 tickLower,
         int24 tickUpper,
-        int24 tickSpacing,
-        int8 overRange,
+        int8 overR,
         bytes memory challengeSVG
     ) private pure returns (string memory svg) {
-        string memory fade = overRange == 1 ? '#fade-up' : overRange == -1 ? '#fade-down' : '#none';
+        string memory fade = overR == 1 ? '#fade-up' : overR == -1 ? '#fade-down' : '#none';
         svg = string(
             abi.encodePacked(
                 '<g mask="url(',
