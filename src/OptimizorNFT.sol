@@ -108,13 +108,13 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             ++id;
         }
 
-        return uint32(id);
+        return uint32(id - 1);
     }
 
 
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
         uint challengeId = tokenId >> 32;
-        uint32 winners = winnerLevel(tokenId) - 1;
+        uint32 winners = winnerLevel(tokenId);
         board = new address[](winners);
         for (uint i = 1; i <= winners; ++i) {
             board[i - 1] = _ownerOf[(challengeId << 32) | i];
@@ -122,10 +122,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     }
 
     function svg(uint tokenId) internal view returns (string memory) {
-        uint32 level = uint32(tokenId);
-        bool winner = winnerLevel(tokenId) == level;
-        uint rank = 1;
-        uint participants = 20;
+        uint32 thisLevel = uint32(tokenId);
+        uint32 wLevel = winnerLevel(tokenId);
+        uint32 rank = wLevel - thisLevel + 1;
 
         uint challengeId = tokenId >> 32;
         Data storage chl = challenges[challengeId];
@@ -140,8 +139,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             gasOpti: 10,
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
-            rank: uint32(rank),
-            participants: 10,
+            rank: rank,
+            participants: wLevel,
 
             color0: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 136),
             color1: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 136),
