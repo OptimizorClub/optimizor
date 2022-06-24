@@ -52,21 +52,22 @@ contract SumChallenge is IChallenge {
     bytes30 constant p11 = 'points="115,145 129,13 167,17"';
     bytes30 constant p12 = 'points="115,145 167,17 203,31"';
     function svg(uint tokenId) external view returns (bytes memory art) {
+        uint32 level = uint32(tokenId);
         art = abi.encodePacked(
             '<rect width="230" height="230" rx="18px" ry="18px" fill="rgba(0,0,0,0.1)" />',
             '<polygon ', p0, ' fill="none" stroke="white"/>',
-            '<polygon ', p1, ' fill="none" stroke="white"/>',
-            '<polygon ', p2, ' fill="none" stroke="white"/>',
-            '<polygon ', p3, ' fill="none" stroke="white"/>',
-            '<polygon ', p4, ' fill="none" stroke="white"/>',
-            '<polygon ', p5, ' fill="none" stroke="white"/>',
-            '<polygon ', p6, ' fill="none" stroke="white"/>',
-            '<polygon ', p7, ' fill="none" stroke="white"/>',
-            '<polygon ', p8, ' fill="none" stroke="white"/>',
-            '<polygon ', p9, ' fill="none" stroke="white"/>',
-            '<polygon ', p10, ' fill="none" stroke="white"/>',
-            '<polygon ', p11, ' fill="none" stroke="white"/>',
-            '<polygon ', p12, ' fill="none" stroke="white"/>'
+            level > 1 ? abi.encodePacked('<polygon ', p1, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 2 ? abi.encodePacked('<polygon ', p2, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 3 ? abi.encodePacked('<polygon ', p3, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 4 ? abi.encodePacked('<polygon ', p4, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 5 ? abi.encodePacked('<polygon ', p5, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 6 ? abi.encodePacked('<polygon ', p6, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 7 ? abi.encodePacked('<polygon ', p7, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 8 ? abi.encodePacked('<polygon ', p8, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 9 ? abi.encodePacked('<polygon ', p9, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 10 ? abi.encodePacked('<polygon ', p10, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 11 ? abi.encodePacked('<polygon ', p11, ' fill="none" stroke="white"/>') : bytes(""),
+            level > 12 ? abi.encodePacked('<polygon ', p12, ' fill="none" stroke="white"/>') : bytes("")
         );
         /* art = '<rect width="230" height="240" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />'; */
         //art = '<path d="M150 0 L75 200 L225 200 Z" />';
