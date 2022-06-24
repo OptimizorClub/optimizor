@@ -69,9 +69,6 @@ contract SumChallenge is IChallenge {
             level > 11 ? abi.encodePacked('<polygon ', p11, ' fill="none" stroke="white"/>') : bytes(""),
             level > 12 ? abi.encodePacked('<polygon ', p12, ' fill="none" stroke="white"/>') : bytes("")
         );
-        /* art = '<rect width="230" height="240" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />'; */
-        //art = '<path d="M150 0 L75 200 L225 200 Z" />';
-        //art = '<polygon points="100,10 40,198 190,78 10,78 160,198" style="fill:lime;stroke:purple;stroke-width:5;fill-rule:nonzero;" />';
     }
 }
 
