@@ -63,14 +63,14 @@ contract SqrtChallenge is Challenge {
     // Reverts if invalid
     function verify(Fixed18 input, Fixed18 output) internal pure {
         // Checks
-        //       | input * input - output |
+        //       | output * output - input |
         //       --------------------------  < EPSILON
-        //       |        input           |
+        //       |        output           |
         if(
-           !input
-           .mul(input)
-           .distance(output)
-           .div(input)
+           !output
+           .mul(output)
+           .distance(input)
+           .div(output)
            .lt(EPSILON)
         )
             revert DoesNotSatisfyTolerance(Fixed18.unwrap(input), Fixed18.unwrap(output));
