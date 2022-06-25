@@ -38,6 +38,10 @@ contract SumChallenge is IChallenge {
         return "SUM";
     }
 
+    function description() external override view returns (string memory) {
+        return "";
+    }
+
     function svg(uint tokenId) external view returns (bytes memory art) {
         uint32 level = uint32(tokenId);
         art = "";

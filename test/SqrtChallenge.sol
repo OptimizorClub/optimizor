@@ -79,6 +79,10 @@ contract SqrtChallenge is IChallenge {
         return "SQRT";
     }
 
+    function description() external override view returns (string memory) {
+        return "Spiral of Theodorus.";
+    }
+
     bytes32 constant p0 = 'points="115,145 153,145 153,183"';
     bytes32 constant p1 = 'points="115,145 153,183 126,210"';
     bytes31 constant p2 = 'points="115,145 126,210 88,217"';
