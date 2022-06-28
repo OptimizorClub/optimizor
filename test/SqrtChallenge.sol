@@ -9,6 +9,8 @@ import {Fixed18} from "./Fixed18.sol";
 uint constant INPUT_SIZE = 3;
 
 // Expecting around 5 decimal place of precision
+// Smallest tolerance that binary search passes:
+//Fixed18 constant EPSILON = Fixed18.wrap(0.00000001 * 10**18);
 Fixed18 constant EPSILON = Fixed18.wrap(0.0001 * 10**18);
 
 interface ISqrt {
