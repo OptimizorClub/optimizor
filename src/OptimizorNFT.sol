@@ -28,16 +28,15 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
     struct Data {
         // slot 0
-        uint gasUsed;
-        // slot 1
+        uint32 gasUsed;
         IChallenge target;
-        // slot 2
+        // slot 1
         address holder;
         uint32 level;
     }
 
-    // slot 0
     mapping (uint => Data) public challenges;
+    mapping (uint => uint) extraDetails;
 
     constructor()
         ERC721("Test", "TTT")
@@ -84,7 +83,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert ChallengeNotFound(id);
         }
 
-        uint gas = chl.target.run(target, uint(seed));
+        uint32 gas = uint32(chl.target.run(target, uint(seed)));
 
         if (chl.gasUsed != 0 && (chl.gasUsed <= gas)) {
             revert NotOptimizor();
@@ -96,8 +95,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             ++chl.level;
         }
 
-        uint tokenId = (id << 32) | chl.level;
+        uint tokenId = packTokenId(id, chl.level);
         ERC721._mint(recipient, tokenId);
+        extraDetails[tokenId] = packExtraDetail(recipient, chl.gasUsed);
     }
 
     function winnerLevel(uint id) public view returns (uint32) {
@@ -113,20 +113,21 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
 
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
-        uint challengeId = tokenId >> 32;
+        (uint challengeId, ) = unpackTokenId(tokenId);
         uint32 winners = winnerLevel(tokenId);
         board = new address[](winners);
-        for (uint i = 1; i <= winners; ++i) {
-            board[i - 1] = _ownerOf[(challengeId << 32) | i];
+        for (uint32 i = 1; i <= winners; ++i) {
+            (address recipient, ) = unpackExtraDetail(packTokenId(challengeId, i));
+            board[i - 1] = recipient;
         }
     }
 
     function svg(uint tokenId) internal view returns (string memory) {
-        uint32 thisLevel = uint32(tokenId);
+        (uint challengeId, uint32 thisLevel) = unpackTokenId(tokenId);
+
         uint32 wLevel = winnerLevel(tokenId);
         uint32 rank = wLevel - thisLevel + 1;
 
-        uint challengeId = tokenId >> 32;
         Data storage chl = challenges[challengeId];
         string memory name = chl.target.name();
 
@@ -178,6 +179,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         return abi.encodePacked("Leaderboard:", leadersStr);
     }
 
+    function attributes(uint tokenId) internal view returns (bytes memory) {
+        return "";
+    }
+
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         return
             string(
@@ -199,5 +204,24 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
                     )
                 )
             );
+    }
+
+    function packTokenId(uint challengeId, uint32 level) internal pure returns (uint) {
+        return (challengeId << 32) | level;
+    }
+
+    function unpackTokenId(uint256 tokenId) internal pure returns (uint256 challengeId, uint32 level) {
+        challengeId = tokenId >> 32;
+        level = uint32(tokenId);
+    }
+
+    function packExtraDetail(address recipient, uint32 gasUsed) internal pure returns (uint) {
+        return (uint(uint160(recipient)) << 32) | gasUsed;
+    }
+
+    function unpackExtraDetail(uint256 tokenId) internal view returns (address recipient, uint32 gasUsed) {
+        uint256 tmp = extraDetails[tokenId];
+        recipient = address(uint160(tmp >> 32));
+        gasUsed = uint32(tmp);
     }
 }
