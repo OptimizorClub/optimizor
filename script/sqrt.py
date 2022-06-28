@@ -26,7 +26,7 @@ for i in range(0, N):
     p2_y = c_y + base_length * b_y
     p3_x = c_x + base_length * n_x
     p3_y = c_y + base_length * n_y
-    out += f'<polygon points="{round(p1_x)},{round(p1_y)} {round(p2_x)},{round(p2_y)} {round(p3_x)},{round(p3_y)}" fill="none" stroke="white">'
+    out += f'<polygon points="{round(p1_x)},{round(p1_y)} {round(p2_x)},{round(p2_y)} {round(p3_x)},{round(p3_y)}" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2">'
     out += f'<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 {round(p1_x)} {round(p1_y)}" to="360 {round(p1_x)} {round(p1_y)}" dur="10s" repeatCount="indefinite"/></polygon>'
 
     b_x, b_y = n_x, n_y
