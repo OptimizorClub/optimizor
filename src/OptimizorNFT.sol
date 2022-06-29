@@ -111,42 +111,45 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     }
 
     function svg(uint tokenId) internal view returns (string memory) {
-        (uint challengeId, uint32 thisLevel) = unpackTokenId(tokenId);
+        TokenDetails memory details = tokenDetails(tokenId);
 
-        uint32 wLevel = challenges[challengeId].level;
-        uint32 rank = wLevel - thisLevel + 1;
+        uint32 wLevel = details.leaderLevel;
+        uint32 rank = wLevel - details.level + 1;
 
-        Data storage chl = challenges[challengeId];
-        string memory name = chl.target.name();
+        string memory name = details.challenge.name();
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor",
             challengeName: name,
-            holderAddr: NFTSVG.toHexString(uint(uint160(address(chl.holder))), 20),
-            challengeAddr: NFTSVG.toHexString(uint(uint160(address(chl.target))), 20),
-            gasUsed: chl.gasUsed,
+            // TODO should \/ be details.owner or details.recordHolder?
+            holderAddr: NFTSVG.toHexString(uint(uint160(address(details.owner))), 20),
+            challengeAddr: NFTSVG.toHexString(uint(uint160(address(details.challenge))), 20),
+            gasUsed: details.gas,
             gasOpti: 10,
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: rank,
             participants: wLevel,
 
-            color0: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 136),
-            color1: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 136),
-            color2: NFTSVG.tokenToColorHex(uint256(uint160(address(chl.target))), 0),
-            color3: NFTSVG.tokenToColorHex(uint256(uint160(chl.holder)), 0),
+            // Ideally these colors should not change if someone buys the nft,
+            // since maybe they bought it because of the colors.
+            // So we keep them based on the original record holder of this tokenId.
+            color0: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 136),
+            color1: NFTSVG.tokenToColorHex(uint256(uint160(details.recordHolder)), 136),
+            color2: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 0),
+            color3: NFTSVG.tokenToColorHex(uint256(uint160(details.recordHolder)), 0),
 
-            x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 16, tokenId), 0, 255, 16, 274),
-            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 16, tokenId), 0, 255, 100, 484),
-            x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 32, tokenId), 0, 255, 16, 274),
-            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 32, tokenId), 0, 255, 100, 484),
-            x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(chl.target))), 48, tokenId), 0, 255, 16, 274),
-            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(chl.holder)), 48, tokenId), 0, 255, 100, 484)
+            x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274),
+            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 16, tokenId), 0, 255, 100, 484),
+            x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 32, tokenId), 0, 255, 16, 274),
+            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 32, tokenId), 0, 255, 100, 484),
+            x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 48, tokenId), 0, 255, 16, 274),
+            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 48, tokenId), 0, 255, 100, 484)
         });
 
         return NFTSVG.generateSVG(
             svgParams,
-            chl.target.svg(tokenId)
+            details.challenge.svg(tokenId)
         );
     }
 
@@ -217,31 +220,42 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint challengeId;
         IChallenge challenge;
 
-        uint32 currentGas;
-        uint32 currentLevel;
-        address currentLeader;
+        uint32 leaderGas;
+        uint32 leaderLevel;
+        address leaderRecordHolder;
+        address leaderOwner;
 
         uint32 gas;
         uint32 level;
-        address holder;
+        address recordHolder;
+        address owner;
     }
 
-    function tokenDetails(uint256 tokenId) external view returns (TokenDetails memory details) {
+    function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
         (address recordHolder, uint32 gasUsed) = unpackExtraDetail(tokenId);
+
         Data storage chl = challenges[challengeId];
+
+        uint leaderTokenId = packTokenId(challengeId, chl.level);
+        (address leaderRecordHolder, uint32 leaderGasUsed) = unpackExtraDetail(tokenId);
+
+        assert(leaderRecordHolder == chl.holder);
+        assert(leaderGasUsed == chl.gasUsed);
 
         details = TokenDetails(
             challengeId,
             chl.target,
 
-            chl.gasUsed,
+            leaderGasUsed,
             chl.level,
-            chl.holder,
+            leaderRecordHolder,
+            _ownerOf[leaderTokenId],
 
             gasUsed,
             level,
-            recordHolder
+            recordHolder,
+            _ownerOf[tokenId]
         );
     }
 }
