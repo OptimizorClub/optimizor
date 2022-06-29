@@ -100,21 +100,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         extraDetails[tokenId] = packExtraDetail(recipient, chl.gasUsed);
     }
 
-    function winnerLevel(uint id) public view returns (uint32) {
-        // TODO uncomment the line below
-        require(_ownerOf[id] != address(0));
-
-        while (_ownerOf[id] != address(0)) {
-            ++id;
-        }
-
-        return uint32(id - 1);
-    }
-
-
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
         (uint challengeId, ) = unpackTokenId(tokenId);
-        uint32 winners = winnerLevel(tokenId);
+        uint32 winners = challenges[challengeId].level;
         board = new address[](winners);
         for (uint32 i = 1; i <= winners; ++i) {
             (address recipient, ) = unpackExtraDetail(packTokenId(challengeId, i));
@@ -125,7 +113,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     function svg(uint tokenId) internal view returns (string memory) {
         (uint challengeId, uint32 thisLevel) = unpackTokenId(tokenId);
 
-        uint32 wLevel = winnerLevel(tokenId);
+        uint32 wLevel = challenges[challengeId].level;
         uint32 rank = wLevel - thisLevel + 1;
 
         Data storage chl = challenges[challengeId];
@@ -223,5 +211,37 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint256 tmp = extraDetails[tokenId];
         recipient = address(uint160(tmp >> 32));
         gasUsed = uint32(tmp);
+    }
+
+    struct TokenDetails {
+        uint challengeId;
+        IChallenge challenge;
+
+        uint32 currentGas;
+        uint32 currentLevel;
+        address currentLeader;
+
+        uint32 gas;
+        uint32 level;
+        address holder;
+    }
+
+    function tokenDetails(uint256 tokenId) external view returns (TokenDetails memory details) {
+        (uint challengeId, uint32 level) = unpackTokenId(tokenId);
+        (address recordHolder, uint32 gasUsed) = unpackExtraDetail(tokenId);
+        Data storage chl = challenges[challengeId];
+
+        details = TokenDetails(
+            challengeId,
+            chl.target,
+
+            chl.gasUsed,
+            chl.level,
+            chl.holder,
+
+            gasUsed,
+            level,
+            recordHolder
+        );
     }
 }
