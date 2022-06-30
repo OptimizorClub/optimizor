@@ -125,7 +125,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             holderAddr: NFTSVG.toHexString(uint(uint160(address(details.owner))), 20),
             challengeAddr: NFTSVG.toHexString(uint(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
-            gasOpti: 10,
+            gasOpti: gasOptiPercentage(tokenId, details),
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: rank,
@@ -151,6 +151,18 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             svgParams,
             details.challenge.svg(tokenId)
         );
+    }
+
+    function gasOptiPercentage(uint tokenId, TokenDetails memory details) internal view returns (uint) {
+        // TODO this is a hack to show 99% improvement for the first holder
+        if (details.level <= 1) {
+            return 99;
+        }
+
+        TokenDetails memory prevDetails = tokenDetails(tokenId - 1);
+        assert(prevDetails.gas > 0);
+
+        return (details.gas * 100) / prevDetails.gas;
     }
 
     function leaderboardString(uint tokenId) public view returns (bytes memory) {
@@ -238,18 +250,15 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         Data storage chl = challenges[challengeId];
 
         uint leaderTokenId = packTokenId(challengeId, chl.level);
-        (address leaderRecordHolder, uint32 leaderGasUsed) = unpackExtraDetail(tokenId);
-
-        assert(leaderRecordHolder == chl.holder);
-        assert(leaderGasUsed == chl.gasUsed);
+        assert(_ownerOf[leaderTokenId] != address(0));
 
         details = TokenDetails(
             challengeId,
             chl.target,
 
-            leaderGasUsed,
+            chl.gasUsed,
             chl.level,
-            leaderRecordHolder,
+            chl.holder,
             _ownerOf[leaderTokenId],
 
             gasUsed,
