@@ -189,14 +189,11 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
                     Base64.encode(
                         bytes(
                             abi.encodePacked(
-                                '{"name":"',
-                                "TestName",
-                                '", "description":"',
-                                leaderboardString(tokenId),
-                                '", "image": "',
-                                'data:image/svg+xml;base64,',
-                                Base64.encode(bytes(svg(tokenId))),
-                                '"}'
+                                '{',
+                                '"name":"', "TestName", '", ',
+                                '"description":"', leaderboardString(tokenId), '", ',
+                                '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
+                                '}'
                             )
                         )
                     )
