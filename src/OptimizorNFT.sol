@@ -177,8 +177,19 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         return abi.encodePacked("Leaderboard:", leadersStr);
     }
 
-    function attributes(uint tokenId) internal view returns (bytes memory) {
-        return "";
+    function attributesJSON(uint tokenId) internal view returns (bytes memory attr) {
+        TokenDetails memory details = tokenDetails(tokenId);
+
+        uint32 wLevel = details.leaderLevel;
+        uint32 rank = wLevel - details.level + 1;
+
+        attr = abi.encodePacked(
+            '[',
+            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} ',
+            ']'
+        );
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -192,6 +203,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
                                 '{',
                                 '"name":"', "TestName", '", ',
                                 '"description":"', leaderboardString(tokenId), '", ',
+                                '"attributes": ', attributesJSON(tokenId), ',',
                                 '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
                                 '}'
                             )
