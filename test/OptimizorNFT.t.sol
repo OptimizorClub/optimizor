@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import "./BaseTest.sol";
 import "../src/OptimizorNFT.sol";
+import "../src/DataHelpers.sol";
 
 contract OptimizorTest is BaseTest {
     function run() external returns (string memory) {
@@ -93,13 +94,14 @@ contract OptimizorTest is BaseTest {
         advancePeriod();
         advancePeriod();
 
-        (,,, uint32 preLevel) = opt.challenges(CHL_ID);
+        (, uint32 preLevel) = opt.challenges(CHL_ID);
 
         vm.prank(other);
         opt.challenge(CHL_ID, chl_hash_0, challenger_0, other);
         vm.stopPrank();
 
-        (,, address postOpt, uint32 postLevel) = opt.challenges(CHL_ID);
+        (, uint32 postLevel) = opt.challenges(CHL_ID);
+        (address postOpt, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel)));
         assertEq(postOpt, other);
         assertEq(postLevel, preLevel + 1);
 
@@ -111,7 +113,8 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders[0], other);
 
         opt.challenge(CHL_ID, chl_hash_1, challenger_1, address(this));
-        (,, address postOpt2, uint32 postLevel2) = opt.challenges(CHL_ID);
+        (, uint32 postLevel2) = opt.challenges(CHL_ID);
+        (address postOpt2, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel2)));
         assertEq(postOpt2, address(this));
         assertEq(postLevel2, postLevel + 1);
 
@@ -135,10 +138,10 @@ contract OptimizorTest is BaseTest {
         advancePeriod();
         advancePeriod();
 
-        (,,, uint32 preLevel) = opt.challenges(CHL_ID);
+        (, uint32 preLevel) = opt.challenges(CHL_ID);
         opt.challenge(CHL_ID, chl_hash, challenger, address(this));
-        (,, address postOpt, uint32 postLevel) = opt.challenges(CHL_ID);
-
+        (, uint32 postLevel) = opt.challenges(CHL_ID);
+        (address postOpt, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel)));
         assertEq(postOpt, address(this));
         assertEq(postLevel, preLevel + 1);
 

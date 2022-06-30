@@ -4,15 +4,13 @@ pragma solidity ^0.8.15;
 import "./Challenge.sol";
 import "./Time.sol";
 import "./base64.sol";
-
+import "./DataHelpers.sol";
 import "./NFTSVG.sol";
 
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
 import '@openzeppelin/contracts/utils/Strings.sol';
-
-
 
 contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     error ChallengeNotFound(uint challengeId);
@@ -27,16 +25,12 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     // TODO add events
 
     struct Data {
-        // slot 0
-        uint32 gasUsed;
         IChallenge target;
-        // slot 1
-        address holder;
         uint32 level;
     }
 
     mapping (uint => Data) public challenges;
-    mapping (uint => uint) extraDetails;
+    mapping (uint => uint) public extraDetails;
 
     constructor()
         ERC721("Test", "TTT")
@@ -85,19 +79,20 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
         uint32 gas = uint32(chl.target.run(target, uint(seed)));
 
-        if (chl.gasUsed != 0 && (chl.gasUsed <= gas)) {
+        uint winnerTokenId = packTokenId(id, chl.level);
+        (address winner, uint gasUsed) = extraDetailUnpacked(winnerTokenId);
+
+        if (gasUsed != 0 && (gasUsed <= gas)) {
             revert NotOptimizor();
         }
 
-        chl.gasUsed = gas;
-        chl.holder = recipient;
         unchecked {
             ++chl.level;
         }
 
         uint tokenId = packTokenId(id, chl.level);
         ERC721._mint(recipient, tokenId);
-        extraDetails[tokenId] = packExtraDetail(recipient, chl.gasUsed);
+        extraDetails[tokenId] = packExtraDetail(recipient, gas);
     }
 
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
@@ -105,7 +100,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint32 winners = challenges[challengeId].level;
         board = new address[](winners);
         for (uint32 i = 1; i <= winners; ++i) {
-            (address recipient, ) = unpackExtraDetail(packTokenId(challengeId, i));
+            (address recipient, ) = extraDetailUnpacked(packTokenId(challengeId, i));
             board[i - 1] = recipient;
         }
     }
@@ -209,23 +204,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             );
     }
 
-    function packTokenId(uint challengeId, uint32 level) internal pure returns (uint) {
-        return (challengeId << 32) | level;
-    }
 
-    function unpackTokenId(uint256 tokenId) internal pure returns (uint256 challengeId, uint32 level) {
-        challengeId = tokenId >> 32;
-        level = uint32(tokenId);
-    }
-
-    function packExtraDetail(address recipient, uint32 gasUsed) internal pure returns (uint) {
-        return (uint(uint160(recipient)) << 32) | gasUsed;
-    }
-
-    function unpackExtraDetail(uint256 tokenId) internal view returns (address recipient, uint32 gasUsed) {
-        uint256 tmp = extraDetails[tokenId];
-        recipient = address(uint160(tmp >> 32));
-        gasUsed = uint32(tmp);
+    function extraDetailUnpacked(uint256 tokenId) internal view returns (address recipient, uint32 gasUsed) {
+        return unpackExtraDetail(extraDetails[tokenId]);
     }
 
     struct TokenDetails {
@@ -245,20 +226,21 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
     function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
-        (address recordHolder, uint32 gasUsed) = unpackExtraDetail(tokenId);
+        (address recordHolder, uint32 gasUsed) = extraDetailUnpacked(tokenId);
 
         Data storage chl = challenges[challengeId];
 
         uint leaderTokenId = packTokenId(challengeId, chl.level);
         assert(_ownerOf[leaderTokenId] != address(0));
+        (address winnerHolder, uint32 winnerGasUsed) = extraDetailUnpacked(leaderTokenId);
 
         details = TokenDetails(
             challengeId,
             chl.target,
 
-            chl.gasUsed,
+            winnerGasUsed,
             chl.level,
-            chl.holder,
+            winnerHolder,
             _ownerOf[leaderTokenId],
 
             gasUsed,
