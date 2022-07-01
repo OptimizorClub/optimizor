@@ -10,3 +10,6 @@
 [submodule "lib/v3-core.git"]
 	path = lib/v3-core.git
 	url = https://github.com/Uniswap/v3-core.git
+[submodule "lib/puretea"]
+	path = lib/puretea
+	url = https://github.com/axic/puretea
