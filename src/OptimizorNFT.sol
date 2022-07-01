@@ -6,6 +6,7 @@ import "./Time.sol";
 import "./base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
+import "./IPurityChecker.sol";
 
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
@@ -19,6 +20,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     error AddressCodeMismatch();
     error BlockHashNotFound();
     error CodeNotSubmitted();
+    error NotPure();
 
     event ChallengeAdded(uint challengeId, IChallenge);
 
@@ -32,9 +34,16 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     mapping (uint => Data) public challenges;
     mapping (uint => uint) public extraDetails;
 
-    constructor()
+    IPurityChecker purity;
+
+    constructor(IPurityChecker pureh)
         ERC721("Test", "TTT")
         Owned(msg.sender) {
+        purity = pureh;
+    }
+
+    function updatePurityChecker(IPurityChecker pureh) external onlyOwner {
+        purity = pureh;
     }
 
     function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
@@ -75,6 +84,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
         if (chl.target == IChallenge(address(0))) {
             revert ChallengeNotFound(id);
+        }
+
+        if (!purity.check(address(chl.target))) {
+            revert NotPure();
         }
 
         uint32 gas = uint32(chl.target.run(target, uint(seed)));

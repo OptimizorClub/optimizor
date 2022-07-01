@@ -4,12 +4,14 @@ pragma solidity ^0.8.15;
 import "./ChallengeIDs.sol";
 import "./SumChallenge.sol";
 import "./SqrtChallenge.sol";
+import "./PurityChecker.sol";
 
 import "../src/OptimizorNFT.sol";
 
 import "forge-std/Test.sol";
 
 contract BaseTest is Test {
+    IPurityChecker purity;
     Optimizor opt;
     IChallenge sum;
     IChallenge sqrt;
@@ -21,7 +23,8 @@ contract BaseTest is Test {
     ISqrt expSqrt;
 
     function setUp() public {
-        opt = new Optimizor();
+        purity = new PurityChecker();
+        opt = new Optimizor(purity);
         sum = new SumChallenge();
         sqrt = new SqrtChallenge();
 
