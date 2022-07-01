@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-source "./.env"
+source "./.env_anvil"
 
 # env contains
 # RPC_URL
@@ -8,4 +8,4 @@ source "./.env"
 # ETH_FROM
 # all from Anvil
 
-forge script script/Optimizor.s.sol:OptimizorScript --rpc-url=$RPC_URL --private-key=$PRIVATE_KEY --broadcast
+forge script script/Optimizor.s.sol:OptimizorScript --rpc-url=$RPC_URL --private-key=$PRIVATE_KEY --broadcast --slow

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-source "./.env"
+source "./.env_anvil"
 
 # env contains
 # RPC_URL
