@@ -86,9 +86,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert ChallengeNotFound(id);
         }
 
-        if (!purity.check(address(chl.target))) {
-            revert NotPure();
-        }
+        //if (!purity.check(address(chl.target))) {
+        //    revert NotPure();
+        //}
 
         uint32 gas = uint32(chl.target.run(target, uint(seed)));
 
