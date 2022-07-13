@@ -42,6 +42,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         purity = pureh;
     }
 
+    /***********************************
+       PUBLIC STATE MUTATING FUNCTIONS
+    ************************************/
+
     function updatePurityChecker(IPurityChecker pureh) external onlyOwner {
         purity = pureh;
     }
@@ -108,6 +112,72 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         extraDetails[tokenId] = packExtraDetail(recipient, gas);
     }
 
+    /*****************************
+         PUBLIC VIEW FUNCTIONS
+    ******************************/
+
+    struct TokenDetails {
+        uint challengeId;
+        IChallenge challenge;
+
+        uint32 leaderGas;
+        uint32 leaderLevel;
+        address leaderRecordHolder;
+        address leaderOwner;
+
+        uint32 gas;
+        uint32 level;
+        address recordHolder;
+        address owner;
+    }
+
+    function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
+        (uint challengeId, uint32 level) = unpackTokenId(tokenId);
+        (address recordHolder, uint32 gasUsed) = extraDetailUnpacked(tokenId);
+
+        Data storage chl = challenges[challengeId];
+
+        uint leaderTokenId = packTokenId(challengeId, chl.level);
+        assert(_ownerOf[leaderTokenId] != address(0));
+        (address winnerHolder, uint32 winnerGasUsed) = extraDetailUnpacked(leaderTokenId);
+
+        details = TokenDetails(
+            challengeId,
+            chl.target,
+
+            winnerGasUsed,
+            chl.level,
+            winnerHolder,
+            _ownerOf[leaderTokenId],
+
+            gasUsed,
+            level,
+            recordHolder,
+            _ownerOf[tokenId]
+        );
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        return
+            string(
+                abi.encodePacked(
+                    'data:application/json;base64,',
+                    Base64.encode(
+                        bytes(
+                            abi.encodePacked(
+                                '{',
+                                '"name":"', "TestName", '", ',
+                                '"description":"', leaderboardString(tokenId), '", ',
+                                '"attributes": ', attributesJSON(tokenId), ',',
+                                '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
+                                '}'
+                            )
+                        )
+                    )
+                )
+            );
+    }
+
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
         (uint challengeId, ) = unpackTokenId(tokenId);
         uint32 winners = challenges[challengeId].level;
@@ -116,6 +186,42 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             (address recipient, ) = extraDetailUnpacked(packTokenId(challengeId, i));
             board[i - 1] = recipient;
         }
+    }
+
+    function leaderboardString(uint tokenId) public view returns (bytes memory) {
+        address[] memory leaders = leaderboard(tokenId);
+        bytes memory leadersStr = "";
+        uint lIdx = leaders.length;
+        for (uint i = 0; i < leaders.length; ++i) {
+            leadersStr = abi.encodePacked(
+                "\\n",
+                Strings.toString(lIdx),
+                ". ",
+                Strings.toHexString(uint(uint160(leaders[i])), 20),
+                leadersStr
+            );
+            --lIdx;
+        }
+        return abi.encodePacked("Leaderboard:", leadersStr);
+    }
+
+    /*****************************
+           INTERNAL HELPERS
+    ******************************/
+
+    function attributesJSON(uint tokenId) internal view returns (bytes memory attr) {
+        TokenDetails memory details = tokenDetails(tokenId);
+
+        uint32 wLevel = details.leaderLevel;
+        uint32 rank = wLevel - details.level + 1;
+
+        attr = abi.encodePacked(
+            '[',
+            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} ',
+            ']'
+        );
     }
 
     function svg(uint tokenId) internal view returns (string memory) {
@@ -173,102 +279,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         return (details.gas * 100) / prevDetails.gas;
     }
 
-    function leaderboardString(uint tokenId) public view returns (bytes memory) {
-        address[] memory leaders = leaderboard(tokenId);
-        bytes memory leadersStr = "";
-        uint lIdx = leaders.length;
-        for (uint i = 0; i < leaders.length; ++i) {
-            leadersStr = abi.encodePacked(
-                "\\n",
-                Strings.toString(lIdx),
-                ". ",
-                Strings.toHexString(uint(uint160(leaders[i])), 20),
-                leadersStr
-            );
-            --lIdx;
-        }
-        return abi.encodePacked("Leaderboard:", leadersStr);
-    }
-
-    function attributesJSON(uint tokenId) internal view returns (bytes memory attr) {
-        TokenDetails memory details = tokenDetails(tokenId);
-
-        uint32 wLevel = details.leaderLevel;
-        uint32 rank = wLevel - details.level + 1;
-
-        attr = abi.encodePacked(
-            '[',
-            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} ',
-            ']'
-        );
-    }
-
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    'data:application/json;base64,',
-                    Base64.encode(
-                        bytes(
-                            abi.encodePacked(
-                                '{',
-                                '"name":"', "TestName", '", ',
-                                '"description":"', leaderboardString(tokenId), '", ',
-                                '"attributes": ', attributesJSON(tokenId), ',',
-                                '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
-                                '}'
-                            )
-                        )
-                    )
-                )
-            );
-    }
-
-
     function extraDetailUnpacked(uint256 tokenId) internal view returns (address recipient, uint32 gasUsed) {
         return unpackExtraDetail(extraDetails[tokenId]);
-    }
-
-    struct TokenDetails {
-        uint challengeId;
-        IChallenge challenge;
-
-        uint32 leaderGas;
-        uint32 leaderLevel;
-        address leaderRecordHolder;
-        address leaderOwner;
-
-        uint32 gas;
-        uint32 level;
-        address recordHolder;
-        address owner;
-    }
-
-    function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
-        (uint challengeId, uint32 level) = unpackTokenId(tokenId);
-        (address recordHolder, uint32 gasUsed) = extraDetailUnpacked(tokenId);
-
-        Data storage chl = challenges[challengeId];
-
-        uint leaderTokenId = packTokenId(challengeId, chl.level);
-        assert(_ownerOf[leaderTokenId] != address(0));
-        (address winnerHolder, uint32 winnerGasUsed) = extraDetailUnpacked(leaderTokenId);
-
-        details = TokenDetails(
-            challengeId,
-            chl.target,
-
-            winnerGasUsed,
-            chl.level,
-            winnerHolder,
-            _ownerOf[leaderTokenId],
-
-            gasUsed,
-            level,
-            recordHolder,
-            _ownerOf[tokenId]
-        );
     }
 }
