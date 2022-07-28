@@ -9,12 +9,3 @@ function unpackTokenId(uint256 tokenId) pure returns (uint256 challengeId, uint3
     challengeId = tokenId >> 32;
     level = uint32(tokenId);
 }
-
-function packExtraDetail(address recipient, uint32 gasUsed) pure returns (uint) {
-    return (uint(uint160(recipient)) << 32) | gasUsed;
-}
-
-function unpackExtraDetail(uint256 detail) pure returns (address recipient, uint32 gasUsed) {
-    recipient = address(uint160(detail >> 32));
-    gasUsed = uint32(detail);
-}

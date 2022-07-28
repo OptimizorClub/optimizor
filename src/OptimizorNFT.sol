@@ -33,8 +33,14 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint32 level;
     }
 
+    struct ExtraDetails {
+        address code;
+        address holder;
+        uint32 gas;
+    }
+
     mapping (uint => Data) public challenges;
-    mapping (uint => uint) public extraDetails;
+    mapping (uint => ExtraDetails) public extraDetails;
 
     IPurityChecker purity;
     IAttribute[] public extraAttrs;
@@ -104,9 +110,9 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint32 gas = uint32(chl.target.run(target, uint(seed)));
 
         uint winnerTokenId = packTokenId(id, chl.level);
-        (address winner, uint gasUsed) = extraDetailUnpacked(winnerTokenId);
+        ExtraDetails storage prevDetails = extraDetails[winnerTokenId];
 
-        if (gasUsed != 0 && (gasUsed <= gas)) {
+        if (prevDetails.gas != 0 && (prevDetails.gas <= gas)) {
             revert NotOptimizor();
         }
 
@@ -116,35 +122,35 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
         uint tokenId = packTokenId(id, chl.level);
         ERC721._mint(recipient, tokenId);
-        extraDetails[tokenId] = packExtraDetail(recipient, gas);
+        extraDetails[tokenId] = ExtraDetails(target, recipient, gas);
     }
 
     /*****************************
          PUBLIC VIEW FUNCTIONS
     ******************************/
 
-    function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
+    function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
-        (address recordHolder, uint32 gasUsed) = extraDetailUnpacked(tokenId);
+        ExtraDetails storage details = extraDetails[tokenId];
 
         Data storage chl = challenges[challengeId];
 
         uint leaderTokenId = packTokenId(challengeId, chl.level);
         assert(_ownerOf[leaderTokenId] != address(0));
-        (address winnerHolder, uint32 winnerGasUsed) = extraDetailUnpacked(leaderTokenId);
+        ExtraDetails storage leaderDetails = extraDetails[leaderTokenId];
 
-        details = TokenDetails(
+        return TokenDetails(
             challengeId,
             chl.target,
 
-            winnerGasUsed,
+            leaderDetails.gas,
             chl.level,
-            winnerHolder,
+            leaderDetails.holder,
             _ownerOf[leaderTokenId],
 
-            gasUsed,
+            details.gas,
             level,
-            recordHolder,
+            details.holder,
             _ownerOf[tokenId]
         );
     }
@@ -175,8 +181,8 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         uint32 winners = challenges[challengeId].level;
         board = new address[](winners);
         for (uint32 i = 1; i <= winners; ++i) {
-            (address recipient, ) = extraDetailUnpacked(packTokenId(challengeId, i));
-            board[i - 1] = recipient;
+            ExtraDetails storage details = extraDetails[packTokenId(challengeId, i)];
+            board[i - 1] = details.holder;
         }
     }
 
@@ -284,9 +290,5 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         assert(prevDetails.gas > 0);
 
         return (details.gas * 100) / prevDetails.gas;
-    }
-
-    function extraDetailUnpacked(uint256 tokenId) internal view returns (address recipient, uint32 gasUsed) {
-        return unpackExtraDetail(extraDetails[tokenId]);
     }
 }

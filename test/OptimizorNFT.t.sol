@@ -101,7 +101,7 @@ contract OptimizorTest is BaseTest {
         vm.stopPrank();
 
         (, uint32 postLevel) = opt.challenges(CHL_ID);
-        (address postOpt, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel)));
+        (, address postOpt, ) = opt.extraDetails(packTokenId(CHL_ID, postLevel));
         assertEq(postOpt, other);
         assertEq(postLevel, preLevel + 1);
 
@@ -114,7 +114,7 @@ contract OptimizorTest is BaseTest {
 
         opt.challenge(CHL_ID, chl_hash_1, challenger_1, address(this));
         (, uint32 postLevel2) = opt.challenges(CHL_ID);
-        (address postOpt2, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel2)));
+        (, address postOpt2, ) = opt.extraDetails(packTokenId(CHL_ID, postLevel2));
         assertEq(postOpt2, address(this));
         assertEq(postLevel2, postLevel + 1);
 
@@ -141,7 +141,7 @@ contract OptimizorTest is BaseTest {
         (, uint32 preLevel) = opt.challenges(CHL_ID);
         opt.challenge(CHL_ID, chl_hash, challenger, address(this));
         (, uint32 postLevel) = opt.challenges(CHL_ID);
-        (address postOpt, ) = unpackExtraDetail(opt.extraDetails(packTokenId(CHL_ID, postLevel)));
+        (, address postOpt, ) = opt.extraDetails(packTokenId(CHL_ID, postLevel));
         assertEq(postOpt, address(this));
         assertEq(postLevel, preLevel + 1);
 
