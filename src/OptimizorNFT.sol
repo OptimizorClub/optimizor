@@ -7,6 +7,8 @@ import "./base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
 import "./IPurityChecker.sol";
+import "./IAttribute.sol";
+import "./TokenDetails.sol";
 
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
@@ -35,6 +37,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     mapping (uint => uint) public extraDetails;
 
     IPurityChecker purity;
+    IAttribute[] public extraAttrs;
 
     constructor(IPurityChecker pureh)
         ERC721("Test", "TTT")
@@ -48,6 +51,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
 
     function updatePurityChecker(IPurityChecker pureh) external onlyOwner {
         purity = pureh;
+    }
+
+    function addAttribute(IAttribute attr) external onlyOwner {
+        extraAttrs.push(attr);
     }
 
     function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
@@ -115,21 +122,6 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     /*****************************
          PUBLIC VIEW FUNCTIONS
     ******************************/
-
-    struct TokenDetails {
-        uint challengeId;
-        IChallenge challenge;
-
-        uint32 leaderGas;
-        uint32 leaderLevel;
-        address leaderRecordHolder;
-        address leaderOwner;
-
-        uint32 gas;
-        uint32 level;
-        address recordHolder;
-        address owner;
-    }
 
     function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory details) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
@@ -209,17 +201,32 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
            INTERNAL HELPERS
     ******************************/
 
-    function attributesJSON(uint tokenId) internal view returns (bytes memory attr) {
+    function attributesJSON(uint tokenId) internal view returns (bytes memory attributes) {
         TokenDetails memory details = tokenDetails(tokenId);
 
         uint32 wLevel = details.leaderLevel;
         uint32 rank = wLevel - details.level + 1;
 
-        attr = abi.encodePacked(
+        attributes = abi.encodePacked(
             '[',
             '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
             '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} ',
+            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} '
+        );
+
+        for (uint i = 0; i < extraAttrs.length; ++i) {
+            (string memory attr, string memory value) = extraAttrs[i].attribute(details);
+            attributes = abi.encodePacked(
+                attributes,
+                ', { ',
+                '"trait_type": "', attr, '", ',
+                '"value": "', value, '",',
+                '}'
+            );
+        }
+
+        attributes = abi.encodePacked(
+            attributes,
             ']'
         );
     }
