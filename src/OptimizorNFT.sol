@@ -103,7 +103,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert ChallengeNotFound(id);
         }
 
-        //if (!purity.check(address(chl.target))) {
+        //if (!purity.check(target)) {
         //    revert NotPure();
         //}
 
