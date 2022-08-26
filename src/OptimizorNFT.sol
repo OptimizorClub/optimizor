@@ -147,11 +147,13 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             chl.level,
             leaderDetails.holder,
             _ownerOf[leaderTokenId],
+            leaderDetails.code,
 
             details.gas,
             level,
             details.holder,
-            _ownerOf[tokenId]
+            _ownerOf[tokenId],
+            details.code
         );
     }
 
