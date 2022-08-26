@@ -18,6 +18,7 @@ import '@openzeppelin/contracts/utils/Strings.sol';
 contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
     error ChallengeNotFound(uint challengeId);
     error ChallengeExists(uint challengeId);
+    error InvalidRecipient();
     error NotOptimizor();
     error AddressCodeMismatch();
     error BlockHashNotFound();
@@ -86,6 +87,10 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert ChallengeNotFound(id);
         }
 
+        if (recipient == address(0)) {
+            revert InvalidRecipient();
+        }
+
         if (codehashes[codehash] == address(0)) {
             revert CodeNotSubmitted();
         }
@@ -97,10 +102,6 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         bytes32 seed = blockhash(boundaryBlock());
         if (seed == 0) {
             revert BlockHashNotFound();
-        }
-
-        if (chl.target == IChallenge(address(0))) {
-            revert ChallengeNotFound(id);
         }
 
         //if (!purity.check(target)) {
@@ -136,7 +137,6 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         Data storage chl = challenges[challengeId];
 
         uint leaderTokenId = packTokenId(challengeId, chl.level);
-        assert(_ownerOf[leaderTokenId] != address(0));
         ExtraDetails storage leaderDetails = extraDetails[leaderTokenId];
 
         return TokenDetails(
