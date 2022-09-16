@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import "./Challenge.sol";
-import "./Time.sol";
+import "./Submissions.sol";
 import "./base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
@@ -15,7 +15,7 @@ import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
+contract Optimizor is Owned, ReentrancyGuard, Submissions, ERC721 {
     error ChallengeNotFound(uint challengeId);
     error ChallengeExists(uint challengeId);
     error InvalidRecipient();
@@ -80,7 +80,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         bytes32 codehash,
         address target,
         address recipient
-    ) inChallengePeriod nonReentrant external {
+    ) mayChallenge(codehash) nonReentrant external {
         Data storage chl = challenges[id];
 
         if (address(chl.target) == address(0)) {
@@ -91,7 +91,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert InvalidRecipient();
         }
 
-        if (codehashes[codehash] == address(0)) {
+        if (submissions[codehash].sender == address(0)) {
             revert CodeNotSubmitted();
         }
 

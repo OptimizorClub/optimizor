@@ -92,7 +92,6 @@ contract OptimizorTest is BaseTest {
         opt.commit(chl_hash_1);
 
         advancePeriod();
-        advancePeriod();
 
         (, uint32 preLevel) = opt.challenges(CHL_ID);
 
@@ -135,7 +134,6 @@ contract OptimizorTest is BaseTest {
     // TODO make this function public too to fuzz it
     function testChallenger(uint CHL_ID, address challenger, bytes32 chl_hash) internal {
         opt.commit(chl_hash);
-        advancePeriod();
         advancePeriod();
 
         (, uint32 preLevel) = opt.challenges(CHL_ID);
