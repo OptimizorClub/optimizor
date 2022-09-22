@@ -32,9 +32,6 @@ contract Optimizor is Owned, ERC721 {
     // Sadness
     error NotOptimizor();
 
-    // Probably a bug
-    error BlockHashNotFound();
-
     event ChallengeAdded(uint challengeId, IChallenge);
 
     // TODO add events
@@ -130,16 +127,11 @@ contract Optimizor is Owned, ERC721 {
             revert InvalidRecipient();
         }
 
-        bytes32 seed = blockhash(block.number - 1);
-        if (seed == 0) {
-            revert BlockHashNotFound();
-        }
-
         //if (!purity.check(target)) {
         //    revert NotPure();
         //}
 
-        uint32 gas = uint32(chl.target.run(target, uint(seed)));
+        uint32 gas = uint32(chl.target.run(target, block.difficulty));
 
         uint winnerTokenId = packTokenId(id, chl.level);
         ExtraDetails storage prevDetails = extraDetails[winnerTokenId];
