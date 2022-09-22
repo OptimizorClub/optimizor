@@ -11,12 +11,11 @@ import "./TokenDetails.sol";
 
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
-import "solmate/utils/ReentrancyGuard.sol";
 import '@openzeppelin/contracts/utils/Strings.sol';
 
 uint constant EPOCH = 256;
 
-contract Optimizor is Owned, ReentrancyGuard, ERC721 {
+contract Optimizor is Owned, ERC721 {
     // Commit errors
     error CodeAlreadySubmitted();
     error TooEarlyToChallenge();
@@ -105,7 +104,7 @@ contract Optimizor is Owned, ReentrancyGuard, ERC721 {
         address target,
         address recipient,
         uint salt
-    ) nonReentrant external {
+    ) external {
         Data storage chl = challenges[id];
 
         bytes32 codehash = target.codehash;
