@@ -190,7 +190,7 @@ contract Optimizor is Owned, ERC721 {
                             abi.encodePacked(
                                 '{',
                                 '"name":"', "TestName", '", ',
-                                '"description":"', leaderboardString(tokenId), '", ',
+                                '"description":"', description(tokenId), '", ',
                                 '"attributes": ', attributesJSON(tokenId), ',',
                                 '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
                                 '}'
@@ -199,6 +199,14 @@ contract Optimizor is Owned, ERC721 {
                     )
                 )
             );
+    }
+
+    function description(uint256 tokenId) public view returns (bytes memory) {
+        TokenDetails memory details = tokenDetails(tokenId);
+        return abi.encodePacked(
+            "Art: ", details.challenge.description(), "\\n",
+            leaderboardString(tokenId)
+        );
     }
 
     function leaderboard(uint tokenId) public view returns (address[] memory board) {
