@@ -2,7 +2,6 @@
 pragma solidity ^0.8.15;
 
 import "./Challenge.sol";
-import "./Time.sol";
 import "./base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
@@ -15,19 +14,38 @@ import "solmate/tokens/ERC721.sol";
 import "solmate/utils/ReentrancyGuard.sol";
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
+uint constant EPOCH = 256;
+
+contract Optimizor is Owned, ReentrancyGuard, ERC721 {
+    // Commit errors
+    error CodeAlreadySubmitted();
+    error TooEarlyToChallenge();
+
+    // Challenge id errors
     error ChallengeNotFound(uint challengeId);
     error ChallengeExists(uint challengeId);
+
+    // Input filtering
     error InvalidRecipient();
-    error NotOptimizor();
-    error AddressCodeMismatch();
-    error BlockHashNotFound();
     error CodeNotSubmitted();
     error NotPure();
+
+    // Sadness
+    error NotOptimizor();
+
+    // Probably a bug
+    error BlockHashNotFound();
 
     event ChallengeAdded(uint challengeId, IChallenge);
 
     // TODO add events
+
+    struct Submission {
+        address sender;
+        uint96 blockNumber;
+    }
+
+    mapping (bytes32 => Submission) public submissions;
 
     struct Data {
         IChallenge target;
@@ -75,13 +93,35 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
         emit ChallengeAdded(id, chlAddr);
     }
 
+    function commit(bytes32 key) external {
+        if (submissions[key].sender != address(0)) {
+            revert CodeAlreadySubmitted();
+        }
+        submissions[key] = Submission({ sender: msg.sender, blockNumber: uint96(block.number) });
+    }
+
     function challenge(
         uint256 id,
-        bytes32 codehash,
         address target,
-        address recipient
-    ) inChallengePeriod nonReentrant external {
+        address recipient,
+        uint salt
+    ) nonReentrant external {
         Data storage chl = challenges[id];
+
+        bytes32 codehash = target.codehash;
+        bytes32 key = keccak256(abi.encode(msg.sender, codehash, salt));
+
+        // Frontrunning cannot steal the submission, but can block
+        // it for users at the expense of the frontrunner's gas.
+        // We consider that a non-issue.
+        if (submissions[key].blockNumber + EPOCH >= block.number) {
+            revert TooEarlyToChallenge();
+        }
+
+        if (submissions[key].sender == address(0)) {
+            revert CodeNotSubmitted();
+        }
+
 
         if (address(chl.target) == address(0)) {
             revert ChallengeNotFound(id);
@@ -91,15 +131,7 @@ contract Optimizor is Owned, ReentrancyGuard, Time, ERC721 {
             revert InvalidRecipient();
         }
 
-        if (codehashes[codehash] == address(0)) {
-            revert CodeNotSubmitted();
-        }
-
-        if (target.codehash != codehash) {
-            revert AddressCodeMismatch();
-        }
-
-        bytes32 seed = blockhash(boundaryBlock());
+        bytes32 seed = blockhash(block.number - 1);
         if (seed == 0) {
             revert BlockHashNotFound();
         }
