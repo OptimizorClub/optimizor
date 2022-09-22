@@ -3,11 +3,13 @@ pragma solidity ^0.8.14;
 
 import "forge-std/Script.sol";
 import "../src/OptimizorNFT.sol";
+import "../test/CommitHash.sol";
 import "../test/SqrtChallenge.sol";
 import "../test/PurityChecker.sol";
 
 //address constant ME = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 address constant ME = 0x7D38256bAb82F2C8651d9968320b3Eaffd08a405;
+uint constant SALT = 0;
 
 contract OptimizorScript is Script {
     function run() external {
@@ -21,11 +23,11 @@ contract OptimizorScript is Script {
 
         opt.addChallenge(4, sqrtChl);
 
-        opt.commit(address(expSqrt).codehash);
-        opt.commit(address(cheapSqrt).codehash);
+        opt.commit(computeKey(address(this), address(expSqrt).codehash, SALT));
+        opt.commit(computeKey(address(this), address(cheapSqrt).codehash, SALT));
 
-        opt.challenge(4, address(expSqrt).codehash, address(expSqrt), ME);
-        opt.challenge(4, address(cheapSqrt).codehash, address(cheapSqrt), ME);
+        opt.challenge(4, address(expSqrt), ME, SALT);
+        opt.challenge(4, address(cheapSqrt), ME, SALT);
 
         vm.stopBroadcast();
     }

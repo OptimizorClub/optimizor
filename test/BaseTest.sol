@@ -44,6 +44,6 @@ contract BaseTest is Test {
     }
 
     function advancePeriod() internal {
-        vm.roll(block.number + 256);
+        vm.roll(block.number + EPOCH + 1);
     }
 }

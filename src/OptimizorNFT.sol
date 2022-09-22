@@ -77,11 +77,20 @@ contract Optimizor is Owned, ReentrancyGuard, Submissions, ERC721 {
 
     function challenge(
         uint256 id,
-        bytes32 codehash,
         address target,
-        address recipient
-    ) mayChallenge(codehash) nonReentrant external {
+        address recipient,
+        uint salt
+    ) nonReentrant external {
         Data storage chl = challenges[id];
+
+        bytes32 codehash = target.codehash;
+        bytes32 key = keccak256(abi.encode(msg.sender, codehash, salt));
+
+        checkChallengeTime(key);
+        if (submissions[key].sender == address(0)) {
+            revert CodeNotSubmitted();
+        }
+
 
         if (address(chl.target) == address(0)) {
             revert ChallengeNotFound(id);
@@ -89,14 +98,6 @@ contract Optimizor is Owned, ReentrancyGuard, Submissions, ERC721 {
 
         if (recipient == address(0)) {
             revert InvalidRecipient();
-        }
-
-        if (submissions[codehash].sender == address(0)) {
-            revert CodeNotSubmitted();
-        }
-
-        if (target.codehash != codehash) {
-            revert AddressCodeMismatch();
         }
 
         bytes32 seed = blockhash(boundaryBlock());

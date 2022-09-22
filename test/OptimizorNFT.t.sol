@@ -4,6 +4,9 @@ pragma solidity ^0.8.15;
 import "./BaseTest.sol";
 import "../src/OptimizorNFT.sol";
 import "../src/DataHelpers.sol";
+import "./CommitHash.sol";
+
+uint constant SALT = 0;
 
 contract OptimizorTest is BaseTest {
     function run() external returns (string memory) {
@@ -86,17 +89,17 @@ contract OptimizorTest is BaseTest {
     ) internal {
         address other = address(42);
         vm.prank(other);
-        opt.commit(chl_hash_0);
+        opt.commit(computeKey(other, chl_hash_0, SALT));
         vm.stopPrank();
 
-        opt.commit(chl_hash_1);
+        opt.commit(computeKey(address(this), chl_hash_1, SALT));
 
         advancePeriod();
 
         (, uint32 preLevel) = opt.challenges(CHL_ID);
 
         vm.prank(other);
-        opt.challenge(CHL_ID, chl_hash_0, challenger_0, other);
+        opt.challenge(CHL_ID, challenger_0, other, SALT);
         vm.stopPrank();
 
         (, uint32 postLevel) = opt.challenges(CHL_ID);
@@ -111,7 +114,7 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders.length, 1);
         assertEq(leaders[0], other);
 
-        opt.challenge(CHL_ID, chl_hash_1, challenger_1, address(this));
+        opt.challenge(CHL_ID, challenger_1, address(this), SALT);
         (, uint32 postLevel2) = opt.challenges(CHL_ID);
         (, address postOpt2, ) = opt.extraDetails(packTokenId(CHL_ID, postLevel2));
         assertEq(postOpt2, address(this));
@@ -122,7 +125,7 @@ contract OptimizorTest is BaseTest {
 
         vm.prank(other);
         vm.expectRevert(abi.encodeWithSignature("NotOptimizor()"));
-        opt.challenge(CHL_ID, chl_hash_0, challenger_0, other);
+        opt.challenge(CHL_ID, challenger_0, other, SALT);
         vm.stopPrank();
 
         address[] memory leaders2 = opt.leaderboard(tokenId2);
@@ -133,11 +136,11 @@ contract OptimizorTest is BaseTest {
 
     // TODO make this function public too to fuzz it
     function testChallenger(uint CHL_ID, address challenger, bytes32 chl_hash) internal {
-        opt.commit(chl_hash);
+        opt.commit(computeKey(address(this), chl_hash, SALT));
         advancePeriod();
 
         (, uint32 preLevel) = opt.challenges(CHL_ID);
-        opt.challenge(CHL_ID, chl_hash, challenger, address(this));
+        opt.challenge(CHL_ID, challenger, address(this), SALT);
         (, uint32 postLevel) = opt.challenges(CHL_ID);
         (, address postOpt, ) = opt.extraDetails(packTokenId(CHL_ID, postLevel));
         assertEq(postOpt, address(this));
