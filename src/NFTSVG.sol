@@ -8,8 +8,6 @@ import './base64.sol';
 /// @title NFTSVG
 /// @notice Provides a function for generating an SVG associated with a Uniswap NFT
 library NFTSVG {
-    using Strings for uint256;
-
     struct SVGParams {
         string projectName;
         string challengeName;
@@ -56,7 +54,7 @@ library NFTSVG {
                     generateSVGCardMantle(params.challengeName, params.challengeAddr, params.rank, params.participants),
                     generateSvgCurve(params.overRange, challengeSVG),
                     generateSVGPositionDataAndLocationCurve(
-                        params.tokenId.toString(),
+                        Strings.toString(params.tokenId),
                         params.gasUsed,
                         params.gasOpti
                     ),
@@ -238,21 +236,21 @@ library NFTSVG {
             abi.encodePacked(
                 ' <g style="transform:translate(29px, 384px)">',
                 '<rect width="',
-                uint256(7 * (str1length + 4)).toString(),
+                Strings.toString(uint256(7 * (str1length + 4))),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">ID: </tspan>',
                 tokenId,
                 '</text></g>',
                 ' <g style="transform:translate(29px, 414px)">',
                 '<rect width="',
-                uint256(7 * (str2length + 4)).toString(),
+                Strings.toString(uint256(7 * (str2length + 4))),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas used: </tspan>',
                 gasUsedStr,
                 '</text></g>',
                 ' <g style="transform:translate(29px, 444px)">',
                 '<rect width="',
-                uint256(7 * (str3length + 4)).toString(),
+                Strings.toString(uint256(7 * (str3length + 4))),
                 'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)" />',
                 '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="white"><tspan fill="rgba(255,255,255,0.6)">Gas opti: </tspan>',
                 gasOptiStr,
