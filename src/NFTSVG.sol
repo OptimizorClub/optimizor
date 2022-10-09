@@ -2,8 +2,6 @@
 pragma solidity ^0.8.15;
 
 import '@openzeppelin/contracts/utils/Strings.sol';
-// v3-core and 0.8 branch
-import '@uniswap/contracts/libraries/BitMath.sol';
 import './base64.sol';
 
 /// @title NFTSVG
