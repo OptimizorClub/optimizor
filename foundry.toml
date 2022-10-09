@@ -1,9 +1,9 @@
-[default]
+[profile.default]
 via_ir = true
 src = 'src'
 out = 'out'
 libs = ['lib']
-solc = "0.8.15"
+solc = "0.8.17"
 #gas_limit = 30000000
 # See more config options https://github.com/gakonst/foundry/tree/master/config
 
@@ -13,10 +13,10 @@ remappings = [
     '@uniswap=lib/v3-core.git/',
 ]
 
-[default.optimizer_details]
+[profile.default.optimizer_details]
 constantOptimizer = true
 yul = true
 # this sets the `yulDetails` of the `optimizer_details` for the `default` profile
-[default.optimizer_details.yulDetails]
+[profile.default.optimizer_details.yulDetails]
 stackAllocation = true
 optimizerSteps = ''
