@@ -9,7 +9,6 @@ cbor_metadata = false
 # See more config options https://github.com/gakonst/foundry/tree/master/config
 
 remappings = [
-    '@openzeppelin=lib/openzeppelin-contracts/',
     'forge-std=lib/forge-std/src/',
 ]
 
