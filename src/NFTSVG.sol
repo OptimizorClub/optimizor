@@ -2,6 +2,7 @@
 pragma solidity ^0.8.15;
 
 import '@openzeppelin/contracts/utils/Strings.sol';
+import './HexString.sol';
 import './base64.sol';
 
 /// @title NFTSVG
@@ -278,16 +279,7 @@ library NFTSVG {
     }
 
     function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
-        return string(toHexStringNoPrefix((token >> offset), 3));
-    }
-
-    function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
-        bytes memory buffer = new bytes(2 * length);
-        for (uint256 i = buffer.length; i > 0; i--) {
-            buffer[i - 1] = ALPHABET[value & 0xf];
-            value >>= 4;
-        }
-        return string(buffer);
+        return string(HexString.toHexStringNoPrefix((token >> offset), 3));
     }
 
     function scale(
@@ -311,18 +303,4 @@ library NFTSVG {
     function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
         return uint256(uint8(token >> offset));
     }
-
-    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {
-        bytes memory buffer = new bytes(2 * length + 2);
-        buffer[0] = '0';
-        buffer[1] = 'x';
-        for (uint256 i = 2 * length + 1; i > 1; --i) {
-            buffer[i] = ALPHABET[value & 0xf];
-            value >>= 4;
-        }
-        require(value == 0, 'Strings: hex length insufficient');
-        return string(buffer);
-    }
-
-    bytes16 constant ALPHABET = '0123456789abcdef';
 }

@@ -279,8 +279,8 @@ contract Optimizor is Owned, ERC721 {
             projectName: "Optimizor",
             challengeName: name,
             // TODO should \/ be details.owner or details.recordHolder?
-            holderAddr: NFTSVG.toHexString(uint(uint160(address(details.owner))), 20),
-            challengeAddr: NFTSVG.toHexString(uint(uint160(address(details.challenge))), 20),
+            holderAddr: Strings.toHexString(uint(uint160(address(details.owner))), 20),
+            challengeAddr: Strings.toHexString(uint(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
             gasOpti: gasOptiPercentage(tokenId, details),
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
