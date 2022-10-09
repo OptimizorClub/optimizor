@@ -11,6 +11,7 @@ import "puretea/Puretea.sol";
 contract PurityTest is BaseTest {
     uint256 constant acceptedOpcodesMask = 0x600800000000000000000000ffffffffffffffff0fdf01ff67ff00013fff0fff;
 
+/*
     function testCheapSqrtPurity() public {
         assertTrue(
             Puretea.check(
@@ -28,5 +29,5 @@ contract PurityTest is BaseTest {
             )
         );
     }
-
+*/
 }
