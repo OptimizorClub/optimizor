@@ -181,29 +181,26 @@ contract Optimizor is Owned, ERC721 {
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    'data:application/json;base64,',
-                    Base64.encode(
-                        bytes(
-                            abi.encodePacked(
-                                '{',
-                                '"name":"', "TestName", '", ',
-                                '"description":"', description(tokenId), '", ',
-                                '"attributes": ', attributesJSON(tokenId), ',',
-                                '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(svg(tokenId))), '"',
-                                '}'
-                            )
-                        )
-                    )
+        return string.concat(
+            'data:application/json;base64,',
+            Base64.encode(
+                bytes.concat(
+                    '{',
+                    '"name":"', "TestName", '", ',
+                    '"description":"', bytes(description(tokenId)), '", ',
+                    '"attributes": ', attributesJSON(tokenId), ',',
+                    '"image": "data:image/svg+xml;base64,',
+                    bytes(Base64.encode(bytes(svg(tokenId)))),
+                    '"',
+                    '}'
                 )
-            );
+            )
+        );
     }
 
-    function description(uint256 tokenId) public view returns (bytes memory) {
+    function description(uint256 tokenId) public view returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
-        return abi.encodePacked(
+        return string.concat(
             "Art: ", details.challenge.description(), "\\n",
             leaderboardString(tokenId)
         );
@@ -219,12 +216,12 @@ contract Optimizor is Owned, ERC721 {
         }
     }
 
-    function leaderboardString(uint tokenId) public view returns (bytes memory) {
+    function leaderboardString(uint tokenId) public view returns (string memory) {
         address[] memory leaders = leaderboard(tokenId);
-        bytes memory leadersStr = "";
+        string memory leadersStr = "";
         uint lIdx = leaders.length;
         for (uint i = 0; i < leaders.length; ++i) {
-            leadersStr = abi.encodePacked(
+            leadersStr = string.concat(
                 "\\n",
                 Strings.toString(lIdx),
                 ". ",
@@ -233,7 +230,7 @@ contract Optimizor is Owned, ERC721 {
             );
             --lIdx;
         }
-        return abi.encodePacked("Leaderboard:", leadersStr);
+        return string.concat("Leaderboard:", leadersStr);
     }
 
     /*****************************
@@ -246,25 +243,25 @@ contract Optimizor is Owned, ERC721 {
         uint32 wLevel = details.leaderLevel;
         uint32 rank = wLevel - details.level + 1;
 
-        attributes = abi.encodePacked(
+        attributes = bytes.concat(
             '[',
-            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} '
+            '{ "trait_type": "Leader", "value": "', bytes((rank == 1) ? "Yes" : "No"), '"}, ',
+            '{ "trait_type": "Top 3", "value": "', bytes((rank <= 3) ? "Yes" : "No"), '"}, ',
+            '{ "trait_type": "Top 10", "value": "', bytes((rank <= 10) ? "Yes" : "No"), '"} '
         );
 
         for (uint i = 0; i < extraAttrs.length; ++i) {
             (string memory attr, string memory value) = extraAttrs[i].attribute(details);
-            attributes = abi.encodePacked(
+            attributes = bytes.concat(
                 attributes,
                 ', { ',
-                '"trait_type": "', attr, '", ',
-                '"value": "', value, '",',
+                '"trait_type": "', bytes(attr), '", ',
+                '"value": "', bytes(value), '",',
                 '}'
             );
         }
 
-        attributes = abi.encodePacked(
+        attributes = bytes.concat(
             attributes,
             ']'
         );
