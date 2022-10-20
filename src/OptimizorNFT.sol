@@ -127,9 +127,9 @@ contract Optimizor is Owned, ERC721 {
             revert InvalidRecipient();
         }
 
-        //if (!purity.check(target)) {
-        //    revert NotPure();
-        //}
+        if (!purity.check(target)) {
+            revert NotPure();
+        }
 
         uint32 gas = uint32(chl.target.run(target, block.difficulty));
 
