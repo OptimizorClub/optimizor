@@ -8,6 +8,11 @@ import {ERC721} from "solmate/tokens/ERC721.sol";
 uint constant EPOCH = 256;
 
 contract Optimizor is OptimizorAdmin {
+    struct Submission {
+        address sender;
+        uint96 blockNumber;
+    }
+
     mapping (bytes32 => Submission) public submissions;
 
     // Commit errors

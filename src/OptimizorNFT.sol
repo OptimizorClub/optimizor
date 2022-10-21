@@ -16,11 +16,6 @@ import "solmate/utils/LibString.sol";
 contract OptimizorNFT is ERC721 {
     // TODO add events
 
-    struct Submission {
-        address sender;
-        uint96 blockNumber;
-    }
-
     struct Data {
         IChallenge target;
         uint32 level;
