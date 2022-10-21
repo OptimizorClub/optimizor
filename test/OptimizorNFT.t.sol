@@ -16,6 +16,11 @@ contract OptimizorTest is BaseTest {
         return opt.tokenURI(tokenId);
     }
 
+    function testNameAndSymbol() public {
+        assertEq(opt.name(), "Optimizor Club");
+        assertEq(opt.symbol(), "OC");
+    }
+
     function testCheapSqrt() public {
         addSqrtChallenge();
 
