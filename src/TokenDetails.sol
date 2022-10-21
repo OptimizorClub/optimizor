@@ -11,11 +11,11 @@ struct TokenDetails {
     uint32 leaderLevel;
     address leaderSolver;
     address leaderOwner;
-    address leaderChallenger;
+    address leaderSubmission;
 
     uint32 gas;
     uint32 level;
     address solver;
     address owner;
-    address challenger;
+    address submission;
 }
