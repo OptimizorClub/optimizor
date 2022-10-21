@@ -85,7 +85,7 @@ contract SqrtChallenge is IChallenge {
         return "Spiral of Theodorus.";
     }
 
-    function svg(uint tokenId) external view returns (bytes memory art) {
+    function svg(uint tokenId) external view returns (string memory art) {
         uint32 level = uint32(tokenId);
         if (level == 0)
             return '<rect width="230" height="230" rx="18px" ry="18px" fill="rgba(0,0,0,0.1)" />';
