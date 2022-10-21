@@ -71,24 +71,24 @@ contract OptimizorNFT is ERC721 {
             percentage = (details.gas * 100) / prevDetails.gas;
         }
 
-        return TokenDetails(
-            challengeId,
-            chl.target,
+        return TokenDetails({
+            challengeId: challengeId,
+            challenge: chl.target,
 
-            leaderDetails.gas,
-            leaderLevel,
-            leaderDetails.solver,
-            _ownerOf[leaderTokenId],
-            leaderDetails.code,
+            leaderGas: leaderDetails.gas,
+            leaderLevel: leaderLevel,
+            leaderSolver: leaderDetails.solver,
+            leaderOwner: _ownerOf[leaderTokenId],
+            leaderSubmission: leaderDetails.code,
 
-            details.gas,
-            level,
-            rank,
-            percentage,
-            details.solver,
-            _ownerOf[tokenId],
-            details.code
-        );
+            gas: details.gas,
+            level: level,
+            rank: rank,
+            improvementPercentage: percentage,
+            solver: details.solver,
+            owner: _ownerOf[tokenId],
+            submission: details.code
+        });
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
