@@ -33,6 +33,12 @@ contract Optimizor is OptimizorAdmin {
     constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {
     }
 
+    /// Commit a `key` derived using
+    /// `keccak256(abi.encode(sender, codehash, salt))`
+    /// where
+    /// - `sender`: the `msg.sender` for the call to `challenge(...)`,
+    /// - `target`: the address of your solution contract,
+    /// - `salt`: `uint256` secret number.
     function commit(bytes32 key) external {
         if (submissions[key].sender != address(0)) {
             revert CodeAlreadySubmitted();
@@ -40,6 +46,14 @@ contract Optimizor is OptimizorAdmin {
         submissions[key] = Submission({ sender: msg.sender, blockNumber: uint96(block.number) });
     }
 
+    /// After committing and waiting for at least 256 blocks, challenge can be
+    /// called to claim an Optimizor Club NFT, if it beats the previous solution
+    /// in terms of runtime gas.
+    ///
+    /// @param id The unique identifier for the challenge.
+    /// @param target The address of your solution contract.
+    /// @param recipient The address that receives the Optimizor Club NFT.
+    /// @param salt The secret number used for deriving the committed key.
     function challenge(
         uint256 id,
         address target,
