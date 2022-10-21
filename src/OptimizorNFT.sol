@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
+import "./Base64.sol";
 import "./Challenge.sol";
-import "./base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
 import "./IPurityChecker.sol";
