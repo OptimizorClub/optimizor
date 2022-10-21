@@ -42,7 +42,7 @@ contract SumChallenge is IChallenge {
         return "";
     }
 
-    function svg(uint tokenId) external view returns (bytes memory art) {
+    function svg(uint tokenId) external view returns (string memory art) {
         uint32 level = uint32(tokenId);
         art = "";
     }

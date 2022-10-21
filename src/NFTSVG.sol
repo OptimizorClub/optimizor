@@ -34,7 +34,7 @@ library NFTSVG {
 
     function generateSVG(
         SVGParams memory params,
-        bytes memory challengeSVG
+        string memory challengeSVG
     ) internal pure returns (string memory svg) {
         /*
         address: "0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
@@ -42,9 +42,7 @@ library NFTSVG {
         sig: "0x2df0e99d9cbfec33a705d83f75666d98b22dea7c1af412c584f7d626d83f02875993df740dc87563b9c73378f8462426da572d7989de88079a382ad96c57b68d1b",
         version: "2"
          */
-        return
-            string(
-                abi.encodePacked(
+        return string.concat(
                     generateSVGDefs(params),
                     generateSVGBorderText(
                         params.projectName,
@@ -61,20 +59,18 @@ library NFTSVG {
                     ),
                     generateSVGRareSparkle(params.rank),
                     '</svg>'
-            )
         );
     }
 
     function generateSVGDefs(SVGParams memory params) private pure returns (string memory svg) {
-        svg = string(
-            abi.encodePacked(
+        svg = string.concat(
                 '<svg width="290" height="500" viewBox="0 0 290 500" xmlns="http://www.w3.org/2000/svg"',
                 " xmlns:xlink='http://www.w3.org/1999/xlink'>",
                 '<defs>',
                 '<filter id="f1"><feImage result="p0" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
-                        abi.encodePacked(
+                        string.concat(
                             "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><rect width='290px' height='500px' fill='#",
                             params.color0,
                             "'/></svg>"
@@ -84,7 +80,7 @@ library NFTSVG {
                 '"/> <feImage result="p1" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
-                        abi.encodePacked(
+                        string.concat(
                             "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
                             params.x1,
                             "' cy='",
@@ -98,7 +94,7 @@ library NFTSVG {
                 '"/> <feImage result="p2" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
-                        abi.encodePacked(
+                        string.concat(
                             "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
                             params.x2,
                             "' cy='",
@@ -113,7 +109,7 @@ library NFTSVG {
                 '<feImage result="p3" xlink:href="data:image/svg+xml;base64,',
                 Base64.encode(
                     bytes(
-                        abi.encodePacked(
+                        string.concat(
                             "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
                             params.x3,
                             "' cy='",
@@ -146,7 +142,6 @@ library NFTSVG {
                 '<rect fill="none" x="0px" y="0px" width="290px" height="500px" />',
                 '<ellipse cx="50%" cy="0px" rx="180px" ry="120px" fill="#000" opacity="0.85" /></g>',
                 '<rect x="0" y="0" width="290" height="500" rx="42" ry="42" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)" /></g>'
-            )
         );
     }
 
@@ -156,8 +151,7 @@ library NFTSVG {
         string memory solverAddr,
         string memory challengeAddr
     ) private pure returns (string memory svg) {
-        svg = string(
-            abi.encodePacked(
+        svg = string.concat(
                 '<text text-rendering="optimizeSpeed">',
                 '<textPath startOffset="-100%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
                 challengeName,
@@ -179,7 +173,6 @@ library NFTSVG {
                 unicode' • ',
                 solverAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite" /></textPath></text>'
-            )
         );
     }
 
@@ -189,8 +182,7 @@ library NFTSVG {
         uint32 rank,
         uint32 participants
     ) private pure returns (string memory svg) {
-        svg = string(
-            abi.encodePacked(
+        svg = string.concat(
                 '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px" /> <text y="70px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
                 solverAddr,
                 '</text><text y="115px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
@@ -202,24 +194,21 @@ library NFTSVG {
                 ),
                 '</text></g>',
                 '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)" />'
-            )
-        );
+            );
     }
 
     function generateSvgCurve(
         int8 overR,
-        bytes memory challengeSVG
+        string memory challengeSVG
     ) private pure returns (string memory svg) {
         string memory fade = overR == 1 ? '#fade-up' : overR == -1 ? '#fade-down' : '#none';
-        svg = string(
-            abi.encodePacked(
+        svg = string.concat(
                 '<g mask="url(',
                 fade,
                 ')"',
                 ' style="transform:translate(30px,130px)">',
                 challengeSVG,
                 '</g>'
-            )
         );
     }
 
@@ -233,8 +222,7 @@ library NFTSVG {
         uint256 str1length = bytes(tokenId).length + 4;
         uint256 str2length = bytes(gasUsedStr).length + 10;
         uint256 str3length = bytes(gasOptiStr).length + 10;
-        svg = string(
-            abi.encodePacked(
+        svg = string.concat(
                 ' <g style="transform:translate(29px, 384px)">',
                 '<rect width="',
                 LibString.toString(uint256(7 * (str1length + 4))),
@@ -257,20 +245,17 @@ library NFTSVG {
                 gasOptiStr,
                 '%',
                 '</text></g>'
-            )
         );
     }
 
     function generateSVGRareSparkle(uint32 rank) private pure returns (string memory svg) {
         if (rank == 1) {
-            svg = string(
-                abi.encodePacked(
+            svg = string.concat(
                     '<g style="transform:translate(226px, 392px)"><rect width="36px" height="36px" rx="8px" ry="8px" fill="none" stroke="rgba(255,255,255,0.2)" />',
                     '<g><path style="transform:translate(6px,6px)" d="M12 0L12.6522 9.56587L18 1.6077L13.7819 10.2181L22.3923 6L14.4341 ',
                     '11.3478L24 12L14.4341 12.6522L22.3923 18L13.7819 13.7819L18 22.3923L12.6522 14.4341L12 24L11.3478 14.4341L6 22.39',
                     '23L10.2181 13.7819L1.6077 18L9.56587 12.6522L0 12L9.56587 11.3478L1.6077 6L10.2181 10.2181L6 1.6077L11.3478 9.56587L12 0Z" fill="white" />',
                     '<animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="10s" repeatCount="indefinite"/></g></g>'
-                )
             );
         } else {
             svg = '';
@@ -278,7 +263,7 @@ library NFTSVG {
     }
 
     function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
-        return string(HexString.toHexStringNoPrefix((token >> offset), 3));
+        return HexString.toHexStringNoPrefix((token >> offset), 3);
     }
 
     function scale(
