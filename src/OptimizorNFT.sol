@@ -8,10 +8,11 @@ import "./NFTSVG.sol";
 import "./IPurityChecker.sol";
 import "./IAttribute.sol";
 import "./TokenDetails.sol";
+import "./HexString.sol";
 
 import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
-import '@openzeppelin/contracts/utils/Strings.sol';
+import "solmate/utils/LibString.sol";
 
 uint constant EPOCH = 256;
 
@@ -223,9 +224,9 @@ contract Optimizor is Owned, ERC721 {
         for (uint i = 0; i < leaders.length; ++i) {
             leadersStr = string.concat(
                 "\\n",
-                Strings.toString(lIdx),
+                LibString.toString(lIdx),
                 ". ",
-                Strings.toHexString(uint(uint160(leaders[i])), 20),
+                HexString.toHexString(uint(uint160(leaders[i])), 20),
                 leadersStr
             );
             --lIdx;
@@ -279,8 +280,8 @@ contract Optimizor is Owned, ERC721 {
             projectName: "Optimizor",
             challengeName: name,
             // TODO should \/ be details.owner or details.recordHolder?
-            holderAddr: NFTSVG.toHexString(uint(uint160(address(details.owner))), 20),
-            challengeAddr: NFTSVG.toHexString(uint(uint160(address(details.challenge))), 20),
+            holderAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
+            challengeAddr: HexString.toHexString(uint(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
             gasOpti: gasOptiPercentage(tokenId, details),
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
