@@ -2,11 +2,11 @@
 pragma solidity ^0.8.15;
 
 import "./Base64.sol";
-import "./Challenge.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
 import "./IPurityChecker.sol";
 import "./IAttribute.sol";
+import "./IChallenge.sol";
 import "./TokenDetails.sol";
 import "./HexString.sol";
 
