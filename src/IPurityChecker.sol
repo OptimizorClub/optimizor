@@ -2,5 +2,6 @@
 pragma solidity ^0.8.15;
 
 interface IPurityChecker {
+    /// @return True if the code of the given account satisfies the code purity requirements.
     function check(address account) external view returns (bool);
 }
