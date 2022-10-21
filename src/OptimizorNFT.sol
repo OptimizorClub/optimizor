@@ -308,7 +308,7 @@ contract Optimizor is Owned, ERC721 {
 
         return NFTSVG.generateSVG(
             svgParams,
-            details.challenge.svg(tokenId)
+            string(details.challenge.svg(tokenId))
         );
     }
 
