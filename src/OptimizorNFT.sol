@@ -182,12 +182,13 @@ contract Optimizor is Owned, ERC721 {
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        TokenDetails memory details = tokenDetails(tokenId);
         return string.concat(
             'data:application/json;base64,',
             Base64.encode(
                 bytes.concat(
                     '{',
-                    '"name":"', "TestName", '", ',
+                    '"name":" Optimizor: ', bytes(details.challenge.name()), '", ',
                     '"description":"', bytes(description(tokenId)), '", ',
                     '"attributes": ', attributesJSON(tokenId), ',',
                     '"image": "data:image/svg+xml;base64,',
