@@ -14,6 +14,8 @@ contract OptimizorAdmin is OptimizorNFT, Owned {
     constructor(IPurityChecker _purity) Owned(msg.sender) {
         purity = _purity;
     }
+
+    /// @dev Purity checker may need to be updated when there are EVM changes.
     function updatePurityChecker(IPurityChecker _purity) external onlyOwner {
         purity = _purity;
     }
