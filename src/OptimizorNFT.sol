@@ -48,18 +48,22 @@ contract OptimizorNFT is ERC721 {
         uint leaderTokenId = packTokenId(challengeId, chl.level);
         ExtraDetails storage leaderDetails = extraDetails[leaderTokenId];
 
+        uint32 leaderLevel = chl.level;
+        uint32 rank = leaderLevel - level + 1;
+
         return TokenDetails(
             challengeId,
             chl.target,
 
             leaderDetails.gas,
-            chl.level,
+            leaderLevel,
             leaderDetails.solver,
             _ownerOf[leaderTokenId],
             leaderDetails.code,
 
             details.gas,
             level,
+            rank,
             details.solver,
             _ownerOf[tokenId],
             details.code
@@ -127,8 +131,7 @@ contract OptimizorNFT is ERC721 {
     function attributesJSON(uint tokenId) internal view returns (bytes memory attributes) {
         TokenDetails memory details = tokenDetails(tokenId);
 
-        uint32 wLevel = details.leaderLevel;
-        uint32 rank = wLevel - details.level + 1;
+        uint32 rank = details.rank;
 
         attributes = bytes.concat(
             '[',
@@ -157,14 +160,9 @@ contract OptimizorNFT is ERC721 {
     function svg(uint tokenId) internal view returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
 
-        uint32 wLevel = details.leaderLevel;
-        uint32 rank = wLevel - details.level + 1;
-
-        string memory name = details.challenge.name();
-
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor Club",
-            challengeName: name,
+            challengeName: details.challenge.name(),
             // TODO should \/ be details.owner or details.solver?
             solverAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
             challengeAddr: HexString.toHexString(uint(uint160(address(details.challenge))), 20),
@@ -172,8 +170,9 @@ contract OptimizorNFT is ERC721 {
             gasOpti: gasOptiPercentage(tokenId, details),
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
-            rank: rank,
-            participants: wLevel,
+            rank: details.rank,
+            // The leader is the last player, e.g. its level equals the number of players.
+            participants: details.leaderLevel,
 
             // Ideally these colors should not change if someone buys the nft,
             // since maybe they bought it because of the colors.
