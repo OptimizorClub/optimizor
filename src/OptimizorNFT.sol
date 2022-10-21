@@ -32,7 +32,7 @@ contract OptimizorNFT is ERC721 {
 
     IAttribute[] public extraAttrs;
 
-    constructor() ERC721("Test", "TTT") {
+    constructor() ERC721("Optimizor Club", "OC") {
     }
 
     /*****************************
