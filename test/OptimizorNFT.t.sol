@@ -6,6 +6,7 @@ import "../src/OptimizorNFT.sol";
 import "../src/DataHelpers.sol";
 import "../src/Base64.sol";
 import "./CommitHash.sol";
+import "./SqrtChallengeSolutions.sol";
 
 uint constant SALT = 0;
 
