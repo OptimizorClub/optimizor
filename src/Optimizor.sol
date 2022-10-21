@@ -1,9 +1,14 @@
 pragma solidity ^0.8.15;
 
-import "./OptimizorNFT.sol";
+import {OptimizorAdmin, OptimizorNFT} from "./OptimizorAdmin.sol";
+import {IPurityChecker} from "./IPurityChecker.sol";
+import {packTokenId} from "./DataHelpers.sol";
+import {ERC721} from "solmate/tokens/ERC721.sol";
 
-contract Optimizor is OptimizorNFT {
-    constructor(IPurityChecker pureh) OptimizorNFT(pureh) {
+uint constant EPOCH = 256;
+
+contract Optimizor is OptimizorAdmin {
+    constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {
     }
 
     function commit(bytes32 key) external {

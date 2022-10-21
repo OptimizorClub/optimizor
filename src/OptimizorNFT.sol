@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import "./Base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
-import "./IPurityChecker.sol";
 import "./IAttribute.sol";
 import "./IChallenge.sol";
 import "./TokenDetails.sol";
@@ -14,9 +13,7 @@ import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/LibString.sol";
 
-uint constant EPOCH = 256;
-
-contract OptimizorNFT is Owned, ERC721 {
+contract OptimizorNFT is ERC721 {
     // Commit errors
     error CodeAlreadySubmitted();
     error TooEarlyToChallenge();
@@ -58,38 +55,10 @@ contract OptimizorNFT is Owned, ERC721 {
     mapping (uint => Data) public challenges;
     mapping (uint => ExtraDetails) public extraDetails;
 
-    IPurityChecker purity;
     IAttribute[] public extraAttrs;
 
-    constructor(IPurityChecker pureh)
-        ERC721("Optimizor Club", "OC")
-        Owned(msg.sender) {
-        purity = pureh;
+    constructor() ERC721("Test", "TTT") {
     }
-
-    /***********************************
-       PUBLIC STATE MUTATING FUNCTIONS
-    ************************************/
-
-    function updatePurityChecker(IPurityChecker pureh) external onlyOwner {
-        purity = pureh;
-    }
-
-    function addAttribute(IAttribute attr) external onlyOwner {
-        extraAttrs.push(attr);
-    }
-
-    function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
-        Data storage chl = challenges[id];
-        if (address(chl.target) != address(0)) {
-            revert ChallengeExists(id);
-        }
-
-        chl.target = chlAddr;
-
-        emit ChallengeAdded(id, chlAddr);
-    }
-
 
     /*****************************
          PUBLIC VIEW FUNCTIONS
