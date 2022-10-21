@@ -62,7 +62,7 @@ contract Optimizor is Owned, ERC721 {
     IAttribute[] public extraAttrs;
 
     constructor(IPurityChecker pureh)
-        ERC721("Test", "TTT")
+        ERC721("Optimizor Club", "OC")
         Owned(msg.sender) {
         purity = pureh;
     }
@@ -182,12 +182,13 @@ contract Optimizor is Owned, ERC721 {
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        TokenDetails memory details = tokenDetails(tokenId);
         return string.concat(
             'data:application/json;base64,',
             Base64.encode(
                 bytes.concat(
                     '{',
-                    '"name":"', "TestName", '", ',
+                    '"name":" Optimizor Club: ', bytes(details.challenge.name()), '", ',
                     '"description":"', bytes(description(tokenId)), '", ',
                     '"attributes": ', attributesJSON(tokenId), ',',
                     '"image": "data:image/svg+xml;base64,',
@@ -277,7 +278,7 @@ contract Optimizor is Owned, ERC721 {
         string memory name = details.challenge.name();
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
-            projectName: "Optimizor",
+            projectName: "Optimizor Club",
             challengeName: name,
             // TODO should \/ be details.owner or details.recordHolder?
             holderAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
