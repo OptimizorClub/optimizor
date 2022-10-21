@@ -15,6 +15,7 @@ struct TokenDetails {
 
     uint32 gas;
     uint32 level;
+    uint32 rank;
     address solver;
     address owner;
     address submission;
