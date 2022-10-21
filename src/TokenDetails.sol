@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import "./Challenge.sol";
+import "./IChallenge.sol";
 
 struct TokenDetails {
     uint challengeId;
@@ -19,4 +19,3 @@ struct TokenDetails {
     address owner;
     address challenger;
 }
-
