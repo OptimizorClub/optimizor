@@ -9,13 +9,13 @@ struct TokenDetails {
 
     uint32 leaderGas;
     uint32 leaderLevel;
-    address leaderRecordHolder;
+    address leaderSolver;
     address leaderOwner;
     address leaderChallenger;
 
     uint32 gas;
     uint32 level;
-    address recordHolder;
+    address solver;
     address owner;
     address challenger;
 }
