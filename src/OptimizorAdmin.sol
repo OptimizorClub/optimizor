@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import {OptimizorNFT} from "./OptimizorNFT.sol";
 import {IPurityChecker} from "./IPurityChecker.sol";
 import {IAttribute} from "./IAttribute.sol";
-import {IChallenge} from "./Challenge.sol";
+import {IChallenge} from "./IChallenge.sol";
 
 import {Owned} from "solmate/auth/Owned.sol";
 

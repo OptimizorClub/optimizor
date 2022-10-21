@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
+import "./IChallenge.sol";
 import "./Base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
 import "./IAttribute.sol";
-import "./IChallenge.sol";
 import "./TokenDetails.sol";
 import "./HexString.sol";
 
