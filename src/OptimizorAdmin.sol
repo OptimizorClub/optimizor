@@ -11,6 +11,9 @@ import {Owned} from "solmate/auth/Owned.sol";
 contract OptimizorAdmin is OptimizorNFT, Owned {
     IPurityChecker purity;
 
+    error ChallengeExists(uint challengeId);
+    event ChallengeAdded(uint challengeId, IChallenge);
+
     constructor(IPurityChecker _purity) Owned(msg.sender) {
         purity = _purity;
     }

@@ -8,6 +8,23 @@ import {ERC721} from "solmate/tokens/ERC721.sol";
 uint constant EPOCH = 256;
 
 contract Optimizor is OptimizorAdmin {
+    mapping (bytes32 => Submission) public submissions;
+
+    // Commit errors
+    error CodeAlreadySubmitted();
+    error TooEarlyToChallenge();
+
+    // Challenge id errors
+    error ChallengeNotFound(uint challengeId);
+
+    // Input filtering
+    error InvalidRecipient();
+    error CodeNotSubmitted();
+    error NotPure();
+
+    // Sadness
+    error NotOptimizor();
+
     constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {
     }
 
@@ -39,7 +56,6 @@ contract Optimizor is OptimizorAdmin {
         if (submissions[key].sender == address(0)) {
             revert CodeNotSubmitted();
         }
-
 
         if (address(chl.target) == address(0)) {
             revert ChallengeNotFound(id);

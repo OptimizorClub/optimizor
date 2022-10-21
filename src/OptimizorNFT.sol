@@ -14,32 +14,12 @@ import "solmate/tokens/ERC721.sol";
 import "solmate/utils/LibString.sol";
 
 contract OptimizorNFT is ERC721 {
-    // Commit errors
-    error CodeAlreadySubmitted();
-    error TooEarlyToChallenge();
-
-    // Challenge id errors
-    error ChallengeNotFound(uint challengeId);
-    error ChallengeExists(uint challengeId);
-
-    // Input filtering
-    error InvalidRecipient();
-    error CodeNotSubmitted();
-    error NotPure();
-
-    // Sadness
-    error NotOptimizor();
-
-    event ChallengeAdded(uint challengeId, IChallenge);
-
     // TODO add events
 
     struct Submission {
         address sender;
         uint96 blockNumber;
     }
-
-    mapping (bytes32 => Submission) public submissions;
 
     struct Data {
         IChallenge target;
