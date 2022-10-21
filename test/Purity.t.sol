@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import "./BaseTest.sol";
 
-import "./PurityChecker.sol";
+import "../src/PurityChecker.sol";
 import "./SolidityMetadata.sol";
 
 import "puretea/Puretea.sol";
