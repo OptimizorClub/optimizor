@@ -51,6 +51,14 @@ contract OptimizorNFT is ERC721 {
         uint32 leaderLevel = chl.level;
         uint32 rank = leaderLevel - level + 1;
 
+        // This means the first holder will have a 99% improvement.
+        // TODO: decide on a value (0, 99, 100)?
+        uint32 percentage = 99;
+        if (level > 1) {
+            ExtraDetails storage prevDetails = extraDetails[tokenId - 1];
+            percentage = (details.gas * 100) / prevDetails.gas;
+        }
+
         return TokenDetails(
             challengeId,
             chl.target,
@@ -64,6 +72,7 @@ contract OptimizorNFT is ERC721 {
             details.gas,
             level,
             rank,
+            percentage,
             details.solver,
             _ownerOf[tokenId],
             details.code
@@ -167,7 +176,7 @@ contract OptimizorNFT is ERC721 {
             solverAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
             challengeAddr: HexString.toHexString(uint(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
-            gasOpti: gasOptiPercentage(tokenId, details),
+            gasOpti: details.improvementPercentage,
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: details.rank,
@@ -194,17 +203,5 @@ contract OptimizorNFT is ERC721 {
             svgParams,
             details.challenge.svg(tokenId)
         );
-    }
-
-    function gasOptiPercentage(uint tokenId, TokenDetails memory details) internal view returns (uint) {
-        // TODO this is a hack to show 99% improvement for the first holder
-        if (details.level <= 1) {
-            return 99;
-        }
-
-        TokenDetails memory prevDetails = tokenDetails(tokenId - 1);
-        assert(prevDetails.gas > 0);
-
-        return (details.gas * 100) / prevDetails.gas;
     }
 }
