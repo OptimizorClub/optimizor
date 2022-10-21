@@ -6,7 +6,7 @@ import "./SumChallenge.sol";
 import "./SqrtChallenge.sol";
 import "./PurityChecker.sol";
 
-import "../src/OptimizorNFT.sol";
+import "../src/Optimizor.sol";
 
 import "forge-std/Test.sol";
 

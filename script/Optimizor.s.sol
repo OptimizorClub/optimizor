@@ -2,7 +2,7 @@
 pragma solidity ^0.8.14;
 
 import "forge-std/Script.sol";
-import "../src/OptimizorNFT.sol";
+import "../src/Optimizor.sol";
 import "../test/CommitHash.sol";
 import "../test/SqrtChallenge.sol";
 import "../test/PurityChecker.sol";

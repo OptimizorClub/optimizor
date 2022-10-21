@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
+import "./IChallenge.sol";
 import "./Base64.sol";
 import "./DataHelpers.sol";
 import "./NFTSVG.sol";
-import "./IPurityChecker.sol";
 import "./IAttribute.sol";
-import "./IChallenge.sol";
 import "./TokenDetails.sol";
 import "./HexString.sol";
 
@@ -14,35 +13,13 @@ import "solmate/auth/Owned.sol";
 import "solmate/tokens/ERC721.sol";
 import "solmate/utils/LibString.sol";
 
-uint constant EPOCH = 256;
-
-contract Optimizor is Owned, ERC721 {
-    // Commit errors
-    error CodeAlreadySubmitted();
-    error TooEarlyToChallenge();
-
-    // Challenge id errors
-    error ChallengeNotFound(uint challengeId);
-    error ChallengeExists(uint challengeId);
-
-    // Input filtering
-    error InvalidRecipient();
-    error CodeNotSubmitted();
-    error NotPure();
-
-    // Sadness
-    error NotOptimizor();
-
-    event ChallengeAdded(uint challengeId, IChallenge);
-
+contract OptimizorNFT is ERC721 {
     // TODO add events
 
     struct Submission {
         address sender;
         uint96 blockNumber;
     }
-
-    mapping (bytes32 => Submission) public submissions;
 
     struct Data {
         IChallenge target;
@@ -58,96 +35,9 @@ contract Optimizor is Owned, ERC721 {
     mapping (uint => Data) public challenges;
     mapping (uint => ExtraDetails) public extraDetails;
 
-    IPurityChecker purity;
     IAttribute[] public extraAttrs;
 
-    constructor(IPurityChecker pureh)
-        ERC721("Optimizor Club", "OC")
-        Owned(msg.sender) {
-        purity = pureh;
-    }
-
-    /***********************************
-       PUBLIC STATE MUTATING FUNCTIONS
-    ************************************/
-
-    function updatePurityChecker(IPurityChecker pureh) external onlyOwner {
-        purity = pureh;
-    }
-
-    function addAttribute(IAttribute attr) external onlyOwner {
-        extraAttrs.push(attr);
-    }
-
-    function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
-        Data storage chl = challenges[id];
-        if (address(chl.target) != address(0)) {
-            revert ChallengeExists(id);
-        }
-
-        chl.target = chlAddr;
-
-        emit ChallengeAdded(id, chlAddr);
-    }
-
-    function commit(bytes32 key) external {
-        if (submissions[key].sender != address(0)) {
-            revert CodeAlreadySubmitted();
-        }
-        submissions[key] = Submission({ sender: msg.sender, blockNumber: uint96(block.number) });
-    }
-
-    function challenge(
-        uint256 id,
-        address target,
-        address recipient,
-        uint salt
-    ) external {
-        Data storage chl = challenges[id];
-
-        bytes32 codehash = target.codehash;
-        bytes32 key = keccak256(abi.encode(msg.sender, codehash, salt));
-
-        // Frontrunning cannot steal the submission, but can block
-        // it for users at the expense of the frontrunner's gas.
-        // We consider that a non-issue.
-        if (submissions[key].blockNumber + EPOCH >= block.number) {
-            revert TooEarlyToChallenge();
-        }
-
-        if (submissions[key].sender == address(0)) {
-            revert CodeNotSubmitted();
-        }
-
-
-        if (address(chl.target) == address(0)) {
-            revert ChallengeNotFound(id);
-        }
-
-        if (recipient == address(0)) {
-            revert InvalidRecipient();
-        }
-
-        if (!purity.check(target)) {
-            revert NotPure();
-        }
-
-        uint32 gas = uint32(chl.target.run(target, block.difficulty));
-
-        uint winnerTokenId = packTokenId(id, chl.level);
-        ExtraDetails storage prevDetails = extraDetails[winnerTokenId];
-
-        if (prevDetails.gas != 0 && (prevDetails.gas <= gas)) {
-            revert NotOptimizor();
-        }
-
-        unchecked {
-            ++chl.level;
-        }
-
-        uint tokenId = packTokenId(id, chl.level);
-        ERC721._mint(recipient, tokenId);
-        extraDetails[tokenId] = ExtraDetails(target, recipient, gas);
+    constructor() ERC721("Test", "TTT") {
     }
 
     /*****************************
