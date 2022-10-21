@@ -12,7 +12,7 @@ library NFTSVG {
     struct SVGParams {
         string projectName;
         string challengeName;
-        string holderAddr;
+        string solverAddr;
         string challengeAddr;
         uint gasUsed;
         uint gasOpti;
@@ -49,7 +49,7 @@ library NFTSVG {
                     generateSVGBorderText(
                         params.projectName,
                         params.challengeName,
-                        params.holderAddr,
+                        params.solverAddr,
                         params.challengeAddr
                     ),
                     generateSVGCardMantle(params.challengeName, params.challengeAddr, params.rank, params.participants),
@@ -153,7 +153,7 @@ library NFTSVG {
     function generateSVGBorderText(
         string memory projectName,
         string memory challengeName,
-        string memory holderAddr,
+        string memory solverAddr,
         string memory challengeAddr
     ) private pure returns (string memory svg) {
         svg = string(
@@ -172,19 +172,19 @@ library NFTSVG {
                 '<textPath startOffset="50%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
                 projectName,
                 unicode' • ',
-                holderAddr,
+                solverAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s"',
                 ' repeatCount="indefinite" /></textPath><textPath startOffset="-50%" fill="white" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
                 projectName,
                 unicode' • ',
-                holderAddr,
+                solverAddr,
                 ' <animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite" /></textPath></text>'
             )
         );
     }
 
     function generateSVGCardMantle(
-        string memory holderAddr,
+        string memory solverAddr,
         string memory challengeAddr,
         uint32 rank,
         uint32 participants
@@ -192,7 +192,7 @@ library NFTSVG {
         svg = string(
             abi.encodePacked(
                 '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px" /> <text y="70px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
-                holderAddr,
+                solverAddr,
                 '</text><text y="115px" x="32px" fill="white" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
                 string.concat(
                     "Rank #",

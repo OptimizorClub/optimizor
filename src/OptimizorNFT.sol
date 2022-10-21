@@ -51,7 +51,7 @@ contract Optimizor is Owned, ERC721 {
 
     struct ExtraDetails {
         address code;
-        address holder;
+        address solver;
         uint32 gas;
     }
 
@@ -169,13 +169,13 @@ contract Optimizor is Owned, ERC721 {
 
             leaderDetails.gas,
             chl.level,
-            leaderDetails.holder,
+            leaderDetails.solver,
             _ownerOf[leaderTokenId],
             leaderDetails.code,
 
             details.gas,
             level,
-            details.holder,
+            details.solver,
             _ownerOf[tokenId],
             details.code
         );
@@ -213,7 +213,7 @@ contract Optimizor is Owned, ERC721 {
         board = new address[](winners);
         for (uint32 i = 1; i <= winners; ++i) {
             ExtraDetails storage details = extraDetails[packTokenId(challengeId, i)];
-            board[i - 1] = details.holder;
+            board[i - 1] = details.solver;
         }
     }
 
@@ -279,8 +279,8 @@ contract Optimizor is Owned, ERC721 {
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor",
             challengeName: name,
-            // TODO should \/ be details.owner or details.recordHolder?
-            holderAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
+            // TODO should \/ be details.owner or details.solver?
+            solverAddr: HexString.toHexString(uint(uint160(address(details.owner))), 20),
             challengeAddr: HexString.toHexString(uint(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
             gasOpti: gasOptiPercentage(tokenId, details),
@@ -291,18 +291,18 @@ contract Optimizor is Owned, ERC721 {
 
             // Ideally these colors should not change if someone buys the nft,
             // since maybe they bought it because of the colors.
-            // So we keep them based on the original record holder of this tokenId.
+            // So we keep them based on the original record solver of this tokenId.
             color0: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 136),
-            color1: NFTSVG.tokenToColorHex(uint256(uint160(details.recordHolder)), 136),
+            color1: NFTSVG.tokenToColorHex(uint256(uint160(details.solver)), 136),
             color2: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 0),
-            color3: NFTSVG.tokenToColorHex(uint256(uint160(details.recordHolder)), 0),
+            color3: NFTSVG.tokenToColorHex(uint256(uint160(details.solver)), 0),
 
             x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274),
-            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 16, tokenId), 0, 255, 100, 484),
+            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 16, tokenId), 0, 255, 100, 484),
             x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 32, tokenId), 0, 255, 16, 274),
-            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 32, tokenId), 0, 255, 100, 484),
+            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 32, tokenId), 0, 255, 100, 484),
             x3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 48, tokenId), 0, 255, 16, 274),
-            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.recordHolder)), 48, tokenId), 0, 255, 100, 484)
+            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 48, tokenId), 0, 255, 100, 484)
         });
 
         return NFTSVG.generateSVG(
