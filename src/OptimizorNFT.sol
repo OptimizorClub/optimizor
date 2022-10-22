@@ -16,6 +16,12 @@ import "solmate/utils/LibString.sol";
 contract OptimizorNFT is ERC721 {
     // TODO add events
 
+    // Invalid inputs
+    error InvalidLevel(uint challengeId, uint32 level);
+
+    // Challenge id errors
+    error ChallengeNotFound(uint challengeId);
+
     struct Data {
         IChallenge target;
         uint32 level;
@@ -41,9 +47,13 @@ contract OptimizorNFT is ERC721 {
 
     function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
-        ExtraDetails storage details = extraDetails[tokenId];
+        if (level == 0) revert InvalidLevel(challengeId, level);
 
         Data storage chl = challenges[challengeId];
+        if (address(chl.target) == address(0)) revert ChallengeNotFound(challengeId);
+        if (level > chl.level) revert InvalidLevel(challengeId, level);
+
+        ExtraDetails storage details = extraDetails[tokenId];
 
         uint leaderTokenId = packTokenId(challengeId, chl.level);
         ExtraDetails storage leaderDetails = extraDetails[leaderTokenId];

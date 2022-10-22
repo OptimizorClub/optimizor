@@ -19,9 +19,6 @@ contract Optimizor is OptimizorAdmin {
     error CodeAlreadySubmitted();
     error TooEarlyToChallenge();
 
-    // Challenge id errors
-    error ChallengeNotFound(uint challengeId);
-
     // Input filtering
     error InvalidRecipient();
     error CodeNotSubmitted();
