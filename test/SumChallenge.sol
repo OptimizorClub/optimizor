@@ -10,7 +10,7 @@ interface ISum {
 }
 
 contract SumChallenge is IChallenge {
-    function run(address opzor, uint seed) external view override returns (uint) {
+    function run(address opzor, uint seed) external view override returns (uint32) {
         // Generate input.
         (uint x, uint y) = (random(seed), random(++seed));
 
@@ -20,7 +20,7 @@ contract SumChallenge is IChallenge {
 
         verify(x, y, s);
 
-        unchecked { return preGas - postGas; }
+        unchecked { return uint32(preGas - postGas); }
     }
 
     function verify(uint x, uint y, uint s) internal pure {
