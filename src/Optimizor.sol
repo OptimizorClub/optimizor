@@ -62,8 +62,7 @@ contract Optimizor is OptimizorAdmin {
     ) external {
         Data storage chl = challenges[id];
 
-        bytes32 codehash = target.codehash;
-        bytes32 key = keccak256(abi.encode(msg.sender, codehash, salt));
+        bytes32 key = keccak256(abi.encode(msg.sender, target.codehash, salt));
 
         // Frontrunning cannot steal the submission, but can block
         // it for users at the expense of the frontrunner's gas.
@@ -90,10 +89,10 @@ contract Optimizor is OptimizorAdmin {
 
         uint32 gas = uint32(chl.target.run(target, block.difficulty));
 
-        uint winnerTokenId = packTokenId(id, chl.level);
-        ExtraDetails storage prevDetails = extraDetails[winnerTokenId];
+        uint leaderTokenId = packTokenId(id, chl.level);
+        uint leaderGas = extraDetails[leaderTokenId].gas;
 
-        if (prevDetails.gas != 0 && (prevDetails.gas <= gas)) {
+        if ((leaderGas != 0) && (leaderGas <= gas)) {
             revert NotOptimizor();
         }
 
