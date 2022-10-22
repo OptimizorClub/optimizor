@@ -51,9 +51,8 @@ contract OptimizorNFT is ERC721 {
         uint32 leaderLevel = chl.level;
         uint32 rank = leaderLevel - level + 1;
 
-        // This means the first holder will have a 99% improvement.
-        // TODO: decide on a value (0, 99, 100)?
-        uint32 percentage = 99;
+        // This means the first holder will have a 0% improvement.
+        uint32 percentage = 0;
         if (level > 1) {
             ExtraDetails storage prevDetails = extraDetails[tokenId - 1];
             percentage = (details.gas * 100) / prevDetails.gas;
