@@ -171,6 +171,19 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders[leaders.length - 1], address(this));
     }
 
+    function testInvalidTokenURIs() public {
+        addSumChallenge();
+        vm.expectRevert(abi.encodeWithSignature("InvalidLevel(uint256,uint32)", 0, 0));
+        opt.tokenURI(0);
+        vm.expectRevert(abi.encodeWithSignature("InvalidLevel(uint256,uint32)", 0, 10));
+        opt.tokenURI(10);
+    }
+
+    function testInvalidChallengeTokenURIs() public {
+        vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", 100));
+        opt.tokenURI((100 << 32) + 1);
+    }
+
     function testTokenURIs() public {
         addSqrtChallenge();
 
