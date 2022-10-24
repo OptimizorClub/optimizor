@@ -93,16 +93,16 @@ contract OptimizorNFT is ERC721 {
         return string.concat(
             'data:application/json;base64,',
             Base64.encode(
-                bytes.concat(
+                bytes(string.concat(
                     '{',
-                    '"name":" Optimizor Club: ', bytes(details.challenge.name()), '", ',
-                    '"description":"', bytes(description(tokenId)), '", ',
+                    '"name":" Optimizor Club: ', details.challenge.name(), '", ',
+                    '"description":"', description(tokenId), '", ',
                     '"attributes": ', attributesJSON(tokenId), ',',
                     '"image": "data:image/svg+xml;base64,',
-                    bytes(Base64.encode(bytes(svg(tokenId)))),
+                    Base64.encode(bytes(svg(tokenId))),
                     '"',
                     '}'
-                )
+                ))
             )
         );
     }
@@ -146,32 +146,32 @@ contract OptimizorNFT is ERC721 {
            INTERNAL HELPERS
     ******************************/
 
-    function attributesJSON(uint tokenId) internal view returns (bytes memory attributes) {
+    function attributesJSON(uint tokenId) internal view returns (string memory attributes) {
         TokenDetails memory details = tokenDetails(tokenId);
 
         uint32 rank = details.rank;
 
-        attributes = bytes.concat(
+        attributes = string.concat(
             '[',
             // With value/max_value this will be displayed as a bar.
-            '{ "trait_type": "Rank", "value: ', bytes(LibString.toString(rank)), ', "max_value": ', bytes(LibString.toString(details.leaderLevel)), ' }',
-            '{ "trait_type": "Leader", "value": "', bytes((rank == 1) ? "Yes" : "No"), '"}, ',
-            '{ "trait_type": "Top 3", "value": "', bytes((rank <= 3) ? "Yes" : "No"), '"}, ',
-            '{ "trait_type": "Top 10", "value": "', bytes((rank <= 10) ? "Yes" : "No"), '"} '
+            '{ "trait_type": "Rank", "value: ', LibString.toString(rank), ', "max_value": ', LibString.toString(details.leaderLevel), ' }',
+            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
+            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} '
         );
 
         for (uint i = 0; i < extraAttrs.length; ++i) {
             (string memory attr, string memory value) = extraAttrs[i].attribute(details);
-            attributes = bytes.concat(
+            attributes = string.concat(
                 attributes,
                 ', { ',
-                '"trait_type": "', bytes(attr), '", ',
-                '"value": "', bytes(value), '",',
+                '"trait_type": "', attr, '", ',
+                '"value": "', value, '",',
                 '}'
             );
         }
 
-        attributes = bytes.concat(
+        attributes = string.concat(
             attributes,
             ']'
         );
