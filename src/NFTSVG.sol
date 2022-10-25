@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity ^0.8.15;
 
-import './Base64.sol';
-import './HexString.sol';
+import {Base64} from "./Base64.sol";
+import {HexString} from "./HexString.sol";
 
-import "solmate/utils/LibString.sol";
+import {LibString} from "solmate/utils/LibString.sol";
 
 /// @title NFTSVG
 /// @notice Provides a function for generating an SVG associated with a Uniswap NFT
