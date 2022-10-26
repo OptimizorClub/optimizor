@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.15;
 
-import "./ChallengeIDs.sol";
-import "./SumChallenge.sol";
-import "./SqrtChallengeSolutions.sol";
-import "../src/PurityChecker.sol";
+import {SUM_ID, SQRT_ID} from "./ChallengeIDs.sol";
+import {ISum, SumChallenge, CheapSum, ExpensiveSum} from "./SumChallenge.sol";
+import {ISqrt, SqrtChallenge, CheapSqrt, ExpensiveSqrt} from "./SqrtChallengeSolutions.sol";
 
-import "../src/Optimizor.sol";
+import {Optimizor, EPOCH} from "../src/Optimizor.sol";
+import {IChallenge} from "../src/IChallenge.sol";
+import {IPurityChecker} from "../src/IPurityChecker.sol";
+import {PurityChecker} from "../src/PurityChecker.sol";
 
 import "forge-std/Test.sol";
 

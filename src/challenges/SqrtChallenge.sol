@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "../IChallenge.sol";
+import {IChallenge} from  "../IChallenge.sol";
 
 import {Fixed18} from "./Fixed18.sol";
 

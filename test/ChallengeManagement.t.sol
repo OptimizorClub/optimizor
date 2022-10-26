@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.15;
 
-import "./BaseTest.sol";
-import "./CommitHash.sol";
-
-import "../src/OptimizorNFT.sol";
+import {BaseTest} from "./BaseTest.sol";
+import {NON_USED_ID} from "./ChallengeIDs.sol";
+import {computeKey} from "./CommitHash.sol";
 
 import "forge-std/Test.sol";
 
