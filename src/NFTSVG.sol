@@ -47,6 +47,7 @@ library NFTSVG {
             generateRankBorder(params.rank),
             generateSvgCurve(params.overRange, challengeSVG),
             generateSVGPositionDataAndLocationCurve(LibString.toString(params.tokenId), params.gasUsed, params.gasOpti),
+            generateOptimizorIcon(),
             "</svg>"
         );
     }
@@ -55,6 +56,7 @@ library NFTSVG {
         svg = string.concat(
             '<svg width="290" height="500" viewBox="0 0 290 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
             "<defs>",
+            '<filter id="icon"><feImage result="icon" xlink:href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTY2LjU5NyIgaGVpZ2h0PSIxMjguOTQxIiB2aWV3Qm94PSIwIDAgNDQuMDc5IDM0LjExNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAuNzkzIDEzLjMyMWgtLjYyM1YxMi43aC02LjIyNXYuNjIyaC42MjJ2LjYyM2gtLjYyMnYuNjIyaC0uNjIzdi0uNjIySDEyLjd2Ni4yMjVoLjYyMnYuNjIzaC42MjN2LjYyMmg2LjIyNXYtLjYyMmguNjIzdi0uNjIzaC42MjJ2LTYuMjI1aC0uNjIyem0tMy43MzUgNS42MDN2LTQuMzU4aDEuODY3djQuMzU4em0xMy42OTgtNi4yMjVoLTYuODQ4di42MjJoLjYyM3YuNjIzaC0uNjIzdi42MjJoLS42MjJ2LS42MjJoLS42MjN2Ni4yMjVoLjYyM3YuNjIzaC42MjJ2LjYyMmg2Ljg0OHYtLjYyMmguNjIydi0xLjI0NWgtLjYyMnYtLjYyM0gyNy4wMnYtNC4zNThoMy43MzV2LS42MjJoLjYyMnYtLjYyM2gtLjYyMnoiIHN0eWxlPSJmaWxsOiM2NjYiLz48L3N2Zz4="/></filter>',
             '<filter id="f1"><feImage result="p0" xlink:href="data:image/svg+xml;base64,',
             Base64.encode(
                 bytes(
@@ -243,6 +245,11 @@ library NFTSVG {
             "%",
             "</text></g></g>"
         );
+    }
+
+    function generateOptimizorIcon() private pure returns (string memory svg) {
+        return
+        '<g style="transform:translate(180px, 365px)"><rect style="filter: url(#icon)" x="0px" y="0px" width="83px" height="64px"/></g>';
     }
 
     function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
