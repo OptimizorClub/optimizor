@@ -98,10 +98,10 @@ contract OptimizorNFT is ERC721 {
             Base64.encode(
                 bytes(string.concat(
                     '{',
-                    '"name":" Optimizor Club: ', details.challenge.name(), '", ',
-                    '"description":"', description(tokenId), '", ',
-                    '"attributes": ', attributesJSON(tokenId), ',',
-                    '"image": "data:image/svg+xml;base64,',
+                    '"name":"Optimizor Club: ', details.challenge.name(), '",',
+                    '"description":"', description(tokenId), '",',
+                    '"attributes":', attributesJSON(tokenId), ',',
+                    '"image":"data:image/svg+xml;base64,',
                     Base64.encode(bytes(svg(tokenId))),
                     '"',
                     '}'
@@ -157,19 +157,19 @@ contract OptimizorNFT is ERC721 {
         attributes = string.concat(
             '[',
             // With value/max_value this will be displayed as a bar.
-            '{ "trait_type": "Rank", "value": ', LibString.toString(rank), ', "max_value": ', LibString.toString(details.leaderLevel), '}, ',
-            '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
-            '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} '
+            '{"trait_type":"Rank","value":', LibString.toString(rank), ',"max_value":', LibString.toString(details.leaderLevel), '},',
+            '{"trait_type":"Leader","value":"', (rank == 1) ? "Yes" : "No", '"},',
+            '{"trait_type":"Top 3","value":"', (rank <= 3) ? "Yes" : "No", '"},',
+            '{"trait_type":"Top 10","value":"', (rank <= 10) ? "Yes" : "No", '"}'
         );
 
         for (uint i = 0; i < extraAttrs.length; ++i) {
             (string memory attr, string memory value) = extraAttrs[i].attribute(details);
             attributes = string.concat(
                 attributes,
-                ', { ',
-                '"trait_type": "', attr, '", ',
-                '"value": "', value, '",',
+                ',{',
+                '"trait_type":"', attr, '",',
+                '"value":"', value, '",',
                 '}'
             );
         }
