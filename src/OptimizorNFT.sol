@@ -44,6 +44,10 @@ contract OptimizorNFT is ERC721 {
          PUBLIC VIEW FUNCTIONS
     ******************************/
 
+    function contractURI() external pure returns (string memory) {
+        return "data:application/json;base64,eyJuYW1lIjoiT3B0aW1pem9yIENsdWIiImRlc2NyaXB0aW9uIjoiVGhlIE9wdGltaXpvciBDbHViIE5GVCBjb2xsZWN0aW9uIHJld2FyZHMgZ2FzIGVmZmljaWVudCBwZW9wbGUgYW5kIG1hY2hpbmVzIGJ5IG1pbnRpbmcgbmV3IGl0ZW1zIHdoZW5ldmVyIGEgY2hlYXBlciBzb2x1dGlvbiBpcyBzdWJtaXR0ZWQgZm9yIGEgY2VydGFpbiBjaGFsbGVuZ2UuIiJpbWFnZSI6IiwgbG9nbywgIiJleHRlcm5hbF9saW5rIjoiaHR0cHM6Ly9vcHRpbWl6b3IuY2x1Yi8ifQ==";
+    }
+
     function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory) {
         (uint challengeId, uint32 level) = unpackTokenId(tokenId);
         if (level == 0) revert InvalidLevel(challengeId, level);
