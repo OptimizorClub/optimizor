@@ -150,8 +150,19 @@ contract OptimizorNFT is ERC721 {
     function attributesJSON(TokenDetails memory details) internal view returns (string memory attributes) {
         uint32 rank = details.rank;
 
+        // Core details.
         attributes = string.concat(
             '[',
+            '{"trait_type":"Challenge","value":"', details.challenge.name(), '"},',
+            '{"trait_type":"Gas used","value":', LibString.toString(details.gas), ',"display_type":"number"},',
+            '{"trait_type":"Code size","value":', LibString.toString(details.submission.code.length), ',"display_type":"number"},',
+            '{"trait_type":"Improvement percentage","value":"', LibString.toString(details.improvementPercentage), '%"},',
+            '{"trait_type":"Solver","value":"', HexString.toHexString(uint(uint160(details.solver)), 20), '"},'
+        );
+
+        // Standing.
+        attributes = string.concat(
+            attributes,
             // With value/max_value this will be displayed as a bar.
             '{"trait_type":"Rank","value":', LibString.toString(rank), ',"max_value":', LibString.toString(details.leaderLevel), '},',
             '{"trait_type":"Leader","value":"', (rank == 1) ? "Yes" : "No", '"},',
