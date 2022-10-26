@@ -31,7 +31,6 @@ jobs:
       - name: Run Forge build
         run: |
           forge --version
-          # FIXME add --sizes once the size limits are fixed
           forge build --use ./bin/solc
         id: build
 
@@ -47,3 +46,7 @@ jobs:
         with:
           name: optimizor.svg
           path: out.svg
+
+      - name: Sizes of the contracts
+        run: |
+          forge build --sizes --skip test --skip script --use ./bin/solc
