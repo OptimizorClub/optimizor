@@ -6,7 +6,7 @@ import {IPurityChecker} from "./IPurityChecker.sol";
 import {packTokenId} from "./DataHelpers.sol";
 import {ERC721} from "solmate/tokens/ERC721.sol";
 
-uint constant EPOCH = 256;
+uint256 constant EPOCH = 256;
 
 contract Optimizor is OptimizorAdmin {
     struct Submission {
@@ -14,7 +14,7 @@ contract Optimizor is OptimizorAdmin {
         uint96 blockNumber;
     }
 
-    mapping (bytes32 => Submission) public submissions;
+    mapping(bytes32 => Submission) public submissions;
 
     // Commit errors
     error CodeAlreadySubmitted();
@@ -28,8 +28,7 @@ contract Optimizor is OptimizorAdmin {
     // Sadness
     error NotOptimizor();
 
-    constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {
-    }
+    constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {}
 
     /// Commit a `key` derived using
     /// `keccak256(abi.encode(sender, codehash, salt))`
@@ -41,7 +40,7 @@ contract Optimizor is OptimizorAdmin {
         if (submissions[key].sender != address(0)) {
             revert CodeAlreadySubmitted();
         }
-        submissions[key] = Submission({ sender: msg.sender, blockNumber: uint96(block.number) });
+        submissions[key] = Submission({sender: msg.sender, blockNumber: uint96(block.number)});
     }
 
     /// After committing and waiting for at least 256 blocks, challenge can be
@@ -52,12 +51,7 @@ contract Optimizor is OptimizorAdmin {
     /// @param target The address of your solution contract.
     /// @param recipient The address that receives the Optimizor Club NFT.
     /// @param salt The secret number used for deriving the committed key.
-    function challenge(
-        uint256 id,
-        address target,
-        address recipient,
-        uint salt
-    ) external {
+    function challenge(uint256 id, address target, address recipient, uint256 salt) external {
         Data storage chl = challenges[id];
 
         bytes32 key = keccak256(abi.encode(msg.sender, target.codehash, salt));
@@ -82,13 +76,13 @@ contract Optimizor is OptimizorAdmin {
         }
 
         if (!purity.check(target)) {
-           revert NotPure();
+            revert NotPure();
         }
 
         uint32 gas = uint32(chl.target.run(target, block.difficulty));
 
-        uint leaderTokenId = packTokenId(id, chl.level);
-        uint leaderGas = extraDetails[leaderTokenId].gas;
+        uint256 leaderTokenId = packTokenId(id, chl.level);
+        uint256 leaderGas = extraDetails[leaderTokenId].gas;
 
         if ((leaderGas != 0) && (leaderGas <= gas)) {
             revert NotOptimizor();
@@ -98,7 +92,7 @@ contract Optimizor is OptimizorAdmin {
             ++chl.level;
         }
 
-        uint tokenId = packTokenId(id, chl.level);
+        uint256 tokenId = packTokenId(id, chl.level);
         ERC721._mint(recipient, tokenId);
         extraDetails[tokenId] = ExtraDetails(target, recipient, gas);
     }

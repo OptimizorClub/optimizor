@@ -5,10 +5,10 @@ interface IChallenge {
     /// Execute a given solution, using the seed to generate inputs. The actual
     /// implementation is specific to the challenge.
     /// @return The amount of gas consumed by the solution.
-    function run(address target, uint seed) external view returns (uint);
+    function run(address target, uint256 seed) external view returns (uint256);
 
     /// @return An SVG snippet, which is embedded in the main NFT.
-    function svg(uint tokenId) external view returns (string memory);
+    function svg(uint256 tokenId) external view returns (string memory);
 
     /// @return The name of the challenge.
     function name() external view returns (string memory);
