@@ -4,8 +4,13 @@ import subprocess
 import os
 import base64
 import json
+import sys
 
-returned_value = str(subprocess.check_output("forge script ../test/OptimizorNFT.t.sol --use ../bin/solc", shell=True, cwd=os.path.dirname(__file__)))
+if len(sys.argv) == 1:
+    returned_value = str(subprocess.check_output("forge script ../test/OptimizorNFT.t.sol --use ../bin/solc", shell=True, cwd=os.path.dirname(__file__)))
+else:
+    returned_value = sys.argv[1]
+
 print(returned_value)
 
 data = returned_value.split("base64,")[1].split('"')[0].split('\\n')[0]
