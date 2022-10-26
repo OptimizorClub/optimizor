@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import "./IChallenge.sol";
-import "./Base64.sol";
-import "./DataHelpers.sol";
-import "./NFTSVG.sol";
-import "./IAttribute.sol";
-import "./TokenDetails.sol";
-import "./HexString.sol";
+import {IChallenge} from "./IChallenge.sol";
+import {Base64} from "./Base64.sol";
+import {packTokenId, unpackTokenId} from "./DataHelpers.sol";
+import {NFTSVG} from "./NFTSVG.sol";
+import {IAttribute} from "./IAttribute.sol";
+import {TokenDetails} from "./TokenDetails.sol";
+import {HexString} from "./HexString.sol";
 
-import "solmate/auth/Owned.sol";
-import "solmate/tokens/ERC721.sol";
-import "solmate/utils/LibString.sol";
+import {ERC721} from "solmate/tokens/ERC721.sol";
+import {LibString} from "solmate/utils/LibString.sol";
 
 contract OptimizorNFT is ERC721 {
     // TODO add events
