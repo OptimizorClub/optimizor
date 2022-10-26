@@ -15,7 +15,7 @@ contract AttributeTest is BaseTest {
 }
 
 contract Attributes is IAttribute {
-    function attribute(TokenDetails memory details) external view returns (string memory attr, string memory value) {
+    function attribute(TokenDetails memory /*details*/) external pure returns (string memory attr, string memory value) {
         return ("someAttr", "yes");
     }
 }

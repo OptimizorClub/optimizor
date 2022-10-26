@@ -26,7 +26,6 @@ function random_uint64(uint256 seed) view returns (uint64) {
 }
 
 contract SqrtChallenge is IChallenge {
-
     error DoesNotSatisfyTolerance(uint input, uint output);
 
     function run(address target, uint seed) external view override returns (uint) {
@@ -77,15 +76,15 @@ contract SqrtChallenge is IChallenge {
         }
     }
 
-    function name() external override view returns (string memory) {
+    function name() external override pure returns (string memory) {
         return "SQRT";
     }
 
-    function description() external override view returns (string memory) {
+    function description() external override pure returns (string memory) {
         return "Spiral of Theodorus.";
     }
 
-    function svg(uint tokenId) external view returns (string memory art) {
+    function svg(uint tokenId) external pure returns (string memory art) {
         uint32 level = uint32(tokenId);
         if (level == 0)
             return '<rect width="230" height="230" rx="18px" ry="18px" fill="rgba(0,0,0,0.1)" />';
@@ -116,5 +115,4 @@ contract SqrtChallenge is IChallenge {
         else
             return '<rect width="230" height="230" rx="18px" ry="18px" fill="rgba(0,0,0,0.1)" /><polygon points="115,115 144,115 144,144" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 144,144 123,164" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 123,164 95,169" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 95,169 68,159" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 68,159 48,138" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 48,138 39,111" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 39,111 41,82" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 41,82 52,56" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 52,56 72,35" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 72,35 97,21" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 97,21 126,16" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 126,16 154,19" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon><polygon points="115,115 154,19 181,30" fill="none" stroke="white" stroke-linejoin="round" stroke-width="2"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 115 115" to="360 115 115" dur="10s" repeatCount="indefinite"/></polygon>';
     }
-
 }
