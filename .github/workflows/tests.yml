@@ -21,3 +21,6 @@ jobs:
 
       - name: Run tests
         run: forge test --use ./bin/solc -vvv
+
+      - name: Test JSON validity
+        run: script/extractsvg.py # Extract JSON + SVG

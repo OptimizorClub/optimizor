@@ -154,7 +154,7 @@ contract OptimizorNFT is ERC721 {
         attributes = string.concat(
             '[',
             // With value/max_value this will be displayed as a bar.
-            '{ "trait_type": "Rank", "value: ', LibString.toString(rank), ', "max_value": ', LibString.toString(details.leaderLevel), ' }',
+            '{ "trait_type": "Rank", "value": ', LibString.toString(rank), ', "max_value": ', LibString.toString(details.leaderLevel), '}, ',
             '{ "trait_type": "Leader", "value": "', (rank == 1) ? "Yes" : "No", '"}, ',
             '{ "trait_type": "Top 3", "value": "', (rank <= 3) ? "Yes" : "No", '"}, ',
             '{ "trait_type": "Top 10", "value": "', (rank <= 10) ? "Yes" : "No", '"} '

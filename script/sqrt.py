@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 height = 230
 N = 13
 base_length = height / 8
