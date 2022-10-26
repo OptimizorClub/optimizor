@@ -204,9 +204,9 @@ contract OptimizorNFT is ERC721 {
     }
 
     function svg(uint256 tokenId, TokenDetails memory details) internal view returns (string memory) {
-        uint256 grad_rgb = 0;
+        uint256 gradRgb = 0;
         if (details.rank > 10) {
-            grad_rgb = 0xbebebe;
+            gradRgb = 0xbebebe;
         } else if (details.rank > 3) {
             uint256 fRank;
             uint256 init = 40;
@@ -214,8 +214,9 @@ contract OptimizorNFT is ERC721 {
             unchecked {
                 fRank = init + details.rank * factor;
             }
-            grad_rgb = (uint256(fRank) << 16) | (uint256(fRank) << 8) | uint256(fRank);
+            gradRgb = (uint256(fRank) << 16) | (uint256(fRank) << 8) | uint256(fRank);
         }
+        string memory gradRgbHex = HexString.toHexStringNoPrefix(gradRgb, 3);
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor Club",
@@ -230,10 +231,10 @@ contract OptimizorNFT is ERC721 {
             rank: details.rank,
             // The leader is the last player, e.g. its solution id equals the number of players.
             participants: details.leaderSolutionId,
-            color0: NFTSVG.tokenToColorHex(grad_rgb, 0),
-            color1: NFTSVG.tokenToColorHex(grad_rgb, 0),
-            color2: NFTSVG.tokenToColorHex(grad_rgb, 0),
-            color3: NFTSVG.tokenToColorHex(grad_rgb, 0),
+            color0: gradRgbHex,
+            color1: gradRgbHex,
+            color2: gradRgbHex,
+            color3: gradRgbHex,
             x1: NFTSVG.scale(
                 NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274
                 ),
