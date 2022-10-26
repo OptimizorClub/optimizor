@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import "../src/IChallenge.sol";
+import {IChallenge} from "../src/IChallenge.sol";
 
 interface ISum {
     error WrongSum(uint, uint, uint);

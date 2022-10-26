@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.15;
 
-import "./BaseTest.sol";
-import "../src/OptimizorNFT.sol";
-import "../src/DataHelpers.sol";
-import "../src/IAttribute.sol";
+import {BaseTest} from "./BaseTest.sol";
+import {IAttribute, TokenDetails} from "../src/IAttribute.sol";
 
 contract AttributeTest is BaseTest {
     Attributes attr = new Attributes();
