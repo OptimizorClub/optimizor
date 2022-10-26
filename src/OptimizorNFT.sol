@@ -93,13 +93,19 @@ contract OptimizorNFT is ERC721 {
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
+
+        string memory description = string.concat(
+            "Art: ", details.challenge.description(), "\\n",
+            leaderboardString(tokenId)
+        );
+
         return string.concat(
             'data:application/json;base64,',
             Base64.encode(
                 bytes(string.concat(
                     '{',
                     '"name":"Optimizor Club: ', details.challenge.name(), '",',
-                    '"description":"', description(tokenId), '",',
+                    '"description":"', description, '",',
                     '"attributes":', attributesJSON(tokenId), ',',
                     '"image":"data:image/svg+xml;base64,',
                     Base64.encode(bytes(svg(tokenId))),
@@ -107,14 +113,6 @@ contract OptimizorNFT is ERC721 {
                     '}'
                 ))
             )
-        );
-    }
-
-    function description(uint256 tokenId) public view returns (string memory) {
-        TokenDetails memory details = tokenDetails(tokenId);
-        return string.concat(
-            "Art: ", details.challenge.description(), "\\n",
-            leaderboardString(tokenId)
         );
     }
 
@@ -128,7 +126,11 @@ contract OptimizorNFT is ERC721 {
         }
     }
 
-    function leaderboardString(uint tokenId) public view returns (string memory) {
+    /*****************************
+           INTERNAL HELPERS
+    ******************************/
+
+    function leaderboardString(uint tokenId) internal view returns (string memory) {
         address[] memory leaders = leaderboard(tokenId);
         string memory leadersStr = "";
         uint lIdx = leaders.length;
@@ -144,10 +146,6 @@ contract OptimizorNFT is ERC721 {
         }
         return string.concat("Leaderboard:", leadersStr);
     }
-
-    /*****************************
-           INTERNAL HELPERS
-    ******************************/
 
     function attributesJSON(uint tokenId) internal view returns (string memory attributes) {
         TokenDetails memory details = tokenDetails(tokenId);
