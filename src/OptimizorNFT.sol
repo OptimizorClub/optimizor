@@ -93,28 +93,26 @@ contract OptimizorNFT is ERC721 {
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
+
+        string memory description = string.concat(
+            "Art: ", details.challenge.description(), "\\n",
+            leaderboardString(tokenId)
+        );
+
         return string.concat(
             'data:application/json;base64,',
             Base64.encode(
                 bytes(string.concat(
                     '{',
                     '"name":"Optimizor Club: ', details.challenge.name(), '",',
-                    '"description":"', description(tokenId), '",',
-                    '"attributes":', attributesJSON(tokenId), ',',
+                    '"description":"', description, '",',
+                    '"attributes":', attributesJSON(details), ',',
                     '"image":"data:image/svg+xml;base64,',
-                    Base64.encode(bytes(svg(tokenId))),
+                    Base64.encode(bytes(svg(tokenId, details))),
                     '"',
                     '}'
                 ))
             )
-        );
-    }
-
-    function description(uint256 tokenId) public view returns (string memory) {
-        TokenDetails memory details = tokenDetails(tokenId);
-        return string.concat(
-            "Art: ", details.challenge.description(), "\\n",
-            leaderboardString(tokenId)
         );
     }
 
@@ -128,7 +126,11 @@ contract OptimizorNFT is ERC721 {
         }
     }
 
-    function leaderboardString(uint tokenId) public view returns (string memory) {
+    /*****************************
+           INTERNAL HELPERS
+    ******************************/
+
+    function leaderboardString(uint tokenId) internal view returns (string memory) {
         address[] memory leaders = leaderboard(tokenId);
         string memory leadersStr = "";
         uint lIdx = leaders.length;
@@ -145,13 +147,7 @@ contract OptimizorNFT is ERC721 {
         return string.concat("Leaderboard:", leadersStr);
     }
 
-    /*****************************
-           INTERNAL HELPERS
-    ******************************/
-
-    function attributesJSON(uint tokenId) internal view returns (string memory attributes) {
-        TokenDetails memory details = tokenDetails(tokenId);
-
+    function attributesJSON(TokenDetails memory details) internal view returns (string memory attributes) {
         uint32 rank = details.rank;
 
         attributes = string.concat(
@@ -180,9 +176,7 @@ contract OptimizorNFT is ERC721 {
         );
     }
 
-    function svg(uint tokenId) internal view returns (string memory) {
-        TokenDetails memory details = tokenDetails(tokenId);
-
+    function svg(uint256 tokenId, TokenDetails memory details) internal view returns (string memory) {
         uint grad_rgb = 0;
         if (details.rank > 10) {
             grad_rgb = 0xbebebe;
