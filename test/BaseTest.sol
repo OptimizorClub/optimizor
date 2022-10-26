@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import "./ChallengeIDs.sol";
 import "./SumChallenge.sol";
-import "./SqrtChallenge.sol";
+import "./SqrtChallengeSolutions.sol";
 import "../src/PurityChecker.sol";
 
 import "../src/Optimizor.sol";
