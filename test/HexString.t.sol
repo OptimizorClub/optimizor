@@ -9,7 +9,9 @@ contract HexStringTest is Test {
     function testTooShort() public {
         vm.expectRevert(abi.encodeWithSignature("HexLengthInsufficient()"));
         HexString.toHexString(0xff00, 1);
+    }
 
+    function testTooShortNoPrefix() public {
         vm.expectRevert(abi.encodeWithSignature("HexLengthInsufficient()"));
         HexString.toHexStringNoPrefix(0xff00, 1);
     }

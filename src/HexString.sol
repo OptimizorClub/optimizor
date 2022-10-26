@@ -13,6 +13,7 @@ library HexString {
             buffer[i - 1] = ALPHABET[value & 0xf];
             value >>= 4;
         }
+        if (value != 0) revert HexLengthInsufficient();
         return string(buffer);
     }
 
