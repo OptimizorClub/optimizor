@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import "./BaseTest.sol";
 import "../src/OptimizorNFT.sol";
 import "../src/DataHelpers.sol";
+import "../src/Base64.sol";
 import "./CommitHash.sol";
 
 uint constant SALT = 0;
@@ -19,6 +20,29 @@ contract OptimizorTest is BaseTest {
     function testNameAndSymbol() public {
         assertEq(opt.name(), "Optimizor Club");
         assertEq(opt.symbol(), "OC");
+    }
+
+    function testContractURI() public {
+        string memory logo = string.concat(
+            '<svg width="308.531" height="112.033" viewBox="0 0 81.632 29.642" xmlns="http://www.w3.org/2000/svg">',
+            '<path d="M158.233 208.68h-2.353v-2.352h-23.53v2.352h2.353v2.353h-2.353v2.353h-2.353v-2.353h-2.352v23.53h2.352v2.353h2.353v2.353h23.53v-2.353h2.353v-2.353h2.353v-23.53h-2.353zm-14.118 21.177v-16.47h7.059v16.47zm47.068-14.117v-2.354h-2.353v-2.353h-21.176v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706H165.3v23.53h2.353v2.353h9.411v-2.353h2.353v-7.059h9.412v-2.353h2.353v-2.353h2.353v-9.412zm-11.765 2.352h4.706v7.06h-4.706zm44.734-7.059h-23.53v2.353h4.706v2.353h-2.353v2.353h-2.353v2.353h4.706v16.47h2.353v2.354h9.412v-2.353h2.353v-16.47h4.706v-2.354h2.353v-4.706h-2.353zm-23.53 2.353h-2.352v4.706h2.352zm42.381-2.353h-9.412v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.353v23.53h2.353v2.353h9.412v-2.353h2.353v-23.53h-2.353zm35.299 0h-4.706v2.353h-2.353v4.706h-2.353v2.353h-2.353v-2.353h-2.353v-4.706h-2.353v-2.353h-9.412v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.353v23.53h2.353v2.353h9.412v-2.353h2.353v-9.412h2.353v2.353h2.353v-2.353h2.353v9.412h2.353v2.353h4.706v-2.353h2.353v-23.53h-2.353zm18.842 0h-9.412v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.353v23.53h2.353v2.353h9.412v-2.353h2.353v-23.53h-2.353zm32.946 2.353v-2.353h-23.53v2.353h4.706v2.353h-2.353v2.353h-2.353v2.353h9.412v2.353h-2.353v2.353h-2.353v2.353h-2.353v2.353h-2.353v2.353h-2.353v4.706h2.353v2.353h23.53v-2.353h2.352v-7.059h-2.353v-2.353h-7.058v-2.353h2.352v-2.353h2.353v-2.353h2.353v-2.353h2.353v-4.706zm-23.53 0h-2.353v4.706h2.353zm56.498 0h-2.353v-2.353h-18.823v2.353h2.353v2.353h-2.353v2.353h-2.353v-2.353h-2.353v18.824h2.353v2.353h2.353v2.353h18.823v-2.353h2.353v-2.353h2.353v-18.824h-2.353zm-4.706 16.471h-7.059v-11.765h7.06zm37.675-16.471h-2.353v-2.353h-21.177v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.352v23.53h2.352v2.353h9.412v-2.353h2.353v-7.059h2.353v2.353h2.353v2.353h2.353v2.353h2.353v2.353h2.353v-2.353h2.353v-7.059h-2.353v-2.353h-2.353v-2.353h2.353v-2.353h2.353v-7.059h-2.353zm-11.765 7.06v-2.354h7.059v2.353z" style="fill:#4d4d4d" transform="translate(-28.773 -49.59) scale(.26458)"/>',
+            '<path d="M193.899 405.302h-25.883v2.353h2.353v2.353h-2.353v2.353h-2.353v-2.353h-2.352v23.53h2.352v2.352h2.353v2.353H193.9v-2.353h2.353v-4.705H193.9v-2.353h-14.12V412.36h14.12v-2.353h2.353v-2.353H193.9zm30.597 23.53h-9.412V412.36h-2.353v-2.353h-9.411v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.353v23.53h2.353v2.352h21.176v-2.353h2.353v-4.705h-2.353zm32.978-18.824h-4.706v2.353h-2.353v16.47h-4.706v-16.47h-2.353v-2.353h-9.411v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.353v21.176h2.353v2.353h2.353v2.353h18.823v-2.353h2.353v-2.353h2.353v-21.176h-2.353zm32.969 2.353h-2.353v-2.353h-21.177v2.353h4.706v2.353h-2.353v2.353h-2.353v-4.706h-2.352v23.53h2.352v2.352h21.177v-2.353h2.353v-2.353h2.353v-9.411h-2.353v-2.353h2.353v-7.06h-2.353zm-4.706 16.47h-7.059v-2.352h7.059zm-7.059-9.411v-2.353h7.059v2.353z" style="fill:#4d4d4d" transform="translate(-18.594 -91.309) scale(.26458)"/>',
+            '</svg>'
+        );
+        string memory expected = string.concat(
+            'data:application/json;base64,',
+            Base64.encode(
+                bytes(string.concat(
+                    '{',
+                    '"name":"Optimizor Club"',
+                    '"description":"The Optimizor Club NFT collection rewards gas efficient people and machines by minting new items whenever a cheaper solution is submitted for a certain challenge."',
+                    '"image":", logo, "',
+                    '"external_link":"https://optimizor.club/"',
+                    '}'
+                ))
+            )
+        );
+        assertEq(opt.contractURI(), expected);
     }
 
     function testCheapSqrt() public {
