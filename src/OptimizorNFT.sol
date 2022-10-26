@@ -39,12 +39,6 @@ contract OptimizorNFT is ERC721 {
 
     constructor() ERC721("Optimizor Club", "OC") {}
 
-    /**
-     *
-     *      PUBLIC VIEW FUNCTIONS
-     *
-     */
-
     function contractURI() external pure returns (string memory) {
         return
         "data:application/json;base64,eyJuYW1lIjoiT3B0aW1pem9yIENsdWIiImRlc2NyaXB0aW9uIjoiVGhlIE9wdGltaXpvciBDbHViIE5GVCBjb2xsZWN0aW9uIHJld2FyZHMgZ2FzIGVmZmljaWVudCBwZW9wbGUgYW5kIG1hY2hpbmVzIGJ5IG1pbnRpbmcgbmV3IGl0ZW1zIHdoZW5ldmVyIGEgY2hlYXBlciBzb2x1dGlvbiBpcyBzdWJtaXR0ZWQgZm9yIGEgY2VydGFpbiBjaGFsbGVuZ2UuIiJpbWFnZSI6IiwgbG9nbywgIiJleHRlcm5hbF9saW5rIjoiaHR0cHM6Ly9vcHRpbWl6b3IuY2x1Yi8ifQ==";
@@ -132,13 +126,7 @@ contract OptimizorNFT is ERC721 {
         }
     }
 
-    /**
-     *
-     *        INTERNAL HELPERS
-     *
-     */
-
-    function leaderboardString(uint256 tokenId) internal view returns (string memory) {
+    function leaderboardString(uint256 tokenId) private view returns (string memory) {
         address[] memory leaders = leaderboard(tokenId);
         string memory leadersStr = "";
         uint256 lIdx = leaders.length;
@@ -155,7 +143,7 @@ contract OptimizorNFT is ERC721 {
         return string.concat("Leaderboard:", leadersStr);
     }
 
-    function attributesJSON(TokenDetails memory details) internal view returns (string memory attributes) {
+    function attributesJSON(TokenDetails memory details) private view returns (string memory attributes) {
         uint32 rank = details.rank;
 
         attributes = string.concat(
@@ -185,7 +173,7 @@ contract OptimizorNFT is ERC721 {
         attributes = string.concat(attributes, "]");
     }
 
-    function svg(uint256 tokenId, TokenDetails memory details) internal view returns (string memory) {
+    function svg(uint256 tokenId, TokenDetails memory details) private view returns (string memory) {
         uint256 grad_rgb = 0;
         if (details.rank > 10) {
             grad_rgb = 0xbebebe;
