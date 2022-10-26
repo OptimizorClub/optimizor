@@ -179,6 +179,19 @@ contract OptimizorNFT is ERC721 {
     function svg(uint tokenId) internal view returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
 
+        uint grad_rgb = 0;
+        if (details.rank > 10) {
+            grad_rgb = 0xbebebe;
+        } else if (details.rank > 3) {
+            uint fRank;
+            uint init = 40;
+            uint factor = 15;
+            unchecked {
+                fRank = init + details.rank * factor;
+            }
+            grad_rgb = (uint(fRank) << 16) | (uint(fRank) << 8) | uint(fRank);
+        }
+
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor Club",
             challengeName: details.challenge.name(),
@@ -192,15 +205,10 @@ contract OptimizorNFT is ERC721 {
             rank: details.rank,
             // The leader is the last player, e.g. its level equals the number of players.
             participants: details.leaderLevel,
-
-            // Ideally these colors should not change if someone buys the nft,
-            // since maybe they bought it because of the colors.
-            // So we keep them based on the original record solver of this tokenId.
-            color0: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 136),
-            color1: NFTSVG.tokenToColorHex(uint256(uint160(details.solver)), 136),
-            color2: NFTSVG.tokenToColorHex(uint256(uint160(address(details.challenge))), 0),
-            color3: NFTSVG.tokenToColorHex(uint256(uint160(details.solver)), 0),
-
+            color0: NFTSVG.tokenToColorHex(grad_rgb, 0),
+            color1: NFTSVG.tokenToColorHex(grad_rgb, 0),
+            color2: NFTSVG.tokenToColorHex(grad_rgb, 0),
+            color3: NFTSVG.tokenToColorHex(grad_rgb, 0),
             x1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274),
             y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 16, tokenId), 0, 255, 100, 484),
             x2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 32, tokenId), 0, 255, 16, 274),
