@@ -24,3 +24,9 @@ jobs:
 
       - name: Test JSON validity
         run: script/extractsvg.py # Extract JSON + SVG
+
+      - name: Upload the Optimizor SVG
+        uses: actions/upload-artifact@v3
+        with:
+          name: optimizor.svg
+          path: out.svg
