@@ -106,9 +106,9 @@ contract OptimizorNFT is ERC721 {
                     '{',
                     '"name":"Optimizor Club: ', details.challenge.name(), '",',
                     '"description":"', description, '",',
-                    '"attributes":', attributesJSON(tokenId), ',',
+                    '"attributes":', attributesJSON(details), ',',
                     '"image":"data:image/svg+xml;base64,',
-                    Base64.encode(bytes(svg(tokenId))),
+                    Base64.encode(bytes(svg(tokenId, details))),
                     '"',
                     '}'
                 ))
@@ -147,9 +147,7 @@ contract OptimizorNFT is ERC721 {
         return string.concat("Leaderboard:", leadersStr);
     }
 
-    function attributesJSON(uint tokenId) internal view returns (string memory attributes) {
-        TokenDetails memory details = tokenDetails(tokenId);
-
+    function attributesJSON(TokenDetails memory details) internal view returns (string memory attributes) {
         uint32 rank = details.rank;
 
         attributes = string.concat(
@@ -178,9 +176,7 @@ contract OptimizorNFT is ERC721 {
         );
     }
 
-    function svg(uint tokenId) internal view returns (string memory) {
-        TokenDetails memory details = tokenDetails(tokenId);
-
+    function svg(uint256 tokenId, TokenDetails memory details) internal view returns (string memory) {
         uint grad_rgb = 0;
         if (details.rank > 10) {
             grad_rgb = 0xbebebe;
