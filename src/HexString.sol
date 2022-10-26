@@ -2,6 +2,9 @@
 pragma solidity ^0.8.15;
 
 library HexString {
+    /// Provided length is insufficient to store the value.
+    error HexLengthInsufficient();
+
     bytes16 constant ALPHABET = '0123456789abcdef';
 
     function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
@@ -21,8 +24,7 @@ library HexString {
             buffer[i] = ALPHABET[value & 0xf];
             value >>= 4;
         }
-        require(value == 0, 'Strings: hex length insufficient');
+        if (value != 0) revert HexLengthInsufficient();
         return string(buffer);
     }
-
 }
