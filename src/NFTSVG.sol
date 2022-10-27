@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity ^0.8.15;
 
-import {Base64} from "./Base64.sol";
-import {HexString} from "./HexString.sol";
+import {Base64} from "src/Base64.sol";
+import {HexString} from "src/HexString.sol";
 
 import {LibString} from "solmate/utils/LibString.sol";
 

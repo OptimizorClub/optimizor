@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {BaseTest, IChallenge, SQRT_ID, SUM_ID, ISqrt} from "./BaseTest.sol";
-import {computeKey} from "./CommitHash.sol";
-import {ExpensiveSqrt2, ExpensiveSqrt3} from "./SqrtChallengeSolutions.sol";
+import {BaseTest, IChallenge, SQRT_ID, SUM_ID, ISqrt} from "test/BaseTest.sol";
+import {computeKey} from "test/CommitHash.sol";
+import {ExpensiveSqrt2, ExpensiveSqrt3} from "test/SqrtChallengeSolutions.sol";
 
-import {packTokenId} from "../src/DataHelpers.sol";
-import {TokenDetails} from "../src/TokenDetails.sol";
-import {Base64} from "../src/Base64.sol";
+import {packTokenId} from "src/DataHelpers.sol";
+import {TokenDetails} from "src/TokenDetails.sol";
+import {Base64} from "src/Base64.sol";
 
-import {Optimizor} from "../src/Optimizor.sol";
-import {OptimizorNFT} from "../src/OptimizorNFT.sol";
+import {Optimizor} from "src/Optimizor.sol";
+import {OptimizorNFT} from "src/OptimizorNFT.sol";
 
 uint256 constant SALT = 0;
 

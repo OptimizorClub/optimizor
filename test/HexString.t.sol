@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 import "forge-std/Test.sol";
 
-import {HexString} from "../src/HexString.sol";
+import {HexString} from "src/HexString.sol";
 
 contract HexStringTest is Test {
     function testTooShort() public {

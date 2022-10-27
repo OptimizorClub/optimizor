@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {OptimizorAdmin, OptimizorNFT} from "./OptimizorAdmin.sol";
-import {IPurityChecker} from "./IPurityChecker.sol";
-import {packTokenId} from "./DataHelpers.sol";
+import {OptimizorAdmin, OptimizorNFT} from "src/OptimizorAdmin.sol";
+import {IPurityChecker} from "src/IPurityChecker.sol";
+import {packTokenId} from "src/DataHelpers.sol";
 import {ERC721} from "solmate/tokens/ERC721.sol";
 
 uint256 constant EPOCH = 256;

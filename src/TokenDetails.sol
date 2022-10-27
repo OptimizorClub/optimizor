@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {IChallenge} from "./IChallenge.sol";
+import {IChallenge} from "src/IChallenge.sol";
 
 struct TokenDetails {
     uint256 challengeId;
