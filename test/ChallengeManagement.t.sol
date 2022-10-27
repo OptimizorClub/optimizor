@@ -5,6 +5,9 @@ import {BaseTest} from "./BaseTest.sol";
 import {NON_USED_ID} from "./ChallengeIDs.sol";
 import {computeKey} from "./CommitHash.sol";
 
+import {OptimizorAdmin} from "../src/OptimizorAdmin.sol";
+import {OptimizorNFT} from "../src/OptimizorNFT.sol";
+
 import "forge-std/Test.sol";
 
 contract ChallengeManagementTest is BaseTest {
@@ -15,7 +18,7 @@ contract ChallengeManagementTest is BaseTest {
     function testDupAddSumChallenge() public {
         addSumChallenge();
 
-        vm.expectRevert(abi.encodeWithSignature("ChallengeExists(uint256)", uint256(0)));
+        vm.expectRevert(abi.encodeWithSelector(OptimizorAdmin.ChallengeExists.selector, uint256(0)));
         addSumChallenge();
     }
 
@@ -43,7 +46,7 @@ contract ChallengeManagementTest is BaseTest {
         advancePeriod();
         advancePeriod();
 
-        vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint256).max));
+        vm.expectRevert(abi.encodeWithSelector(OptimizorNFT.ChallengeNotFound.selector, type(uint256).max));
         opt.challenge(NON_USED_ID, address(0), address(0), 0);
     }
 }

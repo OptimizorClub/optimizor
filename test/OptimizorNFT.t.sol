@@ -9,6 +9,9 @@ import {packTokenId} from "../src/DataHelpers.sol";
 import {TokenDetails} from "../src/TokenDetails.sol";
 import {Base64} from "../src/Base64.sol";
 
+import {Optimizor} from "../src/Optimizor.sol";
+import {OptimizorNFT} from "../src/OptimizorNFT.sol";
+
 uint256 constant SALT = 0;
 
 contract OptimizorTest is BaseTest {
@@ -139,7 +142,7 @@ contract OptimizorTest is BaseTest {
         assertEq(opt.ownerOf(tokenId2), address(this));
 
         vm.prank(other);
-        vm.expectRevert(abi.encodeWithSignature("NotOptimizor()"));
+        vm.expectRevert(Optimizor.NotOptimizor.selector);
         opt.challenge(CHL_ID, challenger_0, other, SALT);
         vm.stopPrank();
 
@@ -173,14 +176,14 @@ contract OptimizorTest is BaseTest {
 
     function testInvalidTokenURIs() public {
         addSumChallenge();
-        vm.expectRevert(abi.encodeWithSignature("InvalidSolutionId(uint256,uint32)", 0, 0));
+        vm.expectRevert(abi.encodeWithSelector(OptimizorNFT.InvalidSolutionId.selector, 0, 0));
         opt.tokenURI(0);
-        vm.expectRevert(abi.encodeWithSignature("InvalidSolutionId(uint256,uint32)", 0, 10));
+        vm.expectRevert(abi.encodeWithSelector(OptimizorNFT.InvalidSolutionId.selector, 0, 10));
         opt.tokenURI(10);
     }
 
     function testInvalidChallengeTokenURIs() public {
-        vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", 100));
+        vm.expectRevert(abi.encodeWithSelector(OptimizorNFT.ChallengeNotFound.selector, 100));
         opt.tokenURI((100 << 32) + 1);
     }
 
