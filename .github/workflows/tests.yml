@@ -25,6 +25,9 @@ jobs:
         with:
           version: nightly
 
+      - name: Run Forge format check
+        run: forge fmt --check
+
       - name: Run Forge build
         run: |
           forge --version
