@@ -9,22 +9,22 @@ import {IChallenge} from "src/IChallenge.sol";
 import {Owned} from "solmate/auth/Owned.sol";
 
 contract OptimizorAdmin is OptimizorNFT, Owned {
-    IPurityChecker public purity;
+    IPurityChecker public purityChecker;
 
     error ChallengeExists(uint256 challengeId);
 
     event PurityCheckerUpdated(IPurityChecker newPurityChecker);
     event ChallengeAdded(uint256 challengeId, IChallenge);
 
-    constructor(IPurityChecker _purity) Owned(msg.sender) {
-        updatePurityChecker(_purity);
+    constructor(IPurityChecker _purityChecker) Owned(msg.sender) {
+        updatePurityChecker(_purityChecker);
     }
 
     /// @dev Purity checker may need to be updated when there are EVM changes.
-    function updatePurityChecker(IPurityChecker _purity) public onlyOwner {
-        purity = _purity;
+    function updatePurityChecker(IPurityChecker _purityChecker) public onlyOwner {
+        purityChecker = _purityChecker;
 
-        emit PurityCheckerUpdated(_purity);
+        emit PurityCheckerUpdated(_purityChecker);
     }
 
     function addAttribute(IAttribute attr) external onlyOwner {
