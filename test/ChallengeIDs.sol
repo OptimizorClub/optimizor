@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: MIT 
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-uint constant SUM_ID = 0;
-uint constant SQRT_ID = 4;
-uint constant NON_USED_ID = type(uint).max;
+uint256 constant SUM_ID = 0;
+uint256 constant SQRT_ID = 4;
+uint256 constant NON_USED_ID = type(uint256).max;

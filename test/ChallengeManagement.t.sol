@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT 
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
 import {BaseTest} from "./BaseTest.sol";
@@ -15,7 +15,7 @@ contract ChallengeManagementTest is BaseTest {
     function testDupAddSumChallenge() public {
         addSumChallenge();
 
-        vm.expectRevert(abi.encodeWithSignature("ChallengeExists(uint256)", uint(0)));
+        vm.expectRevert(abi.encodeWithSignature("ChallengeExists(uint256)", uint256(0)));
         addSumChallenge();
     }
 
@@ -43,7 +43,7 @@ contract ChallengeManagementTest is BaseTest {
         advancePeriod();
         advancePeriod();
 
-        vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint).max));
+        vm.expectRevert(abi.encodeWithSignature("ChallengeNotFound(uint256)", type(uint256).max));
         opt.challenge(NON_USED_ID, address(0), address(0), 0);
     }
 }

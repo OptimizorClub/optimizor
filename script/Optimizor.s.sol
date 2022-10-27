@@ -9,7 +9,7 @@ import "../test/SqrtChallengeSolutions.sol";
 
 //address constant ME = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 address constant ME = 0x7D38256bAb82F2C8651d9968320b3Eaffd08a405;
-uint constant SALT = 0;
+uint256 constant SALT = 0;
 
 contract OptimizorScript is Script {
     function run() external {
