@@ -8,6 +8,7 @@ import {IChallenge} from "src/IChallenge.sol";
 import {Owned} from "solmate/auth/Owned.sol";
 
 contract OptimizorAdmin is OptimizorNFT, Owned {
+    /// The address of the currently used purity checker.
     IPurityChecker public purityChecker;
 
     error ChallengeExists(uint256 challengeId);
