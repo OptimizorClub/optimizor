@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity >=0.8.18;
 
 import {BaseTest, IChallenge, SQRT_ID, SUM_ID, ISqrt} from "test/BaseTest.sol";
 import {computeKey} from "test/CommitHash.sol";

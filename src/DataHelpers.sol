@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity >=0.8.18;
 
 function packTokenId(uint256 challengeId, uint32 solutionId) pure returns (uint256) {
     return (challengeId << 32) | solutionId;
