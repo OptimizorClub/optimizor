@@ -46,11 +46,10 @@ library NFTSVG {
         return string.concat(
             generateSVGDefs(params),
             generateSVGBorderText(params.projectName, params.challengeName, params.solverAddr, params.challengeAddr),
-            generateSVGCardMantle(params.rank, params.participants),
+            generateSVGCardMantle(params.challengeName, params.rank, params.participants),
             generateRankBorder(params.rank),
             generateSvgCurve(params.overRange, challengeSVG),
             generateSVGPositionDataAndLocationCurve(LibString.toString(params.tokenId), params.gasUsed, params.gasOpti),
-            generateSVGRareSparkle(params.rank),
             "</svg>"
         );
     }
@@ -168,10 +167,11 @@ library NFTSVG {
         );
     }
 
-    function generateSVGCardMantle(uint32 rank, uint32 participants) private pure returns (string memory svg) {
+    function generateSVGCardMantle(string memory challengeName, uint32 rank, uint32 participants) private pure returns (string memory svg) {
         svg = string.concat(
-            '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/>',
-            '<text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
+            '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/><text y="70px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
+            challengeName,
+            '</text><text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
             "Rank #",
             LibString.toString(rank),
             "/",
@@ -241,18 +241,6 @@ library NFTSVG {
             "%",
             "</text></g>"
         );
-    }
-
-    function generateSVGRareSparkle(uint32 rank) private pure returns (string memory svg) {
-        if (rank == 1) {
-            svg = string.concat(
-                '<g style="transform:translate(226px, 392px)"><rect width="36px" height="36px" rx="8px" ry="8px" fill="none" stroke="rgba(255,255,255,0.2)"/>',
-                '<g><path style="transform:translate(6px,6px)" d="M12 0L12.6522 9.56587L18 1.6077L13.7819 10.2181L22.3923 6L14.4341 ',
-                "11.3478L24 12L14.4341 12.6522L22.3923 18L13.7819 13.7819L18 22.3923L12.6522 14.4341L12 24L11.3478 14.4341L6 22.39",
-                '23L10.2181 13.7819L1.6077 18L9.56587 12.6522L0 12L9.56587 11.3478L1.6077 6L10.2181 10.2181L6 1.6077L11.3478 9.56587L12 0Z" fill="#fff"/>',
-                '<animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="10s" repeatCount="indefinite"/></g></g>'
-            );
-        }
     }
 
     function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
