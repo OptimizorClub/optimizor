@@ -52,7 +52,7 @@ contract Optimizor is OptimizorAdmin {
     /// @param recipient The address that receives the Optimizor Club NFT.
     /// @param salt The secret number used for deriving the committed key.
     function challenge(uint256 id, address target, address recipient, uint256 salt) external {
-        Data storage chl = challenges[id];
+        ChallengeInfo storage chl = challenges[id];
 
         bytes32 key = keccak256(abi.encode(msg.sender, target.codehash, salt));
 
@@ -81,7 +81,7 @@ contract Optimizor is OptimizorAdmin {
 
         uint32 gas = chl.target.run(target, block.difficulty);
 
-        uint256 leaderTokenId = packTokenId(id, chl.level);
+        uint256 leaderTokenId = packTokenId(id, chl.solutions);
         uint32 leaderGas = extraDetails[leaderTokenId].gas;
 
         if ((leaderGas != 0) && (leaderGas <= gas)) {
@@ -89,10 +89,10 @@ contract Optimizor is OptimizorAdmin {
         }
 
         unchecked {
-            ++chl.level;
+            ++chl.solutions;
         }
 
-        uint256 tokenId = packTokenId(id, chl.level);
+        uint256 tokenId = packTokenId(id, chl.solutions);
         ERC721._mint(recipient, tokenId);
         extraDetails[tokenId] = ExtraDetails(target, recipient, gas);
     }

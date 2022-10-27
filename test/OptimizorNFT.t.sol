@@ -111,18 +111,18 @@ contract OptimizorTest is BaseTest {
 
         advancePeriod();
 
-        (, uint32 preLevel) = opt.challenges(CHL_ID);
+        (, uint32 preSolutionId) = opt.challenges(CHL_ID);
 
         vm.prank(other);
         opt.challenge(CHL_ID, challenger_0, other, SALT);
         vm.stopPrank();
 
-        (, uint32 postLevel) = opt.challenges(CHL_ID);
-        (, address postOpt,) = opt.extraDetails(packTokenId(CHL_ID, postLevel));
+        (, uint32 postSolutionId) = opt.challenges(CHL_ID);
+        (, address postOpt,) = opt.extraDetails(packTokenId(CHL_ID, postSolutionId));
         assertEq(postOpt, other);
-        assertEq(postLevel, preLevel + 1);
+        assertEq(postSolutionId, preSolutionId + 1);
 
-        uint256 tokenId = (CHL_ID << 32) | postLevel;
+        uint256 tokenId = (CHL_ID << 32) | postSolutionId;
         assertEq(opt.ownerOf(tokenId), other);
 
         address[] memory leaders = opt.leaderboard(tokenId);
@@ -130,12 +130,12 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders[0], other);
 
         opt.challenge(CHL_ID, challenger_1, address(this), SALT);
-        (, uint32 postLevel2) = opt.challenges(CHL_ID);
-        (, address postOpt2,) = opt.extraDetails(packTokenId(CHL_ID, postLevel2));
+        (, uint32 postSolutionId2) = opt.challenges(CHL_ID);
+        (, address postOpt2,) = opt.extraDetails(packTokenId(CHL_ID, postSolutionId2));
         assertEq(postOpt2, address(this));
-        assertEq(postLevel2, postLevel + 1);
+        assertEq(postSolutionId2, postSolutionId + 1);
 
-        uint256 tokenId2 = (CHL_ID << 32) | postLevel2;
+        uint256 tokenId2 = (CHL_ID << 32) | postSolutionId2;
         assertEq(opt.ownerOf(tokenId2), address(this));
 
         vm.prank(other);
@@ -154,16 +154,16 @@ contract OptimizorTest is BaseTest {
         opt.commit(computeKey(address(this), chl_hash, SALT));
         advancePeriod();
 
-        (, uint32 preLevel) = opt.challenges(CHL_ID);
-        address[] memory preLeaders = opt.leaderboard((CHL_ID << 32) | preLevel);
+        (, uint32 preSolutionId) = opt.challenges(CHL_ID);
+        address[] memory preLeaders = opt.leaderboard((CHL_ID << 32) | preSolutionId);
 
         opt.challenge(CHL_ID, challenger, address(this), SALT);
-        (, uint32 postLevel) = opt.challenges(CHL_ID);
-        (, address postOpt,) = opt.extraDetails(packTokenId(CHL_ID, postLevel));
+        (, uint32 postSolutionId) = opt.challenges(CHL_ID);
+        (, address postOpt,) = opt.extraDetails(packTokenId(CHL_ID, postSolutionId));
         assertEq(postOpt, address(this));
-        assertEq(postLevel, preLevel + 1);
+        assertEq(postSolutionId, preSolutionId + 1);
 
-        uint256 tokenId = (CHL_ID << 32) | postLevel;
+        uint256 tokenId = (CHL_ID << 32) | postSolutionId;
         assertEq(opt.ownerOf(tokenId), address(this));
 
         address[] memory leaders = opt.leaderboard(tokenId);
@@ -173,9 +173,9 @@ contract OptimizorTest is BaseTest {
 
     function testInvalidTokenURIs() public {
         addSumChallenge();
-        vm.expectRevert(abi.encodeWithSignature("InvalidLevel(uint256,uint32)", 0, 0));
+        vm.expectRevert(abi.encodeWithSignature("InvalidSolutionId(uint256,uint32)", 0, 0));
         opt.tokenURI(0);
-        vm.expectRevert(abi.encodeWithSignature("InvalidLevel(uint256,uint32)", 0, 10));
+        vm.expectRevert(abi.encodeWithSignature("InvalidSolutionId(uint256,uint32)", 0, 10));
         opt.tokenURI(10);
     }
 
@@ -205,12 +205,12 @@ contract OptimizorTest is BaseTest {
                     challengeId: SQRT_ID,
                     challenge: IChallenge(0xf5a2fE45F4f1308502b1C136b9EF8af136141382),
                     leaderGas: 134857,
-                    leaderLevel: 4,
+                    leaderSolutionId: 4,
                     leaderSolver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderOwner: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderSubmission: 0x1DD17af470f2CAa13D29c02AC190a3a1EdDc4e84,
                     gas: 525931,
-                    level: 1,
+                    solutionId: 1,
                     rank: 4,
                     improvementPercentage: 0,
                     solver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
@@ -227,12 +227,12 @@ contract OptimizorTest is BaseTest {
                     challengeId: SQRT_ID,
                     challenge: IChallenge(0xf5a2fE45F4f1308502b1C136b9EF8af136141382),
                     leaderGas: 134857,
-                    leaderLevel: 4,
+                    leaderSolutionId: 4,
                     leaderSolver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderOwner: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderSubmission: 0x1DD17af470f2CAa13D29c02AC190a3a1EdDc4e84,
                     gas: 395573,
-                    level: 2,
+                    solutionId: 2,
                     rank: 3,
                     improvementPercentage: 75,
                     solver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
@@ -249,12 +249,12 @@ contract OptimizorTest is BaseTest {
                     challengeId: SQRT_ID,
                     challenge: IChallenge(0xf5a2fE45F4f1308502b1C136b9EF8af136141382),
                     leaderGas: 134857,
-                    leaderLevel: 4,
+                    leaderSolutionId: 4,
                     leaderSolver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderOwner: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderSubmission: 0x1DD17af470f2CAa13D29c02AC190a3a1EdDc4e84,
                     gas: 265215,
-                    level: 3,
+                    solutionId: 3,
                     rank: 2,
                     improvementPercentage: 67,
                     solver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
@@ -271,12 +271,12 @@ contract OptimizorTest is BaseTest {
                     challengeId: SQRT_ID,
                     challenge: IChallenge(0xf5a2fE45F4f1308502b1C136b9EF8af136141382),
                     leaderGas: 134857,
-                    leaderLevel: 4,
+                    leaderSolutionId: 4,
                     leaderSolver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderOwner: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
                     leaderSubmission: 0x1DD17af470f2CAa13D29c02AC190a3a1EdDc4e84,
                     gas: 134857,
-                    level: 4,
+                    solutionId: 4,
                     rank: 1,
                     improvementPercentage: 50,
                     solver: 0xb4c79daB8f259C7Aee6E5b2Aa729821864227e84,
