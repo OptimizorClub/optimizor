@@ -7,12 +7,12 @@ import {HexString} from "../src/HexString.sol";
 
 contract HexStringTest is Test {
     function testTooShort() public {
-        vm.expectRevert(abi.encodeWithSignature("HexLengthInsufficient()"));
+        vm.expectRevert(HexString.HexLengthInsufficient.selector);
         HexString.toHexString(0xff00, 1);
     }
 
     function testTooShortNoPrefix() public {
-        vm.expectRevert(abi.encodeWithSignature("HexLengthInsufficient()"));
+        vm.expectRevert(HexString.HexLengthInsufficient.selector);
         HexString.toHexStringNoPrefix(0xff00, 1);
     }
 
