@@ -37,12 +37,6 @@ contract OptimizorNFT is ERC721 {
 
     constructor() ERC721("Optimizor Club", "OC") {}
 
-    /**
-     *
-     *      PUBLIC VIEW FUNCTIONS
-     *
-     */
-
     function contractURI() external pure returns (string memory) {
         return
         "data:application/json;base64,eyJuYW1lIjoiT3B0aW1pem9yIENsdWIiImRlc2NyaXB0aW9uIjoiVGhlIE9wdGltaXpvciBDbHViIE5GVCBjb2xsZWN0aW9uIHJld2FyZHMgZ2FzIGVmZmljaWVudCBwZW9wbGUgYW5kIG1hY2hpbmVzIGJ5IG1pbnRpbmcgbmV3IGl0ZW1zIHdoZW5ldmVyIGEgY2hlYXBlciBzb2x1dGlvbiBpcyBzdWJtaXR0ZWQgZm9yIGEgY2VydGFpbiBjaGFsbGVuZ2UuIiJpbWFnZSI6Ijxzdmcgd2lkdGg9IjMwOC41MzEiIGhlaWdodD0iMTEyLjAzMyIgdmlld0JveD0iMCAwIDgxLjYzMiAyOS42NDIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEzLjA5MiA1LjYyM2gtLjYyMlY1SDYuMjQ0di42MjNoLjYyM3YuNjIyaC0uNjIzdi42MjNoLS42MjJ2LS42MjNoLS42MjN2Ni4yMjZoLjYyM3YuNjIyaC42MjJ2LjYyM2g2LjIyNnYtLjYyM2guNjIydi0uNjIyaC42MjNWNi4yNDVoLS42MjN6bS0zLjczNSA1LjYwM1Y2Ljg2OGgxLjg2OHY0LjM1OHpNMjEuODEgNy40OXYtLjYyMmgtLjYyMnYtLjYyM2gtNS42MDN2LjYyM2gxLjI0NXYuNjIyaC0uNjIzdi42MjNoLS42MjJWNi44NjhoLS42MjN2Ni4yMjVoLjYyM3YuNjIzaDIuNDl2LS42MjNoLjYyMnYtMS44NjdoMi40OXYtLjYyM2guNjIzVjkuOThoLjYyMlY3LjQ5em0tMy4xMTMuNjIzaDEuMjQ2VjkuOThoLTEuMjQ2em0xMS44MzYtMS44NjhoLTYuMjI1di42MjNoMS4yNDV2LjYyMmgtLjYyM3YuNjIzaC0uNjIydi42MjJoMS4yNDV2NC4zNThoLjYyMnYuNjIzaDIuNDl2LS42MjNoLjYyM1Y4LjczNmgxLjI0NXYtLjYyM2guNjIzVjYuODY4aC0uNjIzem0tNi4yMjUuNjIzaC0uNjIzdjEuMjQ1aC42MjN6bTExLjIxMy0uNjIzaC0yLjQ5di42MjNoMS4yNDV2LjYyMmgtLjYyM3YuNjIzaC0uNjIyVjYuODY4aC0uNjIzdjYuMjI1aC42MjN2LjYyM2gyLjQ5di0uNjIzaC42MjJWNi44NjhoLS42MjJ6bTkuMzQgMGgtMS4yNDZ2LjYyM2gtLjYyM3YxLjI0NWgtLjYyMnYuNjIyaC0uNjIzdi0uNjIyaC0uNjIyVjYuODY4aC0uNjIzdi0uNjIzaC0yLjQ5di42MjNoMS4yNDV2LjYyMmgtLjYyMnYuNjIzaC0uNjIzVjYuODY4aC0uNjIzdjYuMjI1aC42MjN2LjYyM2gyLjQ5di0uNjIzaC42MjN2LTIuNDloLjYyMnYuNjIzaC42MjN2LS42MjNoLjYyMnYyLjQ5aC42MjN2LjYyM2gxLjI0NXYtLjYyM2guNjIzVjYuODY4aC0uNjIzem00Ljk4NCAwaC0yLjQ5di42MjNINDguNnYuNjIyaC0uNjIydi42MjNoLS42MjNWNi44NjhoLS42MjJ2Ni4yMjVoLjYyMnYuNjIzaDIuNDl2LS42MjNoLjYyM1Y2Ljg2OGgtLjYyM3ptOC43MTcuNjIzdi0uNjIzaC02LjIyNXYuNjIzaDEuMjQ1di42MjJoLS42MjN2LjYyM2gtLjYyMnYuNjIyaDIuNDl2LjYyM2gtLjYyM3YuNjIyaC0uNjIydi42MjNoLS42MjN2LjYyM2gtLjYyMnYuNjIyaC0uNjIzdjEuMjQ1aC42MjN2LjYyM2g2LjIyNXYtLjYyM2guNjIzdi0xLjg2N2gtLjYyM3YtLjYyM2gtMS44NjdWOS45OGguNjIydi0uNjIyaC42MjJ2LS42MjNoLjYyM3YtLjYyMmguNjIzVjYuODY4em0tNi4yMjUgMGgtLjYyM3YxLjI0NWguNjIzem0xNC45NDggMGgtLjYyM3YtLjYyM2gtNC45OHYuNjIzaC42MjN2LjYyMmgtLjYyM3YuNjIzaC0uNjIyVjcuNDloLS42MjN2NC45OGguNjIzdi42MjNoLjYyMnYuNjIzaDQuOTh2LS42MjNoLjYyM3YtLjYyMmguNjIyVjcuNDloLS42MjJ6bS0xLjI0NSA0LjM1OGgtMS44NjhWOC4xMTNoMS44Njh6bTkuOTY4LTQuMzU4aC0uNjIzdi0uNjIzaC01LjYwM3YuNjIzaDEuMjQ1di42MjJoLS42MjJ2LjYyM2gtLjYyM1Y2Ljg2OGgtLjYyMnY2LjIyNWguNjIydi42MjNoMi40OXYtLjYyM2guNjIzdi0xLjg2N2guNjIzdi42MjJoLjYyMnYuNjIzaC42MjN2LjYyMmguNjIydi42MjNoLjYyM3YtLjYyM2guNjIydi0xLjg2N2gtLjYyMnYtLjYyM2gtLjYyM1Y5Ljk4aC42MjN2LS42MjJoLjYyMlY3LjQ5aC0uNjIyem0tMy4xMTMgMS44Njh2LS42MjNoMS44Njh2LjYyMnptLTQwLjE4NyA3LjE5SDI1Ljg2di42MjJoLjYyMnYuNjIzaC0uNjIydi42MjJoLS42MjN2LS42MjJoLS42MjJ2Ni4yMjVoLjYyMnYuNjIzaC42MjN2LjYyMmg2Ljg0OHYtLjYyMmguNjIzdi0xLjI0NWgtLjYyM3YtLjYyM2gtMy43MzZ2LTQuMzU4aDMuNzM2di0uNjIyaC42MjN2LS42MjNoLS42MjN6bTguMDk1IDYuMjI1aC0yLjQ5di00LjM1OGgtLjYyM3YtLjYyMkgzNS4ydi42MjJoMS4yNDZ2LjYyM2gtLjYyM3YuNjIySDM1LjJ2LTEuMjQ1aC0uNjIydjYuMjI2aC42MjJ2LjYyMmg1LjYwM3YtLjYyMmguNjIzdi0xLjI0NWgtLjYyM3ptOC43MjUtNC45OGgtMS4yNDV2LjYyMmgtLjYyMnY0LjM1OGgtMS4yNDV2LTQuMzU4aC0uNjIzdi0uNjIyaC0yLjQ5di42MjJoMS4yNDV2LjYyM2gtLjYyMnYuNjIzaC0uNjIzdi0xLjI0NmgtLjYyMnY1LjYwM2guNjIydi42MjNoLjYyM3YuNjIyaDQuOTh2LS42MjJoLjYyMnYtLjYyM2guNjIzdi01LjYwM2gtLjYyM3ptOC43MjMuNjIyaC0uNjIydi0uNjIyaC01LjYwM3YuNjIyaDEuMjQ1di42MjNoLS42MjN2LjYyM2gtLjYyMnYtMS4yNDZoLS42MjJ2Ni4yMjZoLjYyMnYuNjIyaDUuNjAzdi0uNjIyaC42MjJ2LS42MjNoLjYyM3YtMi40OWgtLjYyM3YtLjYyMmguNjIzdi0xLjg2OGgtLjYyM3ptLTEuMjQ1IDQuMzU4SDU1LjE0di0uNjIyaDEuODY3em0tMS44NjctMi40OXYtLjYyMmgxLjg2N3YuNjIyeiIgc3R5bGU9ImZpbGw6IzY2NiIvPjwvc3ZnPiIiZXh0ZXJuYWxfbGluayI6Imh0dHBzOi8vb3B0aW1pem9yLmNsdWIvIn0=";
@@ -129,13 +123,7 @@ contract OptimizorNFT is ERC721 {
         }
     }
 
-    /**
-     *
-     *        INTERNAL HELPERS
-     *
-     */
-
-    function leaderboardString(uint256 tokenId) internal view returns (string memory) {
+    function leaderboardString(uint256 tokenId) private view returns (string memory) {
         address[] memory leaders = leaderboard(tokenId);
         string memory leadersStr = "";
         uint256 lIdx = leaders.length;
@@ -152,7 +140,7 @@ contract OptimizorNFT is ERC721 {
         return string.concat("Leaderboard:", leadersStr);
     }
 
-    function attributesJSON(TokenDetails memory details) internal view returns (string memory attributes) {
+    function attributesJSON(TokenDetails memory details) private view returns (string memory attributes) {
         uint32 rank = details.rank;
 
         // Core details.
@@ -203,7 +191,7 @@ contract OptimizorNFT is ERC721 {
         attributes = string.concat(attributes, "]");
     }
 
-    function svg(uint256 tokenId, TokenDetails memory details) internal view returns (string memory) {
+    function svg(uint256 tokenId, TokenDetails memory details) private view returns (string memory) {
         uint256 gradRgb = 0;
         if (details.rank > 10) {
             gradRgb = 0xbebebe;

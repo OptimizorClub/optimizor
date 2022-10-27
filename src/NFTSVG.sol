@@ -273,7 +273,7 @@ library NFTSVG {
         return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
     }
 
-    function sliceTokenHex(uint256 token, uint256 offset) internal pure returns (uint256) {
+    function sliceTokenHex(uint256 token, uint256 offset) private pure returns (uint256) {
         return uint256(uint8(token >> offset));
     }
 }
