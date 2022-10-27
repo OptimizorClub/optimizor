@@ -95,7 +95,7 @@ contract OptimizorNFT is ERC721 {
         TokenDetails memory details = tokenDetails(tokenId);
 
         string memory description = string.concat(
-            "Art: ", details.challenge.description(), "\\n",
+            details.challenge.description(), "\\n",
             leaderboardString(tokenId)
         );
 

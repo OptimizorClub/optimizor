@@ -13,7 +13,7 @@ interface IChallenge {
     /// @return The name of the challenge.
     function name() external view returns (string memory);
 
-    /// @return The description of the art/content in the SVG.
+    /// @return The description of the challenge.
     /// @notice Should not have line breaks.
     function description() external view returns (string memory);
 }

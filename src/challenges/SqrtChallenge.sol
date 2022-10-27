@@ -81,7 +81,7 @@ contract SqrtChallenge is IChallenge {
     }
 
     function description() external override pure returns (string memory) {
-        return "Spiral of Theodorus.";
+        return "Calculating the square root of an array of Fixed18 numbers";
     }
 
     function svg(uint tokenId) external pure returns (string memory art) {
