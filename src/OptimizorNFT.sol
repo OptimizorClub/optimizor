@@ -13,8 +13,6 @@ import {ERC721} from "solmate/tokens/ERC721.sol";
 import {LibString} from "solmate/utils/LibString.sol";
 
 contract OptimizorNFT is ERC721 {
-    // TODO add events
-
     // Invalid inputs
     error InvalidSolutionId(uint256 challengeId, uint32 solutionId);
 
