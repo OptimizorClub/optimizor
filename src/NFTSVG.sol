@@ -46,7 +46,7 @@ library NFTSVG {
         return string.concat(
             generateSVGDefs(params),
             generateSVGBorderText(params.projectName, params.challengeName, params.solverAddr, params.challengeAddr),
-            generateSVGCardMantle(params.challengeName, params.challengeAddr, params.rank, params.participants),
+            generateSVGCardMantle(params.rank, params.participants),
             generateRankBorder(params.rank),
             generateSvgCurve(params.overRange, challengeSVG),
             generateSVGPositionDataAndLocationCurve(LibString.toString(params.tokenId), params.gasUsed, params.gasOpti),
@@ -168,16 +168,10 @@ library NFTSVG {
         );
     }
 
-    function generateSVGCardMantle(
-        string memory solverAddr,
-        string memory challengeAddr,
-        uint32 rank,
-        uint32 participants
-    ) private pure returns (string memory svg) {
+    function generateSVGCardMantle(uint32 rank, uint32 participants) private pure returns (string memory svg) {
         svg = string.concat(
-            '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/><text y="70px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
-            solverAddr,
-            '</text><text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
+            '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/>',
+            '<text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
             "Rank #",
             LibString.toString(rank),
             "/",
