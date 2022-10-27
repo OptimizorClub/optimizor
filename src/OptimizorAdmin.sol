@@ -11,8 +11,9 @@ import {Owned} from "solmate/auth/Owned.sol";
 contract OptimizorAdmin is OptimizorNFT, Owned {
     IPurityChecker purity;
 
-    error ChallengeExists(uint challengeId);
-    event ChallengeAdded(uint challengeId, IChallenge);
+    error ChallengeExists(uint256 challengeId);
+
+    event ChallengeAdded(uint256 challengeId, IChallenge);
 
     constructor(IPurityChecker _purity) Owned(msg.sender) {
         purity = _purity;
@@ -27,7 +28,7 @@ contract OptimizorAdmin is OptimizorNFT, Owned {
         extraAttrs.push(attr);
     }
 
-    function addChallenge(uint id, IChallenge chlAddr) external onlyOwner {
+    function addChallenge(uint256 id, IChallenge chlAddr) external onlyOwner {
         Data storage chl = challenges[id];
         if (address(chl.target) != address(0)) {
             revert ChallengeExists(id);

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT 
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
 import {BaseTest} from "./BaseTest.sol";
@@ -13,7 +13,11 @@ contract AttributeTest is BaseTest {
 }
 
 contract Attributes is IAttribute {
-    function attribute(TokenDetails memory /*details*/) external pure returns (string memory attr, string memory value) {
+    function attribute(TokenDetails memory /*details*/ )
+        external
+        pure
+        returns (string memory attr, string memory value)
+    {
         return ("someAttr", "yes");
     }
 }
