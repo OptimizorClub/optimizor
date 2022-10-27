@@ -5,7 +5,7 @@ library HexString {
     /// Provided length is insufficient to store the value.
     error HexLengthInsufficient();
 
-    bytes16 constant ALPHABET = "0123456789abcdef";
+    bytes16 private constant ALPHABET = "0123456789abcdef";
 
     function toHexStringNoPrefix(uint256 value, uint256 length) internal pure returns (string memory) {
         bytes memory buffer = new bytes(2 * length);

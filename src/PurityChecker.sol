@@ -6,7 +6,7 @@ import {IPurityChecker} from "src/IPurityChecker.sol";
 import {Puretea} from "puretea/Puretea.sol";
 
 contract PurityChecker is IPurityChecker {
-    uint256 constant acceptedOpcodesMask = 0x600800000000000000000000ffffffffffffffff0fdf01ff67ff00013fff0fff;
+    uint256 private constant acceptedOpcodesMask = 0x600800000000000000000000ffffffffffffffff0fdf01ff67ff00013fff0fff;
 
     function check(address account) external view returns (bool) {
         return Puretea.check(account.code, acceptedOpcodesMask);
