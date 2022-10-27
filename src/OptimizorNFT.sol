@@ -19,17 +19,25 @@ contract OptimizorNFT is ERC721 {
     error ChallengeNotFound(uint256 challengeId);
 
     struct ChallengeInfo {
+        /// The address of the challenge contract.
         IChallenge target;
+        /// The number of valid solutions so far.
         uint32 solutions;
     }
 
     struct ExtraDetails {
+        /// The address of the solution contract.
         address code;
+        /// The address of the challenger who called `challenge`.
         address solver;
+        /// The amount of gas spent by this solution.
         uint32 gas;
     }
 
+    /// Maps challenge ids to their contracts and amount of solutions.
     mapping(uint256 => ChallengeInfo) public challenges;
+
+    /// Maps token ids to extra details about the solution.
     mapping(uint256 => ExtraDetails) public extraDetails;
 
     constructor() ERC721("Optimizor Club", "OC") {}

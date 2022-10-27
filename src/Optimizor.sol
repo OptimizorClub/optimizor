@@ -14,6 +14,7 @@ contract Optimizor is OptimizorAdmin {
         uint96 blockNumber;
     }
 
+    /// Maps a submitted key to its sender and submission block number.
     mapping(bytes32 => Submission) public submissions;
 
     // Commit errors
