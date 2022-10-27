@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {OptimizorNFT} from "./OptimizorNFT.sol";
-import {IPurityChecker} from "./IPurityChecker.sol";
-import {IAttribute} from "./IAttribute.sol";
-import {IChallenge} from "./IChallenge.sol";
+import {OptimizorNFT} from "src/OptimizorNFT.sol";
+import {IPurityChecker} from "src/IPurityChecker.sol";
+import {IAttribute} from "src/IAttribute.sol";
+import {IChallenge} from "src/IChallenge.sol";
 
 import {Owned} from "solmate/auth/Owned.sol";
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {ISqrt, INPUT_SIZE, SqrtChallenge, Fixed18} from "../src/challenges/SqrtChallenge.sol";
+import {ISqrt, INPUT_SIZE, SqrtChallenge, Fixed18} from "src/challenges/SqrtChallenge.sol";
 
 /// Returns the midpoint avoiding phantom overflow
 function mid(uint256 a, uint256 b) pure returns (uint256) {

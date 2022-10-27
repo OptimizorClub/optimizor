@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {IChallenge} from "./IChallenge.sol";
-import {Base64} from "./Base64.sol";
-import {packTokenId, unpackTokenId} from "./DataHelpers.sol";
-import {NFTSVG} from "./NFTSVG.sol";
-import {IAttribute} from "./IAttribute.sol";
-import {TokenDetails} from "./TokenDetails.sol";
-import {HexString} from "./HexString.sol";
+import {IChallenge} from "src/IChallenge.sol";
+import {Base64} from "src/Base64.sol";
+import {packTokenId, unpackTokenId} from "src/DataHelpers.sol";
+import {NFTSVG} from "src/NFTSVG.sol";
+import {IAttribute} from "src/IAttribute.sol";
+import {TokenDetails} from "src/TokenDetails.sol";
+import {HexString} from "src/HexString.sol";
 
 import {ERC721} from "solmate/tokens/ERC721.sol";
 import {LibString} from "solmate/utils/LibString.sol";
