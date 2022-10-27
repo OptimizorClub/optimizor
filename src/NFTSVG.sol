@@ -261,10 +261,6 @@ library NFTSVG {
         }
     }
 
-    function tokenToColorHex(uint256 token, uint256 offset) internal pure returns (string memory str) {
-        return HexString.toHexStringNoPrefix((token >> offset), 3);
-    }
-
     function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
         internal
         pure
