@@ -7,12 +7,12 @@ struct TokenDetails {
     uint256 challengeId;
     IChallenge challenge;
     uint32 leaderGas;
-    uint32 leaderLevel;
+    uint32 leaderSolutionId;
     address leaderSolver;
     address leaderOwner;
     address leaderSubmission;
     uint32 gas;
-    uint32 level;
+    uint32 solutionId;
     uint32 rank;
     uint32 improvementPercentage;
     address solver;

@@ -16,14 +16,14 @@ contract OptimizorNFT is ERC721 {
     // TODO add events
 
     // Invalid inputs
-    error InvalidLevel(uint256 challengeId, uint32 level);
+    error InvalidSolutionId(uint256 challengeId, uint32 solutionId);
 
     // Challenge id errors
     error ChallengeNotFound(uint256 challengeId);
 
-    struct Data {
+    struct ChallengeInfo {
         IChallenge target;
-        uint32 level;
+        uint32 solutions;
     }
 
     struct ExtraDetails {
@@ -32,7 +32,7 @@ contract OptimizorNFT is ERC721 {
         uint32 gas;
     }
 
-    mapping(uint256 => Data) public challenges;
+    mapping(uint256 => ChallengeInfo) public challenges;
     mapping(uint256 => ExtraDetails) public extraDetails;
 
     IAttribute[] public extraAttrs;
@@ -51,24 +51,24 @@ contract OptimizorNFT is ERC721 {
     }
 
     function tokenDetails(uint256 tokenId) public view returns (TokenDetails memory) {
-        (uint256 challengeId, uint32 level) = unpackTokenId(tokenId);
-        if (level == 0) revert InvalidLevel(challengeId, level);
+        (uint256 challengeId, uint32 solutionId) = unpackTokenId(tokenId);
+        if (solutionId == 0) revert InvalidSolutionId(challengeId, solutionId);
 
-        Data storage chl = challenges[challengeId];
+        ChallengeInfo storage chl = challenges[challengeId];
         if (address(chl.target) == address(0)) revert ChallengeNotFound(challengeId);
-        if (level > chl.level) revert InvalidLevel(challengeId, level);
+        if (solutionId > chl.solutions) revert InvalidSolutionId(challengeId, solutionId);
 
         ExtraDetails storage details = extraDetails[tokenId];
 
-        uint256 leaderTokenId = packTokenId(challengeId, chl.level);
+        uint256 leaderTokenId = packTokenId(challengeId, chl.solutions);
         ExtraDetails storage leaderDetails = extraDetails[leaderTokenId];
 
-        uint32 leaderLevel = chl.level;
-        uint32 rank = leaderLevel - level + 1;
+        uint32 leaderSolutionId = chl.solutions;
+        uint32 rank = leaderSolutionId - solutionId + 1;
 
         // This means the first holder will have a 0% improvement.
         uint32 percentage = 0;
-        if (level > 1) {
+        if (solutionId > 1) {
             ExtraDetails storage prevDetails = extraDetails[tokenId - 1];
             percentage = (details.gas * 100) / prevDetails.gas;
         }
@@ -77,12 +77,12 @@ contract OptimizorNFT is ERC721 {
             challengeId: challengeId,
             challenge: chl.target,
             leaderGas: leaderDetails.gas,
-            leaderLevel: leaderLevel,
+            leaderSolutionId: leaderSolutionId,
             leaderSolver: leaderDetails.solver,
             leaderOwner: _ownerOf[leaderTokenId],
             leaderSubmission: leaderDetails.code,
             gas: details.gas,
-            level: level,
+            solutionId: solutionId,
             rank: rank,
             improvementPercentage: percentage,
             solver: details.solver,
@@ -123,7 +123,7 @@ contract OptimizorNFT is ERC721 {
 
     function leaderboard(uint256 tokenId) public view returns (address[] memory board) {
         (uint256 challengeId,) = unpackTokenId(tokenId);
-        uint32 winners = challenges[challengeId].level;
+        uint32 winners = challenges[challengeId].solutions;
         board = new address[](winners);
         for (uint32 i = 1; i <= winners; ++i) {
             ExtraDetails storage details = extraDetails[packTokenId(challengeId, i)];
@@ -184,7 +184,7 @@ contract OptimizorNFT is ERC721 {
             '{"trait_type":"Rank","value":',
             LibString.toString(rank),
             ',"max_value":',
-            LibString.toString(details.leaderLevel),
+            LibString.toString(details.leaderSolutionId),
             "},",
             '{"trait_type":"Leader","value":"',
             (rank == 1) ? "Yes" : "No",
@@ -230,8 +230,8 @@ contract OptimizorNFT is ERC721 {
             overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: details.rank,
-            // The leader is the last player, e.g. its level equals the number of players.
-            participants: details.leaderLevel,
+            // The leader is the last player, e.g. its solution id equals the number of players.
+            participants: details.leaderSolutionId,
             color0: NFTSVG.tokenToColorHex(grad_rgb, 0),
             color1: NFTSVG.tokenToColorHex(grad_rgb, 0),
             color2: NFTSVG.tokenToColorHex(grad_rgb, 0),

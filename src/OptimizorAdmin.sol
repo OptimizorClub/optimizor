@@ -29,7 +29,7 @@ contract OptimizorAdmin is OptimizorNFT, Owned {
     }
 
     function addChallenge(uint256 id, IChallenge chlAddr) external onlyOwner {
-        Data storage chl = challenges[id];
+        ChallengeInfo storage chl = challenges[id];
         if (address(chl.target) != address(0)) {
             revert ChallengeExists(id);
         }
