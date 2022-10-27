@@ -85,10 +85,10 @@ contract Optimizor is OptimizorAdmin {
            revert NotPure();
         }
 
-        uint32 gas = uint32(chl.target.run(target, block.difficulty));
+        uint32 gas = chl.target.run(target, block.difficulty);
 
         uint leaderTokenId = packTokenId(id, chl.level);
-        uint leaderGas = extraDetails[leaderTokenId].gas;
+        uint32 leaderGas = extraDetails[leaderTokenId].gas;
 
         if ((leaderGas != 0) && (leaderGas <= gas)) {
             revert NotOptimizor();

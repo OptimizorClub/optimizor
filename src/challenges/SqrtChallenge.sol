@@ -28,7 +28,7 @@ function random_uint64(uint256 seed) view returns (uint64) {
 contract SqrtChallenge is IChallenge {
     error DoesNotSatisfyTolerance(uint input, uint output);
 
-    function run(address target, uint seed) external view override returns (uint) {
+    function run(address target, uint seed) external view override returns (uint32) {
         // Generate inputs.
         Fixed18[INPUT_SIZE] memory inputs;
         unchecked {
@@ -47,7 +47,7 @@ contract SqrtChallenge is IChallenge {
 
         verify(inputs, outputs);
 
-        return usedGas;
+        return uint32(usedGas);
     }
 
     // Reverts if invalid
