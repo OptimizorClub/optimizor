@@ -187,23 +187,23 @@ library NFTSVG {
     }
 
     function generateRankBorder(uint32 rank) private pure returns (string memory svg) {
+        string memory color;
         if (rank == 1) {
             // Golden accent.
-            svg =
-                '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,215,0,1.0)"/>';
+            color = "rgba(255,215,0,1.0)";
         } else if (rank == 2) {
             // Silver accent.
-            svg =
-                '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,1.0)"/>';
+            color = "rgba(255,255,255,1.0)";
         } else if (rank == 3) {
             // Bronze accent.
-            svg =
-                '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(205,127,50,1.0)"/>';
+            color = "rgba(205,127,50,1.0)";
         } else {
             // Default (grey) accent. Assuming rank 0 is invalid, this case is for rank > 3.
-            svg =
-                '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)"/>';
+            color = "rgba(255,255,255,0.2)";
         }
+        svg = string.concat(
+            '<rect x="16" y="16" width="258" height="468" rx="26" ry="26" fill="rgba(0,0,0,0)" stroke="', color, '"/>'
+        );
     }
 
     function generateSvgCurve(int8 overR, string memory challengeSVG) private pure returns (string memory svg) {
