@@ -3,7 +3,6 @@ pragma solidity ^0.8.15;
 
 import {OptimizorNFT} from "src/OptimizorNFT.sol";
 import {IPurityChecker} from "src/IPurityChecker.sol";
-import {IAttribute} from "src/IAttribute.sol";
 import {IChallenge} from "src/IChallenge.sol";
 
 import {Owned} from "solmate/auth/Owned.sol";
@@ -22,10 +21,6 @@ contract OptimizorAdmin is OptimizorNFT, Owned {
     /// @dev Purity checker may need to be updated when there are EVM changes.
     function updatePurityChecker(IPurityChecker _purity) external onlyOwner {
         purity = _purity;
-    }
-
-    function addAttribute(IAttribute attr) external onlyOwner {
-        extraAttrs.push(attr);
     }
 
     function addChallenge(uint256 id, IChallenge chlAddr) external onlyOwner {
