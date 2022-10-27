@@ -5,7 +5,6 @@ import {IChallenge} from "src/IChallenge.sol";
 import {Base64} from "src/Base64.sol";
 import {packTokenId, unpackTokenId} from "src/DataHelpers.sol";
 import {NFTSVG} from "src/NFTSVG.sol";
-import {IAttribute} from "src/IAttribute.sol";
 import {TokenDetails} from "src/TokenDetails.sol";
 import {HexString} from "src/HexString.sol";
 
@@ -32,8 +31,6 @@ contract OptimizorNFT is ERC721 {
 
     mapping(uint256 => ChallengeInfo) public challenges;
     mapping(uint256 => ExtraDetails) public extraDetails;
-
-    IAttribute[] public extraAttrs;
 
     constructor() ERC721("Optimizor Club", "OC") {}
 
@@ -182,11 +179,6 @@ contract OptimizorNFT is ERC721 {
             (rank <= 10) ? "Yes" : "No",
             '"}'
         );
-
-        for (uint256 i = 0; i < extraAttrs.length; ++i) {
-            (string memory attr, string memory value) = extraAttrs[i].attribute(details);
-            attributes = string.concat(attributes, ",{", '"trait_type":"', attr, '",', '"value":"', value, '",', "}");
-        }
 
         attributes = string.concat(attributes, "]");
     }
