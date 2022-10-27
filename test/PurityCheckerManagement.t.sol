@@ -17,6 +17,6 @@ contract PurityCheckerManagementTest is BaseTest {
 
         opt.updatePurityChecker(newChecker);
 
-        assertEq(address(newChecker), address(opt.purity()));
+        assertEq(address(newChecker), address(opt.purityChecker()));
     }
 }

@@ -28,7 +28,7 @@ contract Optimizor is OptimizorAdmin {
     // Sadness
     error NotOptimizor();
 
-    constructor(IPurityChecker pureh) OptimizorAdmin(pureh) {}
+    constructor(IPurityChecker _purityChecker) OptimizorAdmin(_purityChecker) {}
 
     /// Commit a `key` derived using
     /// `keccak256(abi.encode(sender, codehash, salt))`
@@ -75,7 +75,7 @@ contract Optimizor is OptimizorAdmin {
             revert InvalidRecipient();
         }
 
-        if (!purity.check(target)) {
+        if (!purityChecker.check(target)) {
             revert NotPure();
         }
 
