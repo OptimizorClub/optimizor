@@ -34,7 +34,7 @@ contract SumChallenge is IChallenge {
     }
 
     function random(uint256 seed) internal view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.timestamp, seed))) % 100;
+        return uint256(keccak256(abi.encodePacked(seed))) % 100;
     }
 
     function name() external pure override returns (string memory) {

@@ -22,7 +22,7 @@ function random_fixed18(uint256 seed) view returns (Fixed18) {
 }
 
 function random_uint64(uint256 seed) view returns (uint64) {
-    return uint64(uint256(keccak256(abi.encodePacked(tx.origin, block.timestamp, seed))));
+    return uint64(uint256(keccak256(abi.encodePacked(seed))));
 }
 
 contract SqrtChallenge is IChallenge {
