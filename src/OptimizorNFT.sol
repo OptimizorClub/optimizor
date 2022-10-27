@@ -140,47 +140,30 @@ contract OptimizorNFT is ERC721 {
     function attributesJSON(TokenDetails memory details) private view returns (string memory attributes) {
         uint32 rank = details.rank;
 
-        // Core details.
         attributes = string.concat(
-            "[",
-            '{"trait_type":"Challenge","value":"',
+            '[{"trait_type":"Challenge","value":"',
             details.challenge.name(),
-            '"},',
-            '{"trait_type":"Gas used","value":',
+            '"},{"trait_type":"Gas used","value":',
             LibString.toString(details.gas),
-            ',"display_type":"number"},',
-            '{"trait_type":"Code size","value":',
+            ',"display_type":"number"},{"trait_type":"Code size","value":',
             LibString.toString(details.submission.code.length),
-            ',"display_type":"number"},',
-            '{"trait_type":"Improvement percentage","value":"',
+            ',"display_type":"number"},{"trait_type":"Improvement percentage","value":"',
             LibString.toString(details.improvementPercentage),
-            '%"},',
-            '{"trait_type":"Solver","value":"',
+            '%"},{"trait_type":"Solver","value":"',
             HexString.toHexString(uint256(uint160(details.solver)), 20),
-            '"},'
-        );
-
-        // Standing.
-        attributes = string.concat(
-            attributes,
             // With value/max_value this will be displayed as a bar.
-            '{"trait_type":"Rank","value":',
+            '"},{"trait_type":"Rank","value":',
             LibString.toString(rank),
             ',"max_value":',
             LibString.toString(details.leaderSolutionId),
-            "},",
-            '{"trait_type":"Leader","value":"',
+            '},{"trait_type":"Leader","value":"',
             (rank == 1) ? "Yes" : "No",
-            '"},',
-            '{"trait_type":"Top 3","value":"',
+            '"},{"trait_type":"Top 3","value":"',
             (rank <= 3) ? "Yes" : "No",
-            '"},',
-            '{"trait_type":"Top 10","value":"',
+            '"},{"trait_type":"Top 10","value":"',
             (rank <= 10) ? "Yes" : "No",
-            '"}'
+            '"}]'
         );
-
-        attributes = string.concat(attributes, "]");
     }
 
     function svg(uint256 tokenId, TokenDetails memory details) private view returns (string memory) {
