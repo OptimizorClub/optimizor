@@ -9,16 +9,23 @@ library Base64 {
     bytes private constant TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     /// @notice Encodes some bytes to the base64 representation
-    function encode(bytes memory data) internal pure returns (string memory) {
+    function encode(bytes memory data) internal pure returns (string memory result) {
         uint256 len = data.length;
         if (len == 0) return "";
 
         // multiply by 4/3 rounded up
-        uint256 encodedLen = 4 * ((len + 2) / 3);
+        uint256 encodedLen;
+        unchecked {
+            // We assume reaching overflow is unfeasible in our use cases.
+            encodedLen = 4 * ((len + 2) / 3);
+        }
 
         // Add some extra buffer at the end
-        bytes memory result = new bytes(encodedLen + 32);
+        unchecked {
+            result = new string(encodedLen + 32);
+        }
 
+        // Until constants are supported in inline assembly.
         bytes memory table = TABLE;
 
         assembly ("memory-safe") {
@@ -50,6 +57,6 @@ library Base64 {
             mstore(result, encodedLen)
         }
 
-        return string(result);
+        return result;
     }
 }
