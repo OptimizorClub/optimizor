@@ -17,11 +17,11 @@ interface ISqrt {
     function sqrt(Fixed18[INPUT_SIZE] calldata) external view returns (Fixed18[INPUT_SIZE] memory);
 }
 
-function random_fixed18(uint256 seed) view returns (Fixed18) {
+function random_fixed18(uint256 seed) pure returns (Fixed18) {
     return Fixed18.wrap(uint256(random_uint64(seed)));
 }
 
-function random_uint64(uint256 seed) view returns (uint64) {
+function random_uint64(uint256 seed) pure returns (uint64) {
     return uint64(uint256(keccak256(abi.encodePacked(seed))));
 }
 
