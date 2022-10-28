@@ -22,12 +22,12 @@ library NFTSVG {
         uint32 rank;
         uint32 participants;
         string color;
-        string x1;
-        string y1;
-        string x2;
-        string y2;
-        string x3;
-        string y3;
+        uint256 x1;
+        uint256 y1;
+        uint256 x2;
+        uint256 y2;
+        uint256 x3;
+        uint256 y3;
     }
 
     function generateSVG(SVGParams memory params, string memory challengeSVG)
@@ -67,9 +67,9 @@ library NFTSVG {
                 bytes(
                     string.concat(
                         "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
-                        params.x1,
+                        LibString.toString(params.x1),
                         "' cy='",
-                        params.y1,
+                        LibString.toString(params.y1),
                         "' r='120' fill='#",
                         params.color,
                         "'/></svg>"
@@ -81,9 +81,9 @@ library NFTSVG {
                 bytes(
                     string.concat(
                         "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
-                        params.x2,
+                        LibString.toString(params.x2),
                         "' cy='",
-                        params.y2,
+                        LibString.toString(params.y2),
                         "' r='120' fill='#",
                         params.color,
                         "'/></svg>"
@@ -96,9 +96,9 @@ library NFTSVG {
                 bytes(
                     string.concat(
                         "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><circle cx='",
-                        params.x3,
+                        LibString.toString(params.x3),
                         "' cy='",
-                        params.y3,
+                        LibString.toString(params.y3),
                         "' r='100' fill='#",
                         params.color,
                         "'/></svg>"
