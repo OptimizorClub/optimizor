@@ -153,7 +153,6 @@ contract OptimizorTest is BaseTest {
         assertEq(leaders2[1], address(this));
     }
 
-    // TODO make this function public too to fuzz it
     function testChallenger(uint256 CHL_ID, address challenger, bytes32 chl_hash) internal {
         opt.commit(computeKey(address(this), chl_hash, SALT));
         advancePeriod();

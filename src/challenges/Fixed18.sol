@@ -24,7 +24,6 @@ function div(Fixed18 a, Fixed18 b) pure returns (Fixed18) {
 function distance(Fixed18 a, Fixed18 b) pure returns (Fixed18) {
     uint256 _a = Fixed18.unwrap(a);
     uint256 _b = Fixed18.unwrap(b);
-    // TODO a branchless implementation
     unchecked {
         if (_a < _b) {
             return Fixed18.wrap(_b - _a);

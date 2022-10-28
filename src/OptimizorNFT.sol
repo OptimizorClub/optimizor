@@ -191,7 +191,6 @@ contract OptimizorNFT is ERC721 {
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor Club",
             challengeName: details.challenge.name(),
-            // TODO should \/ be details.owner or details.solver?
             solverAddr: HexString.toHexString(uint256(uint160(address(details.owner))), 20),
             challengeAddr: HexString.toHexString(uint256(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
