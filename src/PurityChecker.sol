@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 import {IPurityChecker} from "src/IPurityChecker.sol";
 

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 import {SUM_ID, SQRT_ID} from "test/ChallengeIDs.sol";
 import {ISum, SumChallenge, CheapSum, ExpensiveSum} from "test/SumChallenge.sol";
