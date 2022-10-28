@@ -31,12 +31,11 @@ jobs:
       - name: Run Forge build
         run: |
           forge --version
-          # FIXME add --sizes once the size limits are fixed
-          forge build --use ./bin/solc
+          FOUNDRY_PROFILE=test forge build --use ./bin/solc
         id: build
 
       - name: Run Forge tests with custom solc
-        run: forge test --use ./bin/solc -vvv
+        run: FOUNDRY_PROFILE=test forge test --use ./bin/solc -vvv
         id: test
 
       - name: Test JSON validity
@@ -47,3 +46,7 @@ jobs:
         with:
           name: optimizor.svg
           path: out.svg
+
+      - name: Sizes of the contracts
+        run: |
+          forge build --contracts src/Optimizor.sol --sizes --use ./bin/solc --skip test --skip script

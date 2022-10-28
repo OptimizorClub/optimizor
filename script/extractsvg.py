@@ -7,7 +7,7 @@ import json
 import sys
 
 if len(sys.argv) == 1:
-    returned_value = str(subprocess.check_output("forge script ../test/OptimizorNFT.t.sol --use ../bin/solc", shell=True, cwd=os.path.dirname(__file__)))
+    returned_value = str(subprocess.check_output("FOUNDRY_PROFILE=test forge script test/OptimizorNFT.t.sol --use bin/solc", shell=True, cwd=os.path.dirname(__file__) + '/../'))
 else:
     returned_value = sys.argv[1]
 
