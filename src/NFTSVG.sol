@@ -253,7 +253,10 @@ library NFTSVG {
     }
 
     function getCircleCoord(uint256 tokenAddress, uint256 offset, uint256 tokenId) internal pure returns (uint256) {
-        return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
+        unchecked {
+            // This can wrap around by design.
+            return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
+        }
     }
 
     function sliceTokenHex(uint256 token, uint256 offset) private pure returns (uint256) {
