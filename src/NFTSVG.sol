@@ -236,22 +236,12 @@ library NFTSVG {
         '<g style="transform:translate(180px, 365px)"><rect style="filter: url(#icon)" x="0" y="0" width="83" height="64"/></g>';
     }
 
-    function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
-        internal
-        pure
-        returns (string memory)
-    {
-        return LibString.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
-    }
-
-    function getCircleCoord(uint256 tokenAddress, uint256 offset, uint256 tokenId) internal pure returns (uint256) {
+    // This picks a "random number" out of a tokenAddress/offset/tokenId tuple.
+    // Assumes offset <= 158.
+    function getCircleCoord(address tokenAddress, uint256 offset, uint256 tokenId) internal pure returns (uint8) {
         unchecked {
             // This can wrap around by design.
-            return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
+            return uint8((((uint256(uint160(tokenAddress)) >> offset) & 0xFF) * tokenId) % 255);
         }
-    }
-
-    function sliceTokenHex(uint256 token, uint256 offset) private pure returns (uint256) {
-        return uint256(uint8(token >> offset));
     }
 }

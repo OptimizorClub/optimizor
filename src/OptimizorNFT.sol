@@ -170,6 +170,14 @@ contract OptimizorNFT is ERC721 {
         );
     }
 
+    // This scales the value from [0,255] to [minOut,maxOut].
+    // Assumes 255*maxOut <= 2^256-1.
+    function scale(uint8 value, uint256 minOut, uint256 maxOut) private pure returns (uint256) {
+        unchecked {
+            return ((uint256(value) * (maxOut - minOut)) / 255) + minOut;
+        }
+    }
+
     function svg(uint256 tokenId, TokenDetails memory details) private view returns (string memory) {
         uint256 gradRgb = 0;
         if (details.rank > 10) {
@@ -196,18 +204,12 @@ contract OptimizorNFT is ERC721 {
             // The leader is the last player, e.g. its solution id equals the number of players.
             participants: details.leaderSolutionId,
             color: HexString.toHexStringNoPrefix(gradRgb, 3),
-            x1: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274
-                ),
-            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 16, tokenId), 0, 255, 100, 484),
-            x2: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 32, tokenId), 0, 255, 16, 274
-                ),
-            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 32, tokenId), 0, 255, 100, 484),
-            x3: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 48, tokenId), 0, 255, 16, 274
-                ),
-            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 48, tokenId), 0, 255, 100, 484)
+            x1: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 16, tokenId), 16, 274)),
+            y1: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 16, tokenId), 100, 484)),
+            x2: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 32, tokenId), 16, 274)),
+            y2: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 32, tokenId), 100, 484)),
+            x3: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 48, tokenId), 16, 274)),
+            y3: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 48, tokenId), 100, 484))
         });
 
         return NFTSVG.generateSVG(svgParams, details.challenge.svg(tokenId));
