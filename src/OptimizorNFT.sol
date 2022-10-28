@@ -195,7 +195,6 @@ contract OptimizorNFT is ERC721 {
             challengeAddr: HexString.toHexString(uint256(uint160(address(details.challenge))), 20),
             gasUsed: details.gas,
             gasOpti: details.improvementPercentage,
-            overRange: int8(int256(uint256(keccak256(abi.encodePacked(tokenId))))) % 3,
             tokenId: tokenId,
             rank: details.rank,
             // The leader is the last player, e.g. its solution id equals the number of players.
