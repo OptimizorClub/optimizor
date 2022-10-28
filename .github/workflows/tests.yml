@@ -49,4 +49,4 @@ jobs:
 
       - name: Sizes of the contracts
         run: |
-          forge build --contracts src/Optimizor.sol --sizes --use ./bin/solc --skip test --skip script
+          forge build --contracts src/Optimizor.sol --sizes --skip test --skip script

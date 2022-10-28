@@ -34,7 +34,7 @@
 //
 
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 import {OptimizorAdmin, OptimizorNFT} from "src/OptimizorAdmin.sol";
 import {IPurityChecker} from "src/IPurityChecker.sol";

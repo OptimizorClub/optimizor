@@ -1,5 +1,5 @@
 // SPADIX-License-Identifier: MIT
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 type Fixed18 is uint256;
 

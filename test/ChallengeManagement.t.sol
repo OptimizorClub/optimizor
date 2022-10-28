@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 import {BaseTest} from "test/BaseTest.sol";
 import {NON_USED_ID} from "test/ChallengeIDs.sol";

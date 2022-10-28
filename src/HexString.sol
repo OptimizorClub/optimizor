@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-pragma solidity >=0.8.18;
+pragma solidity ^0.8.17;
 
 library HexString {
     /// Provided length is insufficient to store the value.
