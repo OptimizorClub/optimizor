@@ -98,20 +98,15 @@ contract OptimizorNFT is ERC721 {
             Base64.encode(
                 bytes(
                     string.concat(
-                        "{",
-                        '"name":"Optimizor Club: ',
+                        '{"name":"Optimizor Club: ',
                         details.challenge.name(),
-                        '",',
-                        '"description":"',
+                        '","description":"',
                         description,
-                        '",',
-                        '"attributes":',
+                        '","attributes":',
                         attributesJSON(details),
-                        ",",
-                        '"image":"data:image/svg+xml;base64,',
+                        ',"image":"data:image/svg+xml;base64,',
                         Base64.encode(bytes(svg(tokenId, details))),
-                        '"',
-                        "}"
+                        '"}'
                     )
                 )
             )

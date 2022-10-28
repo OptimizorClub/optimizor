@@ -49,9 +49,9 @@ library NFTSVG {
 
     function generateSVGDefs(SVGParams memory params) private pure returns (string memory svg) {
         svg = string.concat(
-            '<svg width="290" height="500" viewBox="0 0 290 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
-            "<defs>",
-            '<filter id="icon"><feImage result="icon" xlink:href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTY2LjU5NyIgaGVpZ2h0PSIxMjguOTQxIiB2aWV3Qm94PSIwIDAgNDQuMDc5IDM0LjExNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAuNzkzIDEzLjMyMWgtLjYyM1YxMi43aC02LjIyNXYuNjIyaC42MjJ2LjYyM2gtLjYyMnYuNjIyaC0uNjIzdi0uNjIySDEyLjd2Ni4yMjVoLjYyMnYuNjIzaC42MjN2LjYyMmg2LjIyNXYtLjYyMmguNjIzdi0uNjIzaC42MjJ2LTYuMjI1aC0uNjIyem0tMy43MzUgNS42MDN2LTQuMzU4aDEuODY3djQuMzU4em0xMy42OTgtNi4yMjVoLTYuODQ4di42MjJoLjYyM3YuNjIzaC0uNjIzdi42MjJoLS42MjJ2LS42MjJoLS42MjN2Ni4yMjVoLjYyM3YuNjIzaC42MjJ2LjYyMmg2Ljg0OHYtLjYyMmguNjIydi0xLjI0NWgtLjYyMnYtLjYyM0gyNy4wMnYtNC4zNThoMy43MzV2LS42MjJoLjYyMnYtLjYyM2gtLjYyMnoiIHN0eWxlPSJmaWxsOiM2NjYiLz48L3N2Zz4="/></filter>',
+            '<svg width="290" height="500" viewBox="0 0 290 500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'
+            "<defs>"
+            '<filter id="icon"><feImage result="icon" xlink:href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTY2LjU5NyIgaGVpZ2h0PSIxMjguOTQxIiB2aWV3Qm94PSIwIDAgNDQuMDc5IDM0LjExNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjAuNzkzIDEzLjMyMWgtLjYyM1YxMi43aC02LjIyNXYuNjIyaC42MjJ2LjYyM2gtLjYyMnYuNjIyaC0uNjIzdi0uNjIySDEyLjd2Ni4yMjVoLjYyMnYuNjIzaC42MjN2LjYyMmg2LjIyNXYtLjYyMmguNjIzdi0uNjIzaC42MjJ2LTYuMjI1aC0uNjIyem0tMy43MzUgNS42MDN2LTQuMzU4aDEuODY3djQuMzU4em0xMy42OTgtNi4yMjVoLTYuODQ4di42MjJoLjYyM3YuNjIzaC0uNjIzdi42MjJoLS42MjJ2LS42MjJoLS42MjN2Ni4yMjVoLjYyM3YuNjIzaC42MjJ2LjYyMmg2Ljg0OHYtLjYyMmguNjIydi0xLjI0NWgtLjYyMnYtLjYyM0gyNy4wMnYtNC4zNThoMy43MzV2LS42MjJoLjYyMnYtLjYyM2gtLjYyMnoiIHN0eWxlPSJmaWxsOiM2NjYiLz48L3N2Zz4="/></filter>'
             '<filter id="f1"><feImage result="p0" xlink:href="data:image/svg+xml;base64,',
             Base64.encode(
                 bytes(
@@ -105,27 +105,26 @@ library NFTSVG {
                     )
                 )
             ),
-            '"/><feBlend mode="overlay" in="p0" in2="p1"/><feBlend mode="exclusion" in2="p2"/><feBlend mode="overlay" in2="p3" result="blendOut"/><feGaussianBlur ',
-            'in="blendOut" stdDeviation="42"/></filter><clipPath id="corners"><rect width="290" height="500" rx="42" ry="42"/></clipPath>',
-            '<path id="text-path-a" d="M40 12 H250 A28 28 0 0 1 278 40 V460 A28 28 0 0 1 250 488 H40 A28 28 0 0 1 12 460 V40 A28 28 0 0 1 40 12 z"/>',
-            '<path id="minimap" d="M234 444C234 457.949 242.21 463 253 463"/>',
-            '<filter id="top-region-blur"><feGaussianBlur in="SourceGraphic" stdDeviation="24"/></filter>',
-            '<linearGradient id="grad-up" x1="1" x2="0" y1="1" y2="0"><stop offset="0.0" stop-color="#fff" stop-opacity="1"/>',
-            '<stop offset=".9" stop-color="#fff" stop-opacity="0"/></linearGradient>',
-            '<linearGradient id="grad-down" x1="0" x2="1" y1="0" y2="1"><stop offset="0.0" stop-color="#fff" stop-opacity="1"/><stop offset="0.9" stop-color="#fff" stop-opacity="0"/></linearGradient>',
-            '<mask id="fade-up" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#grad-up)"/></mask>',
-            '<mask id="fade-down" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#grad-down)"/></mask>',
-            '<mask id="none" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="#fff"/></mask>',
-            '<linearGradient id="grad-symbol"><stop offset="0.7" stop-color="#fff" stop-opacity="1"/><stop offset=".95" stop-color="#fff" stop-opacity="0"/></linearGradient>',
-            '<mask id="fade-symbol" maskContentUnits="userSpaceOnUse"><rect width="290" height="200" fill="url(#grad-symbol)"/></mask></defs>',
-            '<g clip-path="url(#corners)">',
-            '<rect fill="',
+            '"/><feBlend mode="overlay" in="p0" in2="p1"/><feBlend mode="exclusion" in2="p2"/><feBlend mode="overlay" in2="p3" result="blendOut"/><feGaussianBlur '
+            'in="blendOut" stdDeviation="42"/></filter><clipPath id="corners"><rect width="290" height="500" rx="42" ry="42"/></clipPath>'
+            '<path id="text-path-a" d="M40 12 H250 A28 28 0 0 1 278 40 V460 A28 28 0 0 1 250 488 H40 A28 28 0 0 1 12 460 V40 A28 28 0 0 1 40 12 z"/>'
+            '<path id="minimap" d="M234 444C234 457.949 242.21 463 253 463"/>'
+            '<filter id="top-region-blur"><feGaussianBlur in="SourceGraphic" stdDeviation="24"/></filter>'
+            '<linearGradient id="grad-up" x1="1" x2="0" y1="1" y2="0"><stop offset="0.0" stop-color="#fff" stop-opacity="1"/>'
+            '<stop offset=".9" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+            '<linearGradient id="grad-down" x1="0" x2="1" y1="0" y2="1"><stop offset="0.0" stop-color="#fff" stop-opacity="1"/><stop offset="0.9" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+            '<mask id="fade-up" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#grad-up)"/></mask>'
+            '<mask id="fade-down" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#grad-down)"/></mask>'
+            '<mask id="none" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="#fff"/></mask>'
+            '<linearGradient id="grad-symbol"><stop offset="0.7" stop-color="#fff" stop-opacity="1"/><stop offset=".95" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+            '<mask id="fade-symbol" maskContentUnits="userSpaceOnUse"><rect width="290" height="200" fill="url(#grad-symbol)"/></mask></defs>'
+            '<g clip-path="url(#corners)">' '<rect fill="',
             params.color,
-            '" x="0" y="0" width="290" height="500"/>',
-            '<rect style="filter: url(#f1)" x="0" y="0" width="290" height="500"/>',
-            '<g style="filter:url(#top-region-blur); transform:scale(1.5); transform-origin:center top;">',
-            '<rect fill="none" x="0" y="0" width="290" height="500"/>',
-            '<ellipse cx="50%" cy="0" rx="180" ry="120" fill="#000" opacity="0.85"/></g>',
+            '" x="0" y="0" width="290" height="500"/>'
+            '<rect style="filter: url(#f1)" x="0" y="0" width="290" height="500"/>'
+            '<g style="filter:url(#top-region-blur); transform:scale(1.5); transform-origin:center top;">'
+            '<rect fill="none" x="0" y="0" width="290" height="500"/>'
+            '<ellipse cx="50%" cy="0" rx="180" ry="120" fill="#000" opacity="0.85"/></g>'
             '<rect x="0" y="0" width="290" height="500" rx="42" ry="42" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)"/></g>'
         );
     }
@@ -137,22 +136,22 @@ library NFTSVG {
         string memory challengeAddr
     ) private pure returns (string memory svg) {
         svg = string.concat(
-            '<text text-rendering="optimizeSpeed">',
+            '<text text-rendering="optimizeSpeed">'
             '<textPath startOffset="-100%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             challengeName,
             unicode" • ",
             challengeAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/>',
+            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/>'
             '</textPath> <textPath startOffset="0%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             challengeName,
             unicode" • ",
             challengeAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/></textPath>',
+            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/></textPath>'
             '<textPath startOffset="50%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             projectName,
             unicode" • ",
             solverAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s"',
+            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s"'
             ' repeatCount="indefinite"/></textPath><textPath startOffset="-50%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             projectName,
             unicode" • ",
@@ -169,7 +168,7 @@ library NFTSVG {
         svg = string.concat(
             '<g mask="url(#fade-symbol)"><rect fill="none" x="0" y="0" width="290" height="200"/><text y="70" x="32" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="28px">',
             challengeName,
-            '</text><text y="115" x="32" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
+            '</text><text y="115" x="32" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">'
             "Rank ",
             LibString.toString(rank),
             " of ",
@@ -213,29 +212,22 @@ library NFTSVG {
         uint256 str2length = bytes(gasUsedStr).length + 10;
         uint256 str3length = bytes(gasOptiStr).length + 10;
         svg = string.concat(
-            '<g font-family="\'Courier New\', monospace" font-size="12" fill="#fff">',
-            '<g style="transform:translate(29px, 384px)">',
-            '<rect width="',
+            '<g font-family="\'Courier New\', monospace" font-size="12" fill="#fff">'
+            '<g style="transform:translate(29px, 384px)">' '<rect width="',
             LibString.toString(uint256(7 * (str1length + 4))),
-            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12" y="17"><tspan fill="#999">ID: </tspan>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>' '<text x="12" y="17"><tspan fill="#999">ID: </tspan>',
             tokenId,
-            "</text></g>",
-            '<g style="transform:translate(29px, 414px)">',
-            '<rect width="',
+            "</text></g>" '<g style="transform:translate(29px, 414px)">' '<rect width="',
             LibString.toString(uint256(7 * (str2length + 4))),
-            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>'
             '<text x="12" y="17"><tspan fill="#999">Gas used: </tspan>',
             gasUsedStr,
-            "</text></g>",
-            '<g style="transform:translate(29px, 444px)">',
-            '<rect width="',
+            "</text></g>" '<g style="transform:translate(29px, 444px)">' '<rect width="',
             LibString.toString(uint256(7 * (str3length + 4))),
-            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>'
             '<text x="12" y="17"><tspan fill="#999">Gas opti: </tspan>',
             gasOptiStr,
-            "%",
-            "</text></g></g>"
+            "%" "</text></g></g>"
         );
     }
 
