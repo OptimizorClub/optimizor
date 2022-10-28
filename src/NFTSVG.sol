@@ -18,7 +18,6 @@ library NFTSVG {
         string challengeAddr;
         uint256 gasUsed;
         uint256 gasOpti;
-        int8 overRange;
         uint256 tokenId;
         uint32 rank;
         uint32 participants;
@@ -41,7 +40,7 @@ library NFTSVG {
             generateSVGBorderText(params.projectName, params.challengeName, params.solverAddr, params.challengeAddr),
             generateSVGCardMantle(params.challengeName, params.rank, params.participants),
             generateRankBorder(params.rank),
-            generateSvgCurve(params.overRange, challengeSVG),
+            generateSvgCurve(challengeSVG),
             generateSVGPositionDataAndLocationCurve(LibString.toString(params.tokenId), params.gasUsed, params.gasOpti),
             generateOptimizorIcon(),
             "</svg>"
@@ -171,9 +170,9 @@ library NFTSVG {
             '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/><text y="70px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="36px">',
             challengeName,
             '</text><text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
-            "Rank #",
+            "Rank ",
             LibString.toString(rank),
-            "/",
+            " of ",
             LibString.toString(participants),
             "</text></g>"
         );
@@ -199,11 +198,8 @@ library NFTSVG {
         );
     }
 
-    function generateSvgCurve(int8 overR, string memory challengeSVG) private pure returns (string memory svg) {
-        string memory fade = overR == 1 ? "#fade-up" : overR == -1 ? "#fade-down" : "#none";
-        svg = string.concat(
-            '<g mask="url(', fade, ')"', ' style="transform:translate(30px,130px)">', challengeSVG, "</g>"
-        );
+    function generateSvgCurve(string memory challengeSVG) private pure returns (string memory svg) {
+        svg = string.concat('<g mask="url(#none)"', ' style="transform:translate(30px,130px)">', challengeSVG, "</g>");
     }
 
     function generateSVGPositionDataAndLocationCurve(string memory tokenId, uint256 gasUsed, uint256 gasOpti)
