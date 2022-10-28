@@ -122,9 +122,11 @@ contract OptimizorNFT is ERC721 {
         (uint256 challengeId,) = unpackTokenId(tokenId);
         uint32 winners = challenges[challengeId].solutions;
         board = new address[](winners);
-        for (uint32 i = 1; i <= winners; ++i) {
-            ExtraDetails storage details = extraDetails[packTokenId(challengeId, i)];
-            board[i - 1] = details.solver;
+        unchecked {
+            for (uint32 i = 1; i <= winners; ++i) {
+                ExtraDetails storage details = extraDetails[packTokenId(challengeId, i)];
+                board[i - 1] = details.solver;
+            }
         }
     }
 
@@ -132,15 +134,17 @@ contract OptimizorNFT is ERC721 {
         address[] memory leaders = leaderboard(tokenId);
         string memory leadersStr = "";
         uint256 lIdx = leaders.length;
-        for (uint256 i = 0; i < leaders.length; ++i) {
-            leadersStr = string.concat(
-                "\\n",
-                LibString.toString(lIdx),
-                ". ",
-                HexString.toHexString(uint256(uint160(leaders[i])), 20),
-                leadersStr
-            );
-            --lIdx;
+        unchecked {
+            for (uint256 i = 0; i < leaders.length; ++i) {
+                leadersStr = string.concat(
+                    "\\n",
+                    LibString.toString(lIdx),
+                    ". ",
+                    HexString.toHexString(uint256(uint160(leaders[i])), 20),
+                    leadersStr
+                );
+                --lIdx;
+            }
         }
         return string.concat("Leaderboard:", leadersStr);
     }
