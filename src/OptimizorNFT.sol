@@ -163,12 +163,9 @@ contract OptimizorNFT is ERC721 {
             LibString.toString(details.improvementPercentage),
             '%"},{"trait_type":"Solver","value":"',
             HexString.toHexString(uint256(uint160(details.solver)), 20),
-            // With value/max_value this will be displayed as a bar.
             '"},{"trait_type":"Rank","value":',
             LibString.toString(rank),
-            ',"max_value":',
-            LibString.toString(details.leaderSolutionId),
-            '},{"trait_type":"Leader","value":"',
+            ',"display_type":"number"},{"trait_type":"Leader","value":"',
             (rank == 1) ? "Yes" : "No",
             '"},{"trait_type":"Top 3","value":"',
             (rank <= 3) ? "Yes" : "No",
