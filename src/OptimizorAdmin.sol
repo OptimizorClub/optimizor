@@ -27,14 +27,14 @@ contract OptimizorAdmin is OptimizorNFT, Owned {
         emit PurityCheckerUpdated(_purityChecker);
     }
 
-    function addChallenge(uint256 id, IChallenge chlAddr) external onlyOwner {
+    function addChallenge(uint256 id, IChallenge challenge) external onlyOwner {
         ChallengeInfo storage chl = challenges[id];
         if (address(chl.target) != address(0)) {
             revert ChallengeExists(id);
         }
 
-        chl.target = chlAddr;
+        chl.target = challenge;
 
-        emit ChallengeAdded(id, chlAddr);
+        emit ChallengeAdded(id, challenge);
     }
 }
