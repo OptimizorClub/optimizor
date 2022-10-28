@@ -39,11 +39,11 @@ contract OptimizorTest is BaseTest {
                 bytes(
                     string.concat(
                         "{",
-                        '"name":"Optimizor Club"',
-                        '"description":"The Optimizor Club NFT collection rewards gas efficient people and machines by minting new items whenever a cheaper solution is submitted for a certain challenge."',
-                        '"image":"',
-                        logo,
-                        '"',
+                        '"name":"Optimizor Club",',
+                        '"description":"The Optimizor Club NFT collection rewards gas efficient people and machines by minting new items whenever a cheaper solution is submitted for a certain challenge.",',
+                        '"image":"data:image/svg+xml;base64,',
+                        Base64.encode(bytes(logo)),
+                        '",',
                         '"external_link":"https://optimizor.club/"',
                         "}"
                     )
