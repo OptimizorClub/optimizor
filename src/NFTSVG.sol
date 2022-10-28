@@ -56,7 +56,7 @@ library NFTSVG {
             Base64.encode(
                 bytes(
                     string.concat(
-                        "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><rect width='290px' height='500px' fill='#",
+                        "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><rect width='290' height='500' fill='#",
                         params.color,
                         "'/></svg>"
                     )
@@ -70,7 +70,7 @@ library NFTSVG {
                         params.x1,
                         "' cy='",
                         params.y1,
-                        "' r='120px' fill='#",
+                        "' r='120' fill='#",
                         params.color,
                         "'/></svg>"
                     )
@@ -84,7 +84,7 @@ library NFTSVG {
                         params.x2,
                         "' cy='",
                         params.y2,
-                        "' r='120px' fill='#",
+                        "' r='120' fill='#",
                         params.color,
                         "'/></svg>"
                     )
@@ -99,7 +99,7 @@ library NFTSVG {
                         params.x3,
                         "' cy='",
                         params.y3,
-                        "' r='100px' fill='#",
+                        "' r='100' fill='#",
                         params.color,
                         "'/></svg>"
                     )
@@ -117,15 +117,15 @@ library NFTSVG {
             '<mask id="fade-down" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#grad-down)"/></mask>',
             '<mask id="none" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="#fff"/></mask>',
             '<linearGradient id="grad-symbol"><stop offset="0.7" stop-color="#fff" stop-opacity="1"/><stop offset=".95" stop-color="#fff" stop-opacity="0"/></linearGradient>',
-            '<mask id="fade-symbol" maskContentUnits="userSpaceOnUse"><rect width="290px" height="200px" fill="url(#grad-symbol)"/></mask></defs>',
+            '<mask id="fade-symbol" maskContentUnits="userSpaceOnUse"><rect width="290" height="200" fill="url(#grad-symbol)"/></mask></defs>',
             '<g clip-path="url(#corners)">',
             '<rect fill="',
             params.color,
-            '" x="0px" y="0px" width="290px" height="500px"/>',
-            '<rect style="filter: url(#f1)" x="0px" y="0px" width="290px" height="500px"/>',
+            '" x="0" y="0" width="290" height="500"/>',
+            '<rect style="filter: url(#f1)" x="0" y="0" width="290" height="500"/>',
             '<g style="filter:url(#top-region-blur); transform:scale(1.5); transform-origin:center top;">',
-            '<rect fill="none" x="0px" y="0px" width="290px" height="500px"/>',
-            '<ellipse cx="50%" cy="0px" rx="180px" ry="120px" fill="#000" opacity="0.85"/></g>',
+            '<rect fill="none" x="0" y="0" width="290" height="500"/>',
+            '<ellipse cx="50%" cy="0" rx="180" ry="120" fill="#000" opacity="0.85"/></g>',
             '<rect x="0" y="0" width="290" height="500" rx="42" ry="42" fill="rgba(0,0,0,0)" stroke="rgba(255,255,255,0.2)"/></g>'
         );
     }
@@ -167,9 +167,9 @@ library NFTSVG {
         returns (string memory svg)
     {
         svg = string.concat(
-            '<g mask="url(#fade-symbol)"><rect fill="none" x="0px" y="0px" width="290px" height="200px"/><text y="70px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="28px">',
+            '<g mask="url(#fade-symbol)"><rect fill="none" x="0" y="0" width="290" height="200"/><text y="70" x="32" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="28px">',
             challengeName,
-            '</text><text y="115px" x="32px" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
+            '</text><text y="115" x="32" fill="#fff" font-family="\'Courier New\', monospace" font-weight="200" font-size="20px">',
             "Rank ",
             LibString.toString(rank),
             " of ",
@@ -217,22 +217,22 @@ library NFTSVG {
             '<g style="transform:translate(29px, 384px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str1length + 4))),
-            'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px"><tspan fill="#999">ID: </tspan>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
+            '<text x="12" y="17"><tspan fill="#999">ID: </tspan>',
             tokenId,
             "</text></g>",
             '<g style="transform:translate(29px, 414px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str2length + 4))),
-            'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px"><tspan fill="#999">Gas used: </tspan>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
+            '<text x="12" y="17"><tspan fill="#999">Gas used: </tspan>',
             gasUsedStr,
             "</text></g>",
             '<g style="transform:translate(29px, 444px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str3length + 4))),
-            'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px"><tspan fill="#999">Gas opti: </tspan>',
+            '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>',
+            '<text x="12" y="17"><tspan fill="#999">Gas opti: </tspan>',
             gasOptiStr,
             "%",
             "</text></g></g>"
@@ -241,7 +241,7 @@ library NFTSVG {
 
     function generateOptimizorIcon() private pure returns (string memory svg) {
         return
-        '<g style="transform:translate(180px, 365px)"><rect style="filter: url(#icon)" x="0px" y="0px" width="83px" height="64px"/></g>';
+        '<g style="transform:translate(180px, 365px)"><rect style="filter: url(#icon)" x="0" y="0" width="83" height="64"/></g>';
     }
 
     function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
