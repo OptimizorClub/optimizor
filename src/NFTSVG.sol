@@ -244,20 +244,4 @@ library NFTSVG {
             "</text></g></g>"
         );
     }
-
-    function scale(uint256 n, uint256 inMn, uint256 inMx, uint256 outMn, uint256 outMx)
-        internal
-        pure
-        returns (string memory)
-    {
-        return LibString.toString(((n - inMn) * (outMx - outMn)) / (inMx - inMn) + outMn);
-    }
-
-    function getCircleCoord(uint256 tokenAddress, uint256 offset, uint256 tokenId) internal pure returns (uint256) {
-        return (sliceTokenHex(tokenAddress, offset) * tokenId) % 255;
-    }
-
-    function sliceTokenHex(uint256 token, uint256 offset) private pure returns (uint256) {
-        return uint256(uint8(token >> offset));
-    }
 }

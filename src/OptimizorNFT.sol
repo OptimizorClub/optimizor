@@ -202,18 +202,12 @@ contract OptimizorNFT is ERC721 {
             // The leader is the last player, e.g. its solution id equals the number of players.
             participants: details.leaderSolutionId,
             color: HexString.toHexStringNoPrefix(gradRgb, 3),
-            x1: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274
-                ),
-            y1: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 16, tokenId), 0, 255, 100, 484),
-            x2: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 32, tokenId), 0, 255, 16, 274
-                ),
-            y2: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 32, tokenId), 0, 255, 100, 484),
-            x3: NFTSVG.scale(
-                NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 48, tokenId), 0, 255, 16, 274
-                ),
-            y3: NFTSVG.scale(NFTSVG.getCircleCoord(uint256(uint160(details.solver)), 48, tokenId), 0, 255, 100, 484)
+            x1: "147",
+            y1: "336",
+            x2: "181",
+            y2: "334",
+            x3: "168",
+            y3: "309"
         });
 
         return NFTSVG.generateSVG(svgParams, details.challenge.svg(tokenId));
