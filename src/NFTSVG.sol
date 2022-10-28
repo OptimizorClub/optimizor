@@ -222,28 +222,29 @@ library NFTSVG {
         uint256 str2length = bytes(gasUsedStr).length + 10;
         uint256 str3length = bytes(gasOptiStr).length + 10;
         svg = string.concat(
+            '<g font-family="\'Courier New\', monospace" font-size="12" fill="#fff">',
             '<g style="transform:translate(29px, 384px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str1length + 4))),
             'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="#fff"><tspan fill="rgba(255,255,255,0.6)">ID: </tspan>',
+            '<text x="12px" y="17px"><tspan fill="#999">ID: </tspan>',
             tokenId,
             "</text></g>",
             '<g style="transform:translate(29px, 414px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str2length + 4))),
             'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="#fff"><tspan fill="rgba(255,255,255,0.6)">Gas used: </tspan>',
+            '<text x="12px" y="17px"><tspan fill="#999">Gas used: </tspan>',
             gasUsedStr,
             "</text></g>",
             '<g style="transform:translate(29px, 444px)">',
             '<rect width="',
             LibString.toString(uint256(7 * (str3length + 4))),
             'px" height="26px" rx="8px" ry="8px" fill="rgba(0,0,0,0.6)"/>',
-            '<text x="12px" y="17px" font-family="\'Courier New\', monospace" font-size="12px" fill="#fff"><tspan fill="rgba(255,255,255,0.6)">Gas opti: </tspan>',
+            '<text x="12px" y="17px"><tspan fill="#999">Gas opti: </tspan>',
             gasOptiStr,
             "%",
-            "</text></g>"
+            "</text></g></g>"
         );
     }
 
