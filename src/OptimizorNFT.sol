@@ -187,7 +187,6 @@ contract OptimizorNFT is ERC721 {
             }
             gradRgb = (uint256(fRank) << 16) | (uint256(fRank) << 8) | uint256(fRank);
         }
-        string memory gradRgbHex = HexString.toHexStringNoPrefix(gradRgb, 3);
 
         NFTSVG.SVGParams memory svgParams = NFTSVG.SVGParams({
             projectName: "Optimizor Club",
@@ -202,10 +201,7 @@ contract OptimizorNFT is ERC721 {
             rank: details.rank,
             // The leader is the last player, e.g. its solution id equals the number of players.
             participants: details.leaderSolutionId,
-            color0: gradRgbHex,
-            color1: gradRgbHex,
-            color2: gradRgbHex,
-            color3: gradRgbHex,
+            color: HexString.toHexStringNoPrefix(gradRgb, 3),
             x1: NFTSVG.scale(
                 NFTSVG.getCircleCoord(uint256(uint160(address(details.challenge))), 16, tokenId), 0, 255, 16, 274
                 ),

@@ -20,10 +20,7 @@ library NFTSVG {
         uint256 tokenId;
         uint32 rank;
         uint32 participants;
-        string color0;
-        string color1;
-        string color2;
-        string color3;
+        string color;
         string x1;
         string y1;
         string x2;
@@ -63,7 +60,7 @@ library NFTSVG {
                 bytes(
                     string.concat(
                         "<svg width='290' height='500' viewBox='0 0 290 500' xmlns='http://www.w3.org/2000/svg'><rect width='290px' height='500px' fill='#",
-                        params.color0,
+                        params.color,
                         "'/></svg>"
                     )
                 )
@@ -77,7 +74,7 @@ library NFTSVG {
                         "' cy='",
                         params.y1,
                         "' r='120px' fill='#",
-                        params.color1,
+                        params.color,
                         "'/></svg>"
                     )
                 )
@@ -91,7 +88,7 @@ library NFTSVG {
                         "' cy='",
                         params.y2,
                         "' r='120px' fill='#",
-                        params.color2,
+                        params.color,
                         "'/></svg>"
                     )
                 )
@@ -106,7 +103,7 @@ library NFTSVG {
                         "' cy='",
                         params.y3,
                         "' r='100px' fill='#",
-                        params.color3,
+                        params.color,
                         "'/></svg>"
                     )
                 )
@@ -126,7 +123,7 @@ library NFTSVG {
             '<mask id="fade-symbol" maskContentUnits="userSpaceOnUse"><rect width="290px" height="200px" fill="url(#grad-symbol)"/></mask></defs>',
             '<g clip-path="url(#corners)">',
             '<rect fill="',
-            params.color0,
+            params.color,
             '" x="0px" y="0px" width="290px" height="500px"/>',
             '<rect style="filter: url(#f1)" x="0px" y="0px" width="290px" height="500px"/>',
             '<g style="filter:url(#top-region-blur); transform:scale(1.5); transform-origin:center top;">',
