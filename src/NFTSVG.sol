@@ -1,3 +1,5 @@
+// This file is derived from https://github.com/Uniswap/v3-periphery/blob/b771ff9a20a0fd7c3233df0eb70d4fa084766cde/contracts/libraries/NFTSVG.sol
+
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity ^0.8.17;
 
@@ -34,12 +36,6 @@ library NFTSVG {
         pure
         returns (string memory svg)
     {
-        /*
-        address: "0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
-        msg: "Forged in SVG for Uniswap in 2021 by 0xe8ab59d3bcde16a29912de83a90eb39628cfc163",
-        sig: "0x2df0e99d9cbfec33a705d83f75666d98b22dea7c1af412c584f7d626d83f02875993df740dc87563b9c73378f8462426da572d7989de88079a382ad96c57b68d1b",
-        version: "2"
-         */
         return string.concat(
             generateSVGDefs(params),
             generateSVGBorderText(params.projectName, params.challengeName, params.solverAddr, params.challengeAddr),

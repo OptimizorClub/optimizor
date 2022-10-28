@@ -1,4 +1,7 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// This file is derived from https://github.com/Uniswap/v3-periphery/blob/b771ff9a20a0fd7c3233df0eb70d4fa084766cde/contracts/libraries/HexStrings.sol
+// which in turn originates from OpenZeppelin under an MIT license.
+
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 library HexString {
