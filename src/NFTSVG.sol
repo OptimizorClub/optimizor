@@ -139,28 +139,32 @@ library NFTSVG {
         string memory solverAddr,
         string memory challengeAddr
     ) private pure returns (string memory svg) {
+        string memory animate =
+            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/>';
         svg = string.concat(
             '<text text-rendering="optimizeSpeed">',
             '<textPath startOffset="-100%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             challengeName,
             unicode" • ",
             challengeAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/>',
+            animate,
             '</textPath> <textPath startOffset="0%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             challengeName,
             unicode" • ",
             challengeAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/></textPath>',
+            animate,
+            "</textPath>",
             '<textPath startOffset="50%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             projectName,
             unicode" • ",
             solverAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s"',
-            ' repeatCount="indefinite"/></textPath><textPath startOffset="-50%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
+            animate,
+            '</textPath><textPath startOffset="-50%" fill="#fff" font-family="\'Courier New\', monospace" font-size="10px" xlink:href="#text-path-a">',
             projectName,
             unicode" • ",
             solverAddr,
-            '<animate additive="sum" attributeName="startOffset" from="0%" to="100%" begin="0s" dur="30s" repeatCount="indefinite"/></textPath></text>'
+            animate,
+            "</textPath></text>"
         );
     }
 
