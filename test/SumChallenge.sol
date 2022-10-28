@@ -33,7 +33,7 @@ contract SumChallenge is IChallenge {
         }
     }
 
-    function random(uint256 seed) internal view returns (uint256) {
+    function random(uint256 seed) internal pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(seed))) % 100;
     }
 
