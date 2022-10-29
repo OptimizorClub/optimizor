@@ -1,4 +1,4 @@
-<img align="right" width="150" height="150" top="100" src="./assets/icon.svg">
+<img align="right" width="167" height="129" top="100" src="./assets/icon.svg">
 
 # Optimizor Club Gas Golfing and NFT Collection
 
