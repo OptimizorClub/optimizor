@@ -41,7 +41,7 @@ import {IPurityChecker} from "src/IPurityChecker.sol";
 import {packTokenId} from "src/DataHelpers.sol";
 import {ERC721} from "solmate/tokens/ERC721.sol";
 
-uint256 constant EPOCH = 256;
+uint256 constant EPOCH = 64;
 
 contract Optimizor is OptimizorAdmin {
     struct Submission {
