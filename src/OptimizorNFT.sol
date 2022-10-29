@@ -204,12 +204,12 @@ contract OptimizorNFT is ERC721 {
             // The leader is the last player, e.g. its solution id equals the number of players.
             participants: details.leaderSolutionId,
             color: HexString.toHexStringNoPrefix(gradRgb, 3),
-            x1: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 16, tokenId), 16, 274)),
-            y1: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 16, tokenId), 100, 484)),
-            x2: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 32, tokenId), 16, 274)),
-            y2: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 32, tokenId), 100, 484)),
-            x3: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.challenge), 48, tokenId), 16, 274)),
-            y3: LibString.toString(scale(NFTSVG.getCircleCoord(address(details.solver), 48, tokenId), 100, 484))
+            x1: scale(NFTSVG.getCircleCoord(address(details.challenge), 16, tokenId), 16, 274),
+            y1: scale(NFTSVG.getCircleCoord(address(details.solver), 16, tokenId), 100, 484),
+            x2: scale(NFTSVG.getCircleCoord(address(details.challenge), 32, tokenId), 16, 274),
+            y2: scale(NFTSVG.getCircleCoord(address(details.solver), 32, tokenId), 100, 484),
+            x3: scale(NFTSVG.getCircleCoord(address(details.challenge), 48, tokenId), 16, 274),
+            y3: scale(NFTSVG.getCircleCoord(address(details.solver), 48, tokenId), 100, 484)
         });
 
         return NFTSVG.generateSVG(svgParams, details.challenge.svg(tokenId));
