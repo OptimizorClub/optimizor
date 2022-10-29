@@ -34,8 +34,6 @@ contract SqrtChallenge is IChallenge {
         unchecked {
             for (uint256 i = 0; i < INPUT_SIZE; ++i) {
                 inputs[i] = random_fixed18(seed);
-                // TODO should the inputs be uniform?
-                // TODO Maybe use a Linear Congruential Generator?
                 seed = Fixed18.unwrap(inputs[i]);
             }
         }
