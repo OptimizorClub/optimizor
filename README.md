@@ -20,3 +20,9 @@ challenge itself can be performed after at least 64 blocks.
 
 If you are an optimizooor who wants to show your skills please see the
 [docs](docs).
+
+## Relevant contract addresses:
+
+1. Optimizor: [0x66DE7D67CcfDD92b4E5759Ed9dD2d7cE3C9154a9](https://etherscan.io/address/0x66DE7D67CcfDD92b4E5759Ed9dD2d7cE3C9154a9)
+2. Purity Checker: [0x5C71fcd090948dCC5E8A1a01ad8Fa26313422022](https://etherscan.io/address/0x5C71fcd090948dCC5E8A1a01ad8Fa26313422022)
+3. SQRT Challenge: [0x2747096ff9e0fce877cd168dcd5de16040a4ab85](https://etherscan.io/address/0x2747096ff9e0fce877cd168dcd5de16040a4ab85)
