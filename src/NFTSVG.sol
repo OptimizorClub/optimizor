@@ -210,7 +210,7 @@ library NFTSVG {
         string memory gasOptiStr = LibString.toString(gasOpti);
         uint256 str1length = bytes(tokenId).length + 4;
         uint256 str2length = bytes(gasUsedStr).length + 10;
-        uint256 str3length = bytes(gasOptiStr).length + 10;
+        uint256 str3length = bytes(gasOptiStr).length + 14;
         svg = string.concat(
             '<g font-family="\'Courier New\', monospace" font-size="12" fill="#fff">'
             '<g style="transform:translate(29px, 384px)">' '<rect width="',
@@ -225,7 +225,7 @@ library NFTSVG {
             "</text></g>" '<g style="transform:translate(29px, 444px)">' '<rect width="',
             LibString.toString(uint256(7 * (str3length + 4))),
             '" height="26" rx="8" ry="8" fill="rgba(0,0,0,0.6)"/>'
-            '<text x="12" y="17"><tspan fill="#999">Gas opti: </tspan>',
+            '<text x="12" y="17"><tspan fill="#999">Improvement: </tspan>',
             gasOptiStr,
             "%" "</text></g></g>"
         );
