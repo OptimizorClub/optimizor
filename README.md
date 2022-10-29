@@ -1,3 +1,5 @@
+<img align="right" width="150" height="150" top="100" src="./assets/icon.svg">
+
 # Optimizor Club Gas Golfing and NFT Collection
 
 The `Optimizor Club` creates and publishes on-chain gas golfing challenges.
