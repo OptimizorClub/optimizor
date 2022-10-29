@@ -16,5 +16,6 @@ yul = true
 [profile.test]
 solc = '0.8.18'
 cbor_metadata = false
+bytecode_hash = 'none'
 optimizer_details.yulDetails.stackAllocation = true
 optimizer_details.yulDetails.optimizerSteps = ''
