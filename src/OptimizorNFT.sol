@@ -91,7 +91,7 @@ contract OptimizorNFT is ERC721 {
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         TokenDetails memory details = tokenDetails(tokenId);
 
-        string memory description = string.concat(details.challenge.description(), "\\n", leaderboardString(tokenId));
+        string memory description = string.concat(details.challenge.description(), "\\n\\n", leaderboardString(tokenId));
 
         return string.concat(
             "data:application/json;base64,",
@@ -141,7 +141,7 @@ contract OptimizorNFT is ERC721 {
                 --lIdx;
             }
         }
-        return string.concat("Leaderboard:", leadersStr);
+        return string.concat("Leaderboard:\\n", leadersStr);
     }
 
     function attributesJSON(TokenDetails memory details) private view returns (string memory attributes) {
